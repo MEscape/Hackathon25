@@ -15,12 +15,13 @@ jobs:
       SSH_PORT:    ${{ secrets.SSH_PORT }}
       SSH_KEY:     ${{ secrets.SSH_KEY }}
 
-      # Kein sudo nötig → ins Home deployen
-      APP_DIR:     /home/${{ secrets.SSH_USER }}/safenet
-      # Health der App (Port anpassen, falls nötig)
+      # Wir deployen nach /opt/safenet (muss dem SSH-User gehören oder beschreibbar sein)
+      APP_DIR:     /opt/safenet
+
+      # Health der App (Port/Path ggf. anpassen)
       HEALTH_URL:  http://127.0.0.1:8080/actuator/health
 
-      # Build-Java (Runner)
+      # Java (nur für den Build auf dem Runner)
       JAVA_HOME:   /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.8-9/x64
       JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.8-9/x64
 
@@ -69,7 +70,7 @@ jobs:
           echo "artifact=backend/$CANDIDATE" >> "$GITHUB_OUTPUT"
           echo "Gefundenes Artefakt: backend/$CANDIDATE"
 
-      - name: Ensure user dirs (no sudo)
+      - name: Ensure dirs (no sudo; /opt/safenet muss beschreibbar sein)
         uses: appleboy/ssh-action@v1.2.0
         with:
           host:     ${{ env.SSH_HOST }}
@@ -79,8 +80,10 @@ jobs:
           envs:     APP_DIR
           script: |
             set -euo pipefail
-            echo "Ensuring $APP_DIR and systemd user dir as $(whoami)"
+            echo "Ensuring APP_DIR as $(whoami): $APP_DIR"
             mkdir -p "$APP_DIR" "$APP_DIR/logs"
+            # Fail-fast, falls nicht beschreibbar:
+            test -w "$APP_DIR" || (echo "ERROR: $APP_DIR ist nicht beschreibbar für $(whoami)"; exit 1)
             mkdir -p "$HOME/.config/systemd/user"
             ls -ld "$APP_DIR" "$HOME/.config/systemd/user"
 
@@ -92,7 +95,7 @@ jobs:
           key:      ${{ env.SSH_KEY }}
           port:     ${{ env.SSH_PORT }}
           source:   ${{ steps.build.outputs.artifact }}   # backend/target/<file>.jar
-          target:   ${{ env.APP_DIR }}                    # ~/safenet
+          target:   ${{ env.APP_DIR }}                    # /opt/safenet
           strip_components: 2
 
       - name: Install/Update user service & restart via systemd --user
@@ -103,8 +106,6 @@ jobs:
           # Passe diese Optionen an deine Umgebung an:
           JAVA_OPTS: "-Xms256m -Xmx512m"
           SPRING_OPTS: "--spring.profiles.active=production --server.port=8080"
-          # Beispiel DB / OIDC (falls du nicht über env-Dateien arbeitest):
-          # SPRING_OPTS: "--spring.profiles.active=production --server.port=8080 --spring.datasource.url=jdbc:postgresql://127.0.0.1:5432/resourcedb --spring.datasource.username=safenet --spring.datasource.password=*** --spring.security.oauth2.resourceserver.jwt.issuer-uri=https://<host>:8081/realms/safenet"
           HEALTH_URL: ${{ env.HEALTH_URL }}
         with:
           host:     ${{ env.SSH_HOST }}
@@ -127,7 +128,7 @@ jobs:
 
             UNIT="$HOME/.config/systemd/user/${APP_NAME}.service"
 
-            # User-Service-Unit schreiben/aktualisieren
+            # User-Service-Unit schreiben/aktualisieren (WorkingDirectory = /opt/safenet)
             cat > "$UNIT" <<EOF
             [Unit]
             Description=SafeNet Backend (user)
@@ -135,11 +136,10 @@ jobs:
 
             [Service]
             Type=simple
-            WorkingDirectory=%h/safenet
-            ExecStart=/usr/bin/java ${JAVA_OPTS} -jar %h/safenet/app.jar ${SPRING_OPTS}
+            WorkingDirectory=/opt/safenet
+            ExecStart=/usr/bin/java ${JAVA_OPTS} -jar /opt/safenet/app.jar ${SPRING_OPTS}
             Restart=always
             RestartSec=2
-            # Log landet in journald (journalctl --user -u ${APP_NAME}), zusätzlich schreiben wir in $APP_DIR/logs via nohup brauchen wir hier nicht.
 
             [Install]
             WantedBy=default.target
@@ -156,7 +156,6 @@ jobs:
                 echo "✅ Health OK"
                 exit 0
               fi
-              # Wenn Dienst schon abgestürzt ist, Logs zeigen
               if ! systemctl --user is-active --quiet "${APP_NAME}.service"; then
                 echo "❌ Service not active. Logs:"
                 journalctl --user -u "${APP_NAME}.service" -n 200 --no-pager || true
