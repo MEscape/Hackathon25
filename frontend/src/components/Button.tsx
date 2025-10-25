@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Pressable, Platform, StyleProp, ViewStyle } from 'react-native';
+import { Pressable, Platform, StyleProp, ViewStyle, View } from 'react-native';
 import type { TextStyle } from 'react-native';
 
 import { Text } from '@/components/Text';
@@ -8,7 +8,11 @@ import { useAppTheme } from '@/theme/context';
 import type { ThemedStyle, ThemedStyleArray } from '@/theme/types';
 import { TxKeyPath } from '@/i18n';
 
-type ButtonPresets = 'primary' | 'secondary' | 'outline';
+export type ButtonPresets = 'primary' | 'secondary' | 'outline';
+
+export interface ButtonAccessoryProps {
+  style?: StyleProp<ViewStyle>;
+}
 
 export interface ButtonProps {
   /**
@@ -43,18 +47,28 @@ export interface ButtonProps {
    * Children components (alternative to text prop)
    */
   children?: React.ReactNode;
+  /**
+   * Left accessory component
+   */
+  LeftAccessory?: React.ComponentType<ButtonAccessoryProps>;
+  /**
+   * Right accessory component
+   */
+  RightAccessory?: React.ComponentType<ButtonAccessoryProps>;
 }
 
 export const Button: React.FC<ButtonProps> = ({
-  text,
-  tx,
-  preset = 'primary',
-  style: styleOverride,
-  textStyle: textStyleOverride,
-  onPress,
-  disabled = false,
-  children,
-}) => {
+                                                text,
+                                                tx,
+                                                preset = 'primary',
+                                                style: styleOverride,
+                                                textStyle: textStyleOverride,
+                                                onPress,
+                                                disabled = false,
+                                                children,
+                                                LeftAccessory,
+                                                RightAccessory,
+                                              }) => {
   const { themed } = useAppTheme();
 
   const buttonStyles = [
@@ -71,17 +85,31 @@ export const Button: React.FC<ButtonProps> = ({
     textStyleOverride,
   ];
 
+  const content = children || <Text style={textStyles} tx={tx}>{text}</Text>;
+
   return (
-    <Pressable
-      style={({ pressed }) => [
-        ...buttonStyles,
-        pressed && !disabled && themed($pressedButton),
-      ]}
-      onPress={onPress}
-      disabled={disabled}
-    >
-      {children || <Text style={textStyles} tx={tx}>{text}</Text>}
-    </Pressable>
+      <Pressable
+          style={({ pressed }) => [
+            ...buttonStyles,
+            pressed && !disabled && themed($pressedButton),
+          ]}
+          onPress={onPress}
+          disabled={disabled}
+      >
+        {(LeftAccessory || RightAccessory) ? (
+            <View style={themed($contentContainer)}>
+              {LeftAccessory && (
+                  <LeftAccessory style={themed($leftAccessory)} />
+              )}
+              {content}
+              {RightAccessory && (
+                  <RightAccessory style={themed($rightAccessory)} />
+              )}
+            </View>
+        ) : (
+            content
+        )}
+      </Pressable>
   );
 };
 
@@ -105,6 +133,20 @@ const $baseButtonText: ThemedStyle<TextStyle> = theme => ({
   fontWeight: '600',
   fontFamily: theme.typography.primary.semiBold,
   letterSpacing: -0.25,
+});
+
+const $contentContainer: ThemedStyle<ViewStyle> = () => ({
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'center',
+});
+
+const $leftAccessory: ThemedStyle<ViewStyle> = theme => ({
+  marginRight: theme.spacing.xs,
+});
+
+const $rightAccessory: ThemedStyle<ViewStyle> = theme => ({
+  marginLeft: theme.spacing.xs,
 });
 
 // Button presets
