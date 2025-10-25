@@ -1,0 +1,28 @@
+{
+  "project_info": {
+    "project_id": "replace-with-your-firebase-project-id",
+    "project_number": "000000000000",
+    "name": "SafeNet"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:000000000000:android:0000000000000000",
+        "android_client_info": {
+          "package_name": "com.hackathon25.safenet"
+        }
+      },
+      "api_key": [
+        {
+          "current_key": "REPLACE_WITH_YOUR_API_KEY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
