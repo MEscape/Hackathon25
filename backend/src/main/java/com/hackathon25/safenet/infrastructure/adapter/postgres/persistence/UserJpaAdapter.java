@@ -59,4 +59,9 @@ public class UserJpaAdapter implements UserRepositoryPort {
         log.debug("Deleting user: {}", id);
         jpaRepository.deleteById(id);
     }
+
+    @Override
+    public String getExpoPushToken(UUID userId) {
+        return "";
+    }
 }
