@@ -11,9 +11,9 @@ jobs:
 
     env:
       SSH_HOST:    ${{ secrets.SSH_HOST }}
-      SSH_USER:    ${{ secrets.SSH_USER }}      # z.B. deploy
-      SSH_PORT:    ${{ secrets.SSH_PORT }}      # z.B. 22
-      SSH_KEY:     ${{ secrets.SSH_KEY }}       # OpenSSH PRIVATE KEY Inhalt
+      SSH_USER:    ${{ secrets.SSH_USER }}
+      SSH_PORT:    ${{ secrets.SSH_PORT }}
+      SSH_KEY:     ${{ secrets.SSH_KEY }}
       APP_DIR:     /opt/safenet
       SERVICE:     safenet
       HEALTH_URL:  http://127.0.0.1:8080/actuator/health
@@ -46,7 +46,7 @@ jobs:
             chmod +x ./mvnw
           fi
 
-          # Clean install ohne Tests, frische SNAPSHOTs, leiseres Log
+          # Clean install ohne Tests
           "$MVN" -B -U -ntp -DskipTests clean install
 
           # finalName + packaging deterministisch aus Maven lesen
@@ -54,7 +54,7 @@ jobs:
           PACKAGING=$("$MVN" -q -DforceStdout help:evaluate -Dexpression=project.packaging || echo "jar")
           CANDIDATE="target/${FINAL_NAME}.${PACKAGING}"
 
-          # Fallback: bestes .jar ohne sources/javadoc/original
+          # Fallback, falls kein deterministischer Name
           if [ ! -f "$CANDIDATE" ]; then
             CANDIDATE=$(find target -maxdepth 1 -type f -name "*.jar" \
               ! -name "*-sources.jar" \
@@ -72,7 +72,7 @@ jobs:
           echo "artifact=backend/$CANDIDATE" >> "$GITHUB_OUTPUT"
           echo "Gefundenes Artefakt: backend/$CANDIDATE"
 
-      - name: Ensure target dir on server
+      - name: Ensure target dir on server (and fix perms)
         uses: appleboy/ssh-action@v1.2.0
         with:
           host:     ${{ env.SSH_HOST }}
@@ -81,9 +81,16 @@ jobs:
           port:     ${{ env.SSH_PORT }}
           envs:     APP_DIR
           script: |
-            set -e
-            echo "APP_DIR (remote) = '$APP_DIR'"
-            mkdir -p "$APP_DIR"
+            set -euo pipefail
+            echo "Ensuring $APP_DIR exists and is writable by $(whoami)"
+
+            u=$(id -un)
+            g=$(id -gn)
+            sudo -n mkdir -p "$APP_DIR"
+            sudo -n chown -R "$u:$g" "$APP_DIR"
+            sudo -n chmod 775 "$APP_DIR"
+
+            ls -ld "$APP_DIR"
 
       - name: Copy JAR (flat into APP_DIR)
         uses: appleboy/scp-action@v0.1.7
@@ -92,9 +99,9 @@ jobs:
           username: ${{ env.SSH_USER }}
           key:      ${{ env.SSH_KEY }}
           port:     ${{ env.SSH_PORT }}
-          source:   ${{ steps.build.outputs.artifact }}   # backend/target/<file>.jar
-          target:   ${{ env.APP_DIR }}                    # /opt/safenet
-          strip_components: 2                             # entfernt backend/target → Datei liegt flach
+          source:   ${{ steps.build.outputs.artifact }}
+          target:   ${{ env.APP_DIR }}
+          strip_components: 2
 
       - name: Place as app.jar + restart + health
         uses: appleboy/ssh-action@v1.2.0
@@ -110,9 +117,7 @@ jobs:
             set -e
 
             jar_name=$(basename "$JAR_PATH")
-
-            echo "Listing $APP_DIR before mv:"
-            ls -al "$APP_DIR"
+            echo "Using jar_name='$jar_name' in APP_DIR='$APP_DIR'"
 
             if [ ! -f "$APP_DIR/$jar_name" ]; then
               echo "ERROR: $APP_DIR/$jar_name nicht gefunden."
@@ -122,20 +127,24 @@ jobs:
             mv -f "$APP_DIR/$jar_name" "$APP_DIR/app.jar"
             chmod 0644 "$APP_DIR/app.jar"
 
-            sudo systemctl restart "$SERVICE"
+            if ! sudo -n /usr/bin/systemctl restart "$SERVICE"; then
+              echo "ERROR: systemctl restart benötigt NOPASSWD in sudoers."
+              exit 1
+            fi
+
             sleep 2
 
             if command -v curl >/dev/null 2>&1; then
               for i in $(seq 1 60); do
                 if curl -fsS "$HEALTH_URL" >/dev/null 2>&1; then
-                  echo "Health OK"
+                  echo "✅ Health OK"
                   exit 0
                 fi
                 sleep 1
               done
 
-              echo "Health check failed after 60s"
-              sudo systemctl status "$SERVICE" --no-pager -n 100 || true
-              sudo journalctl -u "$SERVICE" -n 200 --no-pager || true
+              echo "❌ Health check failed after 60s"
+              sudo -n systemctl status "$SERVICE" --no-pager -n 100 || true
+              sudo -n journalctl -u "$SERVICE" -n 200 --no-pager || true
               exit 1
             fi
