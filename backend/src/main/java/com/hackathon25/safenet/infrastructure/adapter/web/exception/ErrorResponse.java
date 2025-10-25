@@ -1,4 +1,4 @@
-package com.hackathon.safenet.infrastructure.adapters.web.exception;
+package com.hackathon25.safenet.infrastructure.adapter.web.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;

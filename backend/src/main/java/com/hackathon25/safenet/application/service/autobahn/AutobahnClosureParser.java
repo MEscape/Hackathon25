@@ -1,9 +1,9 @@
-package com.hackathon.safenet.application.service.autobahn;
+package com.hackathon25.safenet.application.service.autobahn;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hackathon.safenet.infrastructure.adapters.web.dto.autobahn.AutobahnClosureItemDto;
+import com.hackathon25.safenet.infrastructure.adapter.web.dto.autobahn.AutobahnClosureItemDto;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;

@@ -1,4 +1,4 @@
-package com.hackathon.safenet.domain.model.notfalltipps;
+package com.hackathon25.safenet.domain.model.notfalltipps;
 
 import lombok.Builder;
 import lombok.Data;

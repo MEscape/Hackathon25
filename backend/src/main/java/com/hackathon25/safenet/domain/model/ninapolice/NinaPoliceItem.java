@@ -1,4 +1,4 @@
-package com.hackathon.safenet.domain.model.ninapolice;
+package com.hackathon25.safenet.domain.model.ninapolice;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

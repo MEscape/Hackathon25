@@ -1,6 +1,6 @@
-package com.hackathon.safenet.infrastructure.adapters.rss.persistance;
+package com.hackathon25.safenet.infrastructure.adapter.rss.persistance;
 
-import com.hackathon.safenet.domain.ports.outbound.MeteoAlarmFeedPort;
+import com.hackathon25.safenet.domain.port.outbound.MeteoAlarmFeedPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;

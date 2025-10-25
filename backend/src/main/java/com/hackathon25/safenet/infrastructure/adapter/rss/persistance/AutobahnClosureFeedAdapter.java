@@ -1,8 +1,8 @@
-package com.hackathon.safenet.infrastructure.adapters.rss.persistance;
+package com.hackathon25.safenet.infrastructure.adapter.rss.persistance;
 
-import com.hackathon.safenet.application.service.autobahn.AutobahnClosureParser;
-import com.hackathon.safenet.domain.ports.outbound.AutobahnClosureFeedPort;
-import com.hackathon.safenet.infrastructure.adapters.web.dto.autobahn.AutobahnClosureItemDto;
+import com.hackathon25.safenet.application.service.autobahn.AutobahnClosureParser;
+import com.hackathon25.safenet.domain.port.outbound.AutobahnClosureFeedPort;
+import com.hackathon25.safenet.infrastructure.adapter.web.dto.autobahn.AutobahnClosureItemDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

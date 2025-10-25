@@ -1,7 +1,7 @@
-package com.hackathon.safenet.infrastructure.adapters.web.dto.nina;
+package com.hackathon25.safenet.infrastructure.adapter.web.dto.ninaPolice;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hackathon.safenet.domain.model.ninapolice.NinaPoliceItem;
+import com.hackathon25.safenet.domain.model.ninapolice.NinaPoliceItem;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;

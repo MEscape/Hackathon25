@@ -1,8 +1,8 @@
-package com.hackathon.safenet.infrastructure.adapters.rss.mapper;
+package com.hackathon25.safenet.infrastructure.adapter.rss.mapper;
 
 
-import com.hackathon.safenet.domain.model.ninapolice.NinaPoliceItem;
-import com.hackathon.safenet.application.service.ninapolice.NinaPoliceParser;
+import com.hackathon25.safenet.domain.model.ninapolice.NinaPoliceItem;
+import com.hackathon25.safenet.application.service.ninapolice.NinaPoliceParser;
 
 import java.util.List;
 

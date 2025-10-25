@@ -1,4 +1,4 @@
-package com.hackathon.safenet.domain.ports.outbound;
+package com.hackathon25.safenet.domain.port.outbound;
 
 /**
  * Outbound port for fetching MeteoAlarm RSS feed content.

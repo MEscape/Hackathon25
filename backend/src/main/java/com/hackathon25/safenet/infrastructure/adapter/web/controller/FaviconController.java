@@ -1,4 +1,4 @@
-package com.hackathon.safenet.infrastructure.adapters.web.controller;
+package com.hackathon25.safenet.infrastructure.adapter.web.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

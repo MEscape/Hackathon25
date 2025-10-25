@@ -1,10 +1,10 @@
-package com.hackathon.safenet.infrastructure.adapters.rss.persistance;
+package com.hackathon25.safenet.infrastructure.adapter.rss.persistance;
 
-import com.hackathon.safenet.domain.model.ninapolice.NinaPoliceItem;
-import com.hackathon.safenet.domain.ports.outbound.NinaPoliceFeedPort;
+import com.hackathon25.safenet.domain.model.ninapolice.NinaPoliceItem;
+import com.hackathon25.safenet.domain.port.outbound.NinaPoliceFeedPort;
 
 import java.util.List;
-import com.hackathon.safenet.infrastructure.adapters.rss.mapper.NinaPoliceApiMapper;
+import com.hackathon25.safenet.infrastructure.adapter.rss.mapper.NinaPoliceApiMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;

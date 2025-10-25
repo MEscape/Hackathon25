@@ -1,8 +1,8 @@
-package com.hackathon.safenet.infrastructure.adapters.web.dto.autobahn;
+package com.hackathon25.safenet.infrastructure.adapter.web.dto.autobahn;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hackathon.safenet.domain.model.autobahn.AutobahnClosureItem;
+import com.hackathon25.safenet.domain.model.autobahn.AutobahnClosureItem;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;

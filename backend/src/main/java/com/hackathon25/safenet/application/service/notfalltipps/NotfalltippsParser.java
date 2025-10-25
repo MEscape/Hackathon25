@@ -1,8 +1,8 @@
-package com.hackathon.safenet.application.service.notfalltipps;
+package com.hackathon25.safenet.application.service.notfalltipps;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hackathon.safenet.domain.model.notfalltipps.*;
+import com.hackathon25.safenet.domain.model.notfalltipps.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;

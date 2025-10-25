@@ -1,7 +1,7 @@
-package com.hackathon.safenet.infrastructure.adapters.rss.mapper;
+package com.hackathon25.safenet.infrastructure.adapter.rss.mapper;
 
-import com.hackathon.safenet.domain.model.notfalltipps.NotfalltippsRoot;
-import com.hackathon.safenet.application.service.notfalltipps.NotfalltippsParser;
+import com.hackathon25.safenet.domain.model.notfalltipps.NotfalltippsRoot;
+import com.hackathon25.safenet.application.service.notfalltipps.NotfalltippsParser;
 
 /**
  * Mapper for converting raw JSON feed data to Notfalltipps domain model.

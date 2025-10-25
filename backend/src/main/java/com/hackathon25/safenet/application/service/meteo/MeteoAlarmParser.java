@@ -1,4 +1,4 @@
-package com.hackathon.safenet.application.service.meteo;
+package com.hackathon25.safenet.application.service.meteo;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

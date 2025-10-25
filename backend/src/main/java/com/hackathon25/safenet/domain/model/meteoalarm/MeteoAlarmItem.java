@@ -1,4 +1,4 @@
-package com.hackathon.safenet.domain.model.meteoalarm;
+package com.hackathon25.safenet.domain.model.meteoalarm;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
