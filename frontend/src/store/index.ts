@@ -13,12 +13,14 @@ import {
 
 import { apiSlice } from './api/baseApi';
 import authReducer from './slices/authSlice';
+import emergencyContactsReducer from '../features/emergencyContacts/store/emergencyContactsSlice';
 import Config from "@/config";
 import * as app from 'app.json'
 
 // Root reducer
 const rootReducer = combineReducers({
   auth: persistReducer(Config.redux.persist.auth, authReducer),
+  emergencyContacts: persistReducer(Config.redux.persist.emergencyContacts ,emergencyContactsReducer),
   [apiSlice.reducerPath]: apiSlice.reducer,
 });
 
