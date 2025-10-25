@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useRef } from 'react';
-import { View, Dimensions, ViewStyle, PanResponder } from 'react-native';
+import {View, Dimensions, ViewStyle, PanResponder, TextStyle} from 'react-native';
 import { Image } from 'expo-image';
 import { Screen } from '@/components/Screen';
 import { Text } from '@/components/Text';
@@ -314,7 +314,7 @@ const $marker: ThemedStyle<ViewStyle> = theme => ({
   elevation: 3,
 });
 
-const $disclaimer: ThemedStyle<ViewStyle> = theme => ({
+const $disclaimer: ThemedStyle<TextStyle> = theme => ({
   paddingHorizontal: theme.spacing.lg,
   paddingVertical: theme.spacing.sm,
 });

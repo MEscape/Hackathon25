@@ -3,7 +3,7 @@ import {auth, root, emergencyContacts} from "@/config/config.redux";
 import type { PersistConfig } from 'redux-persist';
 import {RootState} from "@/store";
 import {AuthState} from "@/store/slices/authSlice";
-import {EmergencyContactsState} from "@/features/emergency/store/emergencyContactsSlice";
+import {EmergencyContactsState} from "@/features/emergencyContacts/store/emergencyContactsSlice";
 
 const {
   EXPO_PUBLIC_OAUTH_CLIENT_ID,
