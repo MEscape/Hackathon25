@@ -1,9 +1,10 @@
 import Constants from 'expo-constants';
-import {auth, root, emergencyContacts} from "@/config/config.redux";
+import {auth, root, emergencyContacts, profile} from "@/config/config.redux";
 import type { PersistConfig } from 'redux-persist';
 import {RootState} from "@/store";
 import {AuthState} from "@/store/slices/authSlice";
 import {EmergencyContactsState} from "@/features/emergencyContacts/store/emergencyContactsSlice";
+import {ProfileState} from "@/features/profile/store/profileSlice";
 
 const {
   EXPO_PUBLIC_OAUTH_CLIENT_ID,
@@ -32,7 +33,8 @@ export interface ConfigBaseProps {
     persist: {
       root: PersistConfig<RootState>;
       auth: PersistConfig<AuthState>;
-      emergencyContacts: PersistConfig<EmergencyContactsState>
+      emergencyContacts: PersistConfig<EmergencyContactsState>;
+      profile: PersistConfig<ProfileState>;
     };
   }
 }
@@ -67,7 +69,8 @@ const BaseConfig: ConfigBaseProps = {
     persist: {
       root,
       auth,
-      emergencyContacts
+      emergencyContacts,
+      profile
     }
   }
 };

@@ -7,6 +7,8 @@ const de: Translations = {
     noData: 'Keine Daten verfügbar',
     loading: 'Wird geladen...',
     lastSeen: 'Zuletzt gesehen',
+    save: 'Speichern',
+    error: 'Fehler'
   },
 
   home: {
@@ -72,6 +74,73 @@ const de: Translations = {
     shareLocation: {
       title: 'Standort teilen',
       subtitle: 'Teile deinen Standort mit vertrauenswürdigen Kontakten.',
+    },
+    settings: {
+      title: 'Einstellungen'
+    }
+  },
+
+  profile: {
+    title: 'Profil',
+    subtitle: 'Verwalte deine persönlichen Informationen',
+    sections: {
+      basicInfo: 'Grundinformationen',
+      medicalInfo: 'Medizinische Informationen',
+      personalInfo: 'Persönliche Informationen',
+    },
+    fields: {
+      firstName: 'Vorname',
+      lastName: 'Nachname',
+      name: 'Name',
+      email: 'E-Mail',
+      phone: 'Telefonnummer',
+      dateOfBirth: 'Geburtsdatum',
+      address: 'Adresse',
+      bloodType: 'Blutgruppe',
+      allergies: 'Allergien',
+      medications: 'Aktuelle Medikamente',
+      preExistingConditions: 'Vorerkrankungen',
+      vaccinationStatus: 'Impfstatus',
+      emergencyContact: 'Notfallkontakt',
+      jobTitle: 'Berufsbezeichnung',
+      company: 'Unternehmen',
+      department: 'Abteilung',
+    },
+    placeholders: {
+      firstName: 'Vorname eingeben',
+      lastName: 'Nachname eingeben',
+      phone: 'Telefonnummer eingeben',
+      dateOfBirth: 'Geburtsdatum auswählen',
+      address: 'Adresse eingeben',
+      bloodType: 'Blutgruppe auswählen',
+      allergies: 'Allergien auflisten',
+      medications: 'Aktuelle Medikamente auflisten',
+      preExistingConditions: 'Vorerkrankungen auflisten',
+      vaccinationStatus: 'Impfstatus eingeben',
+      emergencyContact: 'Notfallkontakt eingeben',
+      jobTitle: 'Berufsbezeichnung eingeben',
+      company: 'Unternehmen eingeben',
+      department: 'Abteilung eingeben',
+      enterValue: 'Wert eingeben',
+    },
+    actions: {
+      edit: 'Bearbeiten',
+      save: 'Speichern',
+      cancel: 'Abbrechen',
+      update: 'Profil aktualisieren',
+    },
+    messages: {
+      loading: 'Profil wird geladen...',
+      updateSuccess: 'Profil erfolgreich aktualisiert',
+      updateError: 'Profil konnte nicht aktualisiert werden',
+      noData: 'Keine Informationen verfügbar',
+      metadataUpdated: 'Profilinformationen aktualisiert',
+      bloodTypeUpdated: 'Blutgruppe aktualisiert',
+      jobUpdated: 'Berufsinformationen aktualisiert',
+      allergiesUpdated: 'Allergien aktualisiert',
+      conditionsUpdated: 'Vorerkrankungen aktualisiert',
+      medicationUpdated: 'Medikamenteninformationen aktualisiert',
+      vaccinationUpdated: 'Impfstatus aktualisiert',
     },
   },
 

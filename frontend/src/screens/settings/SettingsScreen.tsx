@@ -1,0 +1,242 @@
+import React from 'react';
+import { View, Switch, TouchableOpacity } from 'react-native';
+
+import { Screen } from '@/components/Screen';
+import { Text } from '@/components/Text';
+import { Icon } from '@/components/Icon';
+import { BottomSheet, BottomSheetAction } from '@/components/BottomSheet';
+import { useAppTheme } from '@/theme/context';
+import {
+    $section,
+    $settingContent,
+    $settingDescription,
+    $settingGroup,
+    $settingRow,
+    $separator,
+    $sectionTitle,
+    $container,
+    $logoutText
+} from "./settingsScreenStyles";
+import { useAuth } from '@/hooks/useAuth';
+import BottomSheetModal from "@gorhom/bottom-sheet";
+
+export default function SettingsScreen() {
+    const { themed, theme, themeContext, setThemeContextOverride } = useAppTheme();
+    const { logout } = useAuth();
+
+    // BottomSheet refs
+    const backgroundLocationSheetRef = React.useRef<BottomSheetModal>(null);
+    const dataPrivacySheetRef = React.useRef<BottomSheetModal>(null);
+    const aboutSheetRef = React.useRef<BottomSheetModal>(null);
+
+    // Mock state for location sharing - in real app this would come from store
+    const [locationSharingEnabled, setLocationSharingEnabled] = React.useState(true);
+    const [emergencyAlertsEnabled, setEmergencyAlertsEnabled] = React.useState(true);
+    const [backgroundLocationEnabled, setBackgroundLocationEnabled] = React.useState(false);
+
+    const handleThemeToggle = () => {
+        setThemeContextOverride(themeContext === 'dark' ? 'light' : 'dark');
+    };
+
+    const handleLocationSharingToggle = () => {
+        setLocationSharingEnabled(!locationSharingEnabled);
+    };
+
+    const handleEmergencyAlertsToggle = () => {
+        setEmergencyAlertsEnabled(!emergencyAlertsEnabled);
+    };
+
+    const handleBackgroundLocationToggle = () => {
+        if (!backgroundLocationEnabled) {
+            backgroundLocationSheetRef.current?.expand();
+        } else {
+            setBackgroundLocationEnabled(false);
+        }
+    };
+
+    const handleDataPrivacy = () => {
+        dataPrivacySheetRef.current?.expand();
+    };
+
+    const handleAbout = () => {
+        aboutSheetRef.current?.expand();
+    };
+
+    const handleLogout = () => {
+        logout()
+    };
+
+// BottomSheet actions
+    const backgroundLocationActions: BottomSheetAction[] = [
+        {
+            text: 'Enable',
+            onPress: () => setBackgroundLocationEnabled(true),
+            preset: 'primary'
+        },
+        {
+            text: 'Cancel',
+            onPress: () => {},
+            preset: 'primary'
+        }
+    ];
+
+    const dataPrivacyActions: BottomSheetAction[] = [
+        {
+            text: 'OK',
+            onPress: () => {},
+            preset: 'primary'
+        }
+    ];
+
+    const aboutActions: BottomSheetAction[] = [
+        {
+            text: 'OK',
+            onPress: () => {},
+            preset: 'primary'
+        }
+    ];
+
+    return (
+        <Screen preset="scroll" contentContainerStyle={themed($container)}>
+            {/* Appearance */}
+            <View style={themed($section)}>
+                <Text preset="formLabel" text="Appearance" style={themed($sectionTitle)} />
+
+                <View style={themed($settingGroup)}>
+                    <View style={themed($settingRow)}>
+                        <View style={themed($settingContent)}>
+                            <Text preset="default" text="Dark Mode" />
+                        </View>
+                        <Switch
+                            value={themeContext === 'dark'}
+                            onValueChange={handleThemeToggle}
+                            trackColor={{ false: theme.colors.borderStrong, true: theme.colors.tint }}
+                            thumbColor={theme.colors.background}
+                            ios_backgroundColor={theme.colors.borderStrong}
+                        />
+                    </View>
+                </View>
+            </View>
+
+            {/* Privacy & Location */}
+            <View style={themed($section)}>
+                <Text preset="formLabel" text="Privacy & Location" style={themed($sectionTitle)} />
+
+                <View style={themed($settingGroup)}>
+                    <View style={themed($settingRow)}>
+                        <View style={themed($settingContent)}>
+                            <Text preset="default" text="Share Location" />
+                            <Text preset="formHelper" text="Allow emergency contacts to see your location" style={themed($settingDescription)} />
+                        </View>
+                        <Switch
+                            value={locationSharingEnabled}
+                            onValueChange={handleLocationSharingToggle}
+                            trackColor={{ false: theme.colors.borderStrong, true: theme.colors.tint }}
+                            thumbColor={theme.colors.background}
+                            ios_backgroundColor={theme.colors.borderStrong}
+                        />
+                    </View>
+
+                    <View style={themed($separator)} />
+
+                    <View style={themed($settingRow)}>
+                        <View style={themed($settingContent)}>
+                            <Text preset="default" text="Background Location" />
+                            <Text preset="formHelper" text="Track location when app is closed" style={themed($settingDescription)} />
+                        </View>
+                        <Switch
+                            value={backgroundLocationEnabled}
+                            onValueChange={handleBackgroundLocationToggle}
+                            trackColor={{ false: theme.colors.borderStrong, true: theme.colors.tint }}
+                            thumbColor={theme.colors.background}
+                            ios_backgroundColor={theme.colors.borderStrong}
+                        />
+                    </View>
+                </View>
+            </View>
+
+            {/* Notifications */}
+            <View style={themed($section)}>
+                <Text preset="formLabel" text="Notifications" style={themed($sectionTitle)} />
+
+                <View style={themed($settingGroup)}>
+                    <View style={themed($settingRow)}>
+                        <View style={themed($settingContent)}>
+                            <Text preset="default" text="Emergency Alerts" />
+                            <Text preset="formHelper" text="Receive safety alerts and notifications" style={themed($settingDescription)} />
+                        </View>
+                        <Switch
+                            value={emergencyAlertsEnabled}
+                            onValueChange={handleEmergencyAlertsToggle}
+                            trackColor={{ false: theme.colors.borderStrong, true: theme.colors.tint }}
+                            thumbColor={theme.colors.background}
+                            ios_backgroundColor={theme.colors.borderStrong}
+                        />
+                    </View>
+                </View>
+            </View>
+
+            {/* About & Support */}
+            <View style={themed($section)}>
+                <Text preset="formLabel" text="About & Support" style={themed($sectionTitle)} />
+
+                <View style={themed($settingGroup)}>
+                    <TouchableOpacity style={themed($settingRow)} onPress={handleDataPrivacy}>
+                        <View style={themed($settingContent)}>
+                            <Text preset="default" text="Data Privacy" />
+                            <Text preset="formHelper" text="Learn how your data is protected" style={themed($settingDescription)} />
+                        </View>
+                        <Icon icon="chevron-forward" size={16} color={theme.colors.textDim} />
+                    </TouchableOpacity>
+
+                    <View style={themed($separator)} />
+
+                    <TouchableOpacity style={themed($settingRow)} onPress={handleAbout}>
+                        <View style={themed($settingContent)}>
+                            <Text preset="default" text="About SafeNet" />
+                            <Text preset="formHelper" text="Version and app information" style={themed($settingDescription)} />
+                        </View>
+                        <Icon icon="chevron-forward" size={16} color={theme.colors.textDim} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+
+            {/* Account */}
+            <View style={themed($section)}>
+                <Text preset="formLabel" text="Account" style={themed($sectionTitle)} />
+
+                <View style={themed($settingGroup)}>
+                    <TouchableOpacity style={themed($settingRow)} onPress={handleLogout}>
+                        <View style={themed($settingContent)}>
+                            <Text preset="default" text="Logout" style={themed($logoutText)} />
+                            <Text preset="formHelper" text="Sign out of your account" style={themed($settingDescription)} />
+                        </View>
+                        <Icon icon="log-out" size={16} color={theme.colors.error} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+
+            {/* BottomSheets */}
+            <BottomSheet
+                ref={backgroundLocationSheetRef}
+                title="Background Location"
+                message="This allows SafeNet to track your location even when the app is closed, enabling better emergency response."
+                actions={backgroundLocationActions}
+            />
+
+            <BottomSheet
+                ref={dataPrivacySheetRef}
+                title="Data Privacy"
+                message="Your data is encrypted and only shared with your emergency contacts when you explicitly allow it."
+                actions={dataPrivacyActions}
+            />
+
+            <BottomSheet
+                ref={aboutSheetRef}
+                title="About SafeNet"
+                message="SafeNet v1.0.0&#10;Connected Safety for Everyone&#10;&#10;Built with ❤️ for Hackathon Fulda 2025"
+                actions={aboutActions}
+            />
+        </Screen>
+    );
+}
