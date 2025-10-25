@@ -5,6 +5,8 @@ const en = {
     noData: 'No data available',
     loading: 'Loading...',
     lastSeen: 'Last seen',
+    save: 'Save',
+    error: 'Error'
   },
 
   home: {
@@ -46,7 +48,7 @@ const en = {
       profile: {
         title: 'Profile',
         subtitle: 'View and edit your personal details.',
-      },
+      }
     },
     info: {
       title: 'Did you know?',
@@ -71,6 +73,73 @@ const en = {
       title: 'Share Location',
       subtitle: 'Share your location with trusted contacts.',
     },
+    settings: {
+      title: 'Settings'
+    }
+  },
+
+  profile: {
+    title: 'Profile',
+    subtitle: 'Manage your personal information',
+    sections: {
+      basicInfo: 'Basic Information',
+      medicalInfo: 'Medical Information',
+      personalInfo: 'Personal Information',
+    },
+    fields: {
+      firstName: 'First Name',
+      lastName: 'Last Name',
+      name: 'Name',
+      email: 'Email',
+      phone: 'Phone Number',
+      dateOfBirth: 'Date of Birth',
+      address: 'Address',
+      bloodType: 'Blood Type',
+      allergies: 'Allergies',
+      medications: 'Current Medications',
+      preExistingConditions: 'Pre-existing Conditions',
+      vaccinationStatus: 'Vaccination Status',
+      emergencyContact: 'Emergency Contact',
+      jobTitle: 'Job Title',
+      company: 'Company',
+      department: 'Department',
+    },
+    placeholders: {
+      firstName: 'Enter your first name',
+      lastName: 'Enter your last name',
+      phone: 'Enter your phone number',
+      dateOfBirth: 'Select your date of birth',
+      address: 'Enter your address',
+      bloodType: 'Select your blood type',
+      allergies: 'List any allergies',
+      medications: 'List current medications',
+      preExistingConditions: 'List any pre-existing conditions',
+      vaccinationStatus: 'Enter vaccination status',
+      emergencyContact: 'Enter emergency contact',
+      jobTitle: 'Enter your job title',
+      company: 'Enter your company',
+      department: 'Enter your department',
+      enterValue: 'Enter value',
+    },
+    actions: {
+      edit: 'Edit',
+      save: 'Save',
+      cancel: 'Cancel',
+      update: 'Update Profile',
+    },
+    messages: {
+      loading: 'Loading profile...',
+      updateSuccess: 'Profile updated successfully',
+      updateError: 'Failed to update profile',
+      noData: 'No information available',
+      metadataUpdated: 'Profile information updated',
+      bloodTypeUpdated: 'Blood type updated',
+      jobUpdated: 'Job information updated',
+      allergiesUpdated: 'Allergies updated',
+      conditionsUpdated: 'Pre-existing conditions updated',
+      medicationUpdated: 'Medication information updated',
+      vaccinationUpdated: 'Vaccination status updated',
+    }
   },
 
   welcome: {
