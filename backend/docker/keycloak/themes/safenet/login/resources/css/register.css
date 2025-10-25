@@ -1,0 +1,324 @@
+/* SafeNet Registration - Form Components */
+
+/* Form Sections */
+.kc-form-section {
+  margin-bottom: 2rem;
+  animation: slideInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.kc-form-section:nth-child(1) { animation-delay: 0.1s; }
+.kc-form-section:nth-child(2) { animation-delay: 0.2s; }
+.kc-form-section:nth-child(3) { animation-delay: 0.3s; }
+
+.kc-section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--border);
+  letter-spacing: -0.01em;
+  position: relative;
+}
+
+.kc-section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--blue-500), transparent);
+  transition: width var(--transition-slow);
+}
+
+.kc-form-section:hover .kc-section-title::after {
+  width: 120px;
+}
+
+/* Form Grid for Side-by-Side Inputs */
+.kc-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.kc-form-grid .kc-form-group {
+  margin-bottom: 1rem;
+}
+
+.kc-form-group-full {
+  grid-column: 1 / -1;
+}
+
+/* Password Strength Indicator */
+.kc-password-strength {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--muted);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.kc-password-strength-bar {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.kc-password-strength-fill {
+  height: 100%;
+  transition: all var(--transition-slow);
+  border-radius: 3px;
+  width: 0;
+}
+
+.kc-password-strength-fill.weak {
+  width: 20%;
+  background: linear-gradient(90deg, var(--red-500), var(--red-600));
+}
+
+.kc-password-strength-fill.fair {
+  width: 40%;
+  background: linear-gradient(90deg, var(--orange-500), #ff7b00);
+}
+
+.kc-password-strength-fill.good {
+  width: 70%;
+  background: linear-gradient(90deg, #ca8a04, #eab308);
+}
+
+.kc-password-strength-fill.strong,
+.kc-password-strength-fill.very-strong {
+  width: 100%;
+  background: linear-gradient(90deg, var(--green-500), var(--green-600));
+}
+
+.kc-password-strength-text {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 0.75rem;
+  transition: color var(--transition-base);
+}
+
+.kc-password-strength-text.weak { color: var(--red-500); }
+.kc-password-strength-text.fair { color: var(--orange-500); }
+.kc-password-strength-text.good { color: #ca8a04; }
+.kc-password-strength-text.strong,
+.kc-password-strength-text.very-strong { color: var(--green-500); }
+
+/* Password Requirements List */
+.kc-password-requirements {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.kc-requirement {
+  font-size: 0.8125rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--muted-foreground);
+  transition: all var(--transition-base);
+  padding: 0.25rem 0;
+}
+
+.kc-requirement.met {
+  color: var(--green-500);
+}
+
+.kc-requirement-icon {
+  width: 16px;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 0.625rem;
+  font-weight: 700;
+  transition: all var(--transition-base);
+  background: var(--border);
+  color: var(--muted-foreground);
+}
+
+.kc-requirement.met .kc-requirement-icon {
+  background: var(--green-500);
+  color: white;
+  animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.kc-requirement-text {
+  flex: 1;
+}
+
+/* Password Match Indicator */
+.kc-password-match {
+  font-size: 0.8125rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-base);
+  opacity: 0;
+  transform: translateY(-5px);
+}
+
+.kc-password-match.kc-match-success,
+.kc-password-match.kc-match-error {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.kc-password-match.kc-match-success {
+  background: rgba(52, 199, 89, 0.1);
+  color: var(--green-500);
+  border: 1px solid rgba(52, 199, 89, 0.2);
+}
+
+.kc-password-match.kc-match-error {
+  background: rgba(255, 59, 48, 0.1);
+  color: var(--red-500);
+  border: 1px solid rgba(255, 59, 48, 0.2);
+}
+
+/* Input Validation States */
+.kc-input.valid {
+  border-color: var(--green-500);
+  background: rgba(52, 199, 89, 0.03);
+}
+
+.kc-input.invalid {
+  border-color: var(--red-500);
+  background: rgba(255, 59, 48, 0.03);
+}
+
+.kc-input.valid:focus {
+  border-color: var(--green-500);
+  box-shadow: 0 0 0 4px rgba(52, 199, 89, 0.08);
+}
+
+.kc-input.invalid:focus {
+  border-color: var(--red-500);
+  box-shadow: 0 0 0 4px rgba(255, 59, 48, 0.08);
+}
+
+/* Help Text */
+.kc-help-text {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  margin-top: 0.5rem;
+  line-height: 1.5;
+  padding-left: 0.25rem;
+}
+
+.kc-help-text.error {
+  color: var(--red-500);
+}
+
+/* Dark Mode Adjustments */
+@media (prefers-color-scheme: dark) {
+  .kc-password-strength {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: var(--border);
+  }
+  
+  .kc-password-match.kc-match-success {
+    background: rgba(52, 199, 89, 0.15);
+    border-color: rgba(52, 199, 89, 0.3);
+  }
+  
+  .kc-password-match.kc-match-error {
+    background: rgba(255, 59, 48, 0.15);
+    border-color: rgba(255, 59, 48, 0.3);
+  }
+  
+  .kc-input.valid {
+    background: rgba(52, 199, 89, 0.1);
+  }
+  
+  .kc-input.invalid {
+    background: rgba(255, 59, 48, 0.1);
+  }
+}
+
+/* Info Section */
+.kc-account-info {
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+  animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.6s backwards;
+}
+
+.kc-account-info p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 640px) {
+  .kc-form-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  
+  .kc-password-strength {
+    padding: 0.75rem;
+  }
+  
+  .kc-section-title {
+    font-size: 0.9375rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .kc-form-section {
+    margin-bottom: 1.5rem;
+  }
+  
+  .kc-password-requirements {
+    gap: 0.375rem;
+  }
+  
+  .kc-requirement {
+    font-size: 0.75rem;
+  }
+}
