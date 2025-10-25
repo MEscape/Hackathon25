@@ -8,6 +8,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import Toast from 'react-native-toast-message';
 
 import { KeyboardProvider } from 'react-native-keyboard-controller';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import {
     initialWindowMetrics,
     SafeAreaProvider,
@@ -17,6 +18,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 import { AnimatedSplashScreen } from '@/components/AnimatedSplashScreen';
 import { AuthNavigationHandler } from '@/components/AuthNavigationHandler';
+import { BottomSheetProvider } from '@/components/BottomSheet';
 import { ErrorBoundary } from '@/components/errorBoundary/ErrorBoundary';
 import { RootErrorBoundary } from '@/components/errorBoundary/RootErrorBoundary';
 import { createToastConfig } from '@/components/ToastConfig';
@@ -69,44 +71,48 @@ export default function RootLayout(): React.ReactNode {
 
     // otherwise, we're ready to render the app
     return (
-        <RootErrorBoundary
-            onError={(error, errorInfo) => {
-                // Log to your error tracking service for theme/provider errors
-                console.log('Provider Error logged:', error, errorInfo);
-            }}
-            onReset={() => {
-                // Clean up any state
-                console.log('Provider error boundary reset');
-            }}
-        >
-            <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+            <RootErrorBoundary
+                onError={(error, errorInfo) => {
+                    // Log to your error tracking service for theme/provider errors
+                    console.log('Provider Error logged:', error, errorInfo);
+                }}
+                onReset={() => {
+                    // Clean up any state
+                    console.log('Provider error boundary reset');
+                }}
+            >
+                <SafeAreaProvider initialMetrics={initialWindowMetrics}>
                 <Provider store={store}>
                     <PersistGate
                         loading={null}
                         persistor={persistor}
                     >
                         <ThemeProvider>
-                            <ErrorBoundary
-                                onError={(error, errorInfo) => {
-                                    // Log to your error tracking service for app errors
-                                    console.log('App Error logged:', error, errorInfo);
-                                }}
-                                onReset={() => {
-                                    // Clean up any state
-                                    console.log('App error boundary reset');
-                                }}
-                            >
-                                <AuthNavigationHandler>
-                                    <KeyboardProvider>
-                                        <Slot />
-                                        <Toast config={createToastConfig()} />
-                                    </KeyboardProvider>
-                                </AuthNavigationHandler>
-                            </ErrorBoundary>
+                            <BottomSheetProvider>
+                                <ErrorBoundary
+                                    onError={(error, errorInfo) => {
+                                        // Log to your error tracking service for app errors
+                                        console.log('App Error logged:', error, errorInfo);
+                                    }}
+                                    onReset={() => {
+                                        // Clean up any state
+                                        console.log('App error boundary reset');
+                                    }}
+                                >
+                                    <AuthNavigationHandler>
+                                        <KeyboardProvider>
+                                            <Slot />
+                                            <Toast config={createToastConfig()} />
+                                        </KeyboardProvider>
+                                    </AuthNavigationHandler>
+                                </ErrorBoundary>
+                            </BottomSheetProvider>
                         </ThemeProvider>
                     </PersistGate>
                 </Provider>
             </SafeAreaProvider>
         </RootErrorBoundary>
+        </GestureHandlerRootView>
     );
 }

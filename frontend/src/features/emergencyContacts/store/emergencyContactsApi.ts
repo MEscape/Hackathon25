@@ -92,8 +92,6 @@ export const emergencyContactsApi = apiSlice.injectEndpoints({
                 } catch {
                     // Revert optimistic update on error
                     patchResult.undo();
-                    // Note: The slice action change would need to be reverted manually
-                    // or we could implement a revert action in the slice
                 }
             },
         }),
@@ -163,8 +161,6 @@ export const emergencyContactsApi = apiSlice.injectEndpoints({
                     // Revert optimistic updates on error
                     contactsPatchResult.undo();
                     usersPatchResult.undo();
-                    // Note: The slice action change would need to be reverted manually
-                    // or we could implement a revert action in the slice
                 }
             },
             invalidatesTags: ['EmergencyContacts', 'DiscoverableUsers'],

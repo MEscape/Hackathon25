@@ -85,7 +85,7 @@
   ],
 
   "eventsEnabled": true,
-  "eventsListeners": ["webhook-http", "jboss-logging"],
+  "eventsListeners": ["jboss-logging"],
   "enabledEventTypes": [
     "LOGIN",
     "LOGOUT",

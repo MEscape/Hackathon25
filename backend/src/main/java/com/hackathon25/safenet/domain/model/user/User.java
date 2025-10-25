@@ -1,6 +1,7 @@
 package com.hackathon25.safenet.domain.model.user;
 
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -73,13 +74,29 @@ public record User(
     /**
      * Update user with new data from Keycloak
      * Returns a new immutable instance with updated fields
+     * Metadata merge strategy: preserves existing keys, adds new keys, updates changed values
      */
     public User updateFromKeycloak(
             String username,
             String email,
             String firstName,
             String lastName,
-            Map<String, Object> meta) {
+            Map<String, Object> newMeta) {
+
+        // Merge metadata: start with existing, then add/update with new
+        Map<String, Object> mergedMeta = new HashMap<>(this.meta);
+
+        if (newMeta != null) {
+            for (Map.Entry<String, Object> entry : newMeta.entrySet()) {
+                Object existingValue = mergedMeta.get(entry.getKey());
+                Object newValue = entry.getValue();
+
+                // Add new key or update if value is different
+                if (!Objects.equals(existingValue, newValue)) {
+                    mergedMeta.put(entry.getKey(), newValue);
+                }
+            }
+        }
 
         return new User(
                 this.id,
@@ -87,13 +104,11 @@ public record User(
                 email,
                 firstName,
                 lastName,
-                meta != null ? Map.copyOf(meta) : Map.of(),
+                Map.copyOf(mergedMeta),  // Make immutable
                 this.createdAt,
                 Instant.now()  // Update timestamp
         );
     }
-
-
 
     /**
      * Checks if the email is syntactically valid and within length constraints.

@@ -1,6 +1,8 @@
 export { AnimatedSplashScreen } from './AnimatedSplashScreen';
 export { ActionButton } from './ActionButton';
 export { AuthNavigationHandler } from './AuthNavigationHandler';
+export { BottomSheet, BottomSheetProvider } from './BottomSheet';
+export type { BottomSheetRef, BottomSheetAction } from './BottomSheet';
 export { Button } from './Button';
 export { Card } from './Card';
 export { Header } from './Header';

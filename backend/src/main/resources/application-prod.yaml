@@ -18,7 +18,7 @@ spring:
     oauth2:
       resourceserver:
         opaquetoken:
-          introspection-uri: ${HOST}:8081/realms/safenet/protocol/openid-connect/token/introspect
+          introspection-uri: ${HOST}/realms/safenet/protocol/openid-connect/token/introspect
           client-id: ${KEYCLOAK_CLIENT_ID}
           client-secret: ${KEYCLOAK_CLIENT_SECRET}
 
