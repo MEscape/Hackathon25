@@ -11,12 +11,15 @@ jobs:
 
     env:
       SSH_HOST:    ${{ secrets.SSH_HOST }}
-      SSH_USER:    ${{ secrets.SSH_USER }}      # z.B. "deploy"
-      SSH_PORT:    ${{ secrets.SSH_PORT }}      # z.B. "22"
-      SSH_KEY:     ${{ secrets.SSH_KEY }}       # Inhalt des PRIVATE KEY
-      APP_DIR:     "/opt/safenet"
-      SERVICE:     "safenet"
-      HEALTH_URL:  "http://127.0.0.1:8080/actuator/health"
+      SSH_USER:    ${{ secrets.SSH_USER }}
+      SSH_PORT:    ${{ secrets.SSH_PORT }}
+      SSH_KEY:     ${{ secrets.SSH_KEY }}
+      APP_DIR:     /opt/safenet
+      SERVICE:     safenet
+      HEALTH_URL:  http://127.0.0.1:8080/actuator/health
+      # von setup-java gesetzt; ist ok so:
+      JAVA_HOME:   /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.8-9/x64
+      JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.8-9/x64
 
     steps:
       - name: Checkout
@@ -63,8 +66,10 @@ jobs:
           username: ${{ env.SSH_USER }}
           key:      ${{ env.SSH_KEY }}
           port:     ${{ env.SSH_PORT }}
+          envs:     APP_DIR
           script: |
             set -e
+            echo "APP_DIR (remote) = '$APP_DIR'"
             mkdir -p "$APP_DIR"
 
       - name: Copy JAR
@@ -79,18 +84,22 @@ jobs:
 
       - name: Place as app.jar + restart + health
         uses: appleboy/ssh-action@v1.2.0
+        env:
+          # diesen Pfad/JAR geben wir in die SSH-Session weiter
+          JAR_PATH: ${{ steps.build.outputs.artifact }}
         with:
           host:     ${{ env.SSH_HOST }}
           username: ${{ env.SSH_USER }}
           key:      ${{ env.SSH_KEY }}
           port:     ${{ env.SSH_PORT }}
+          envs:     APP_DIR,SERVICE,HEALTH_URL,JAR_PATH
           script: |
             set -e
 
-            jar_name=$(basename "${{ steps.build.outputs.artifact }}")
-            mv -f "$APP_DIR/$jar_name" "$APP_DIR/app.jar"
+            jar_name=$(basename "$JAR_PATH")
+            echo "Using jar_name='$jar_name' in APP_DIR='$APP_DIR'"
 
-            # optional sicherstellen, dass Dienst lesen kann
+            mv -f "$APP_DIR/$jar_name" "$APP_DIR/app.jar"
             chmod 0644 "$APP_DIR/app.jar"
 
             sudo systemctl restart "$SERVICE"
