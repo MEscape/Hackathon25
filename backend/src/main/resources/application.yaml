@@ -1,0 +1,98 @@
+# Main application configuration
+spring:
+  application:
+    name: SafeNet
+
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+  # Database configuration
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+    # HikariCP connection pool (production-ready defaults)
+    hikari:
+      maximum-pool-size: ${MAXIMUM_POOL_SIZE}
+      minimum-idle: ${MINIMUM_IDLE}
+      connection-timeout: ${CONNECTION_TIMEOUT}
+      idle-timeout: ${IDLE_TIMEOUT}
+      max-lifetime: ${MAX_LIFETIME}
+
+  # JPA/Hibernate configuration
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate  # Production: never use 'update' or 'create-drop'
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+    show-sql: false  # Enable in dev profile
+
+# Server configuration
+server:
+  port: ${SERVER_PORT}
+  shutdown: graceful  # Graceful shutdown for Kubernetes
+
+# Actuator configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,metrics,prometheus"
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when_authorized
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+# OpenAPI documentation
+springdoc:
+  swagger-ui:
+    oauth:
+      use-pkce-with-authorization-code-grant: true
+      use-basic-authentication-with-access-code-grant: true
+
+    # UI Configuration
+    persist-authorization: true
+
+safenet:
+  # OpenAPI documentation
+  springdoc:
+    api-docs:
+      title: ${spring.application.name}
+      description: SafePath ist eine mobile/webbasierte App, die in Katastrophenfällen sichere Evakuierungsrouten anzeigt, Statusmeldungen ermöglicht und die Koordination von Betroffenen und Rettungskräften unterstützt.
+      app-version: 1.0
+      external-docs:
+        - description: OpenID Provider Configuration
+          url: ${HOST}:8081/realms/safenet/.well-known/openid-configuration
+
+    swagger-ui:
+      oauth:
+        authorization-url: ${HOST}:8081/realms/safenet/protocol/openid-connect/auth
+        token-url: ${HOST}:8081/realms/safenet/protocol/openid-connect/token
+
+  # Security configuration
+  security:
+    https-only: false
+    cors-allowed-origins:
+      - ${HOST}:8080
+      - ${HOST}:8081
+
+# Logging configuration
+logging:
+  level:
+    root: INFO
+    com.hackathon.safenet: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
