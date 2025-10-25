@@ -1,0 +1,100 @@
+{
+  "id": "safenet",
+  "realm": "safenet",
+  "loginTheme": "safenet",
+  "accountTheme": "safenet",
+  "displayName": "SafeNet",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": true,
+  "rememberMe": true,
+  "bruteForceProtected": true,
+
+  "internationalizationEnabled": true,
+  "supportedLocales": [
+    "en",
+    "de"
+  ],
+  "defaultLocale": "en",
+
+  "accessTokenLifespan": 300,
+  "accessTokenLifespanForImplicitFlow": 900,
+  "ssoSessionIdleTimeout": 1800,
+  "ssoSessionMaxLifespan": 36000,
+  "passwordPolicy": "length(8) and upperCase and lowerCase and digits and specialChars and notUsername",
+
+  "clients": [
+    {
+      "clientId": "${KEYCLOAK_CLIENT_ID}",
+      "name": "Frontend Application",
+      "enabled": true,
+      "publicClient": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "secret": "${KEYCLOAK_CLIENT_SECRET}",
+      "redirectUris": [
+        "safenet:///",
+        "${HOST}:8081/*",
+        "${HOST}:8080/swagger-ui/oauth2-redirect.html"
+      ],
+      "webOrigins": [
+        "${HOST}:8081",
+        "${HOST}:8080"
+      ]
+    }
+  ],
+
+  "roles": {
+    "realm": [
+      {
+        "name": "user",
+        "description": "Standard user role"
+      },
+      {
+        "name": "admin",
+        "description": "Administrator role"
+      },
+      {
+        "name": "service-account",
+        "description": "Service account role for backend services"
+      }
+    ]
+  },
+
+  "identityProviders": [
+    {
+      "alias": "google",
+      "displayName": "Google",
+      "providerId": "google",
+      "enabled": true,
+      "updateProfileFirstLoginMode": "on",
+      "trustEmail": true,
+      "storeToken": false,
+      "addReadTokenRoleOnCreate": false,
+      "authenticateByDefault": false,
+      "linkOnly": false,
+      "firstBrokerLoginFlowAlias": "first broker login",
+      "config": {
+        "clientId": "${GOOGLE_CLIENT_ID}",
+        "clientSecret": "${GOOGLE_CLIENT_SECRET}",
+        "syncMode": "IMPORT",
+        "useJwksUrl": "true"
+      }
+    }
+  ],
+
+  "eventsEnabled": true,
+  "eventsListeners": ["webhook-http", "jboss-logging"],
+  "enabledEventTypes": [
+    "LOGIN",
+    "LOGOUT",
+    "REGISTER",
+    "UPDATE_PROFILE",
+    "UPDATE_EMAIL",
+    "DELETE_ACCOUNT"
+  ],
+
+  "adminEventsEnabled": true,
+  "adminEventsDetailsEnabled": true
+}

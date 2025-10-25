@@ -1,0 +1,319 @@
+/* SafeNet Template - Core Layout and Components */
+
+/* Layout */
+.login-pf {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.login-pf-page {
+  width: 100%;
+  max-width: 480px;
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Card */
+.card-pf {
+  background: var(--card);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  padding: 3rem 2.5rem;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow var(--transition-slow);
+}
+
+.card-pf::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--blue-500), transparent);
+  opacity: 0.6;
+}
+
+.card-pf:hover {
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.15), 0 8px 10px -6px rgb(0 0 0 / 0.15);
+}
+
+/* Logo and Header */
+.kc-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s backwards;
+}
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: scale(0.95); 
+  }
+  to { 
+    opacity: 1; 
+    transform: scale(1); 
+  }
+}
+
+.kc-logo img {
+  max-height: 150px;
+  width: auto;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.08));
+}
+
+/* Header */
+.kc-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s backwards;
+}
+
+.kc-header h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.01em;
+}
+
+.kc-header p {
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Messages */
+.kc-error,
+.kc-warning,
+.kc-success,
+.kc-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.kc-error {
+  background: rgba(255, 59, 48, 0.05);
+  border: 1px solid rgba(255, 59, 48, 0.15);
+  color: var(--red-500);
+}
+
+.kc-warning {
+  background: rgba(255, 149, 0, 0.05);
+  border: 1px solid rgba(255, 149, 0, 0.15);
+  color: var(--orange-500);
+}
+
+.kc-success {
+  background: rgba(52, 199, 89, 0.05);
+  border: 1px solid rgba(52, 199, 89, 0.15);
+  color: var(--green-500);
+}
+
+.kc-info {
+  background: rgba(0, 122, 255, 0.05);
+  border: 1px solid rgba(0, 122, 255, 0.15);
+  color: var(--blue-500);
+}
+
+/* Form Container */
+.kc-form {
+  margin-bottom: 1.5rem;
+}
+
+/* Social Providers */
+.kc-social-providers {
+  margin-top: 2rem;
+  animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.6s backwards;
+}
+
+.kc-social-divider {
+  position: relative;
+  text-align: center;
+  margin: 2rem 0 1.5rem;
+}
+
+.kc-social-divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--border);
+}
+
+.kc-social-divider span {
+  position: relative;
+  background: var(--card);
+  padding: 0 1rem;
+  font-size: 0.8125rem;
+  color: var(--muted-foreground);
+  font-weight: 500;
+}
+
+.kc-social-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.kc-social-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.875rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  color: var(--foreground);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9375rem;
+  transition: all var(--transition-base);
+  gap: 0.5rem;
+}
+
+.kc-social-button:hover {
+  background: var(--muted);
+  border-color: var(--stone-300);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.kc-social-button:active {
+  transform: translateY(0);
+}
+
+/* Footer */
+.kc-footer {
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+  animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.7s backwards;
+}
+
+.kc-footer p {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--muted-foreground);
+}
+
+/* Logo mode switching - removed language selector */
+.kc-logo-light {
+  display: block;
+}
+
+.kc-logo-dark {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .kc-logo-light {
+    display: none;
+  }
+  
+  .kc-logo-dark {
+    display: block;
+  }
+  
+  .kc-error {
+    background: rgba(255, 59, 48, 0.15);
+    border-color: rgba(255, 59, 48, 0.3);
+  }
+  
+  .kc-warning {
+    background: rgba(255, 149, 0, 0.15);
+    border-color: rgba(255, 149, 0, 0.3);
+  }
+  
+  .kc-success {
+    background: rgba(52, 199, 89, 0.15);
+    border-color: rgba(52, 199, 89, 0.3);
+  }
+  
+  .kc-info {
+    background: rgba(0, 122, 255, 0.15);
+    border-color: rgba(0, 122, 255, 0.3);
+  }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .login-pf {
+    padding: 1rem;
+  }
+  
+  .card-pf {
+    padding: 2rem 1.5rem;
+    border-radius: var(--radius-lg);
+  }
+  
+  .kc-logo img {
+    max-height: 64px;
+  }
+  
+  .kc-header h1 {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-pf {
+    padding: 1.5rem 1.25rem;
+  }
+  
+  .kc-logo img {
+    max-height: 56px;
+  }
+  
+  .kc-header h1 {
+    font-size: 1.125rem;
+  }
+  
+  .kc-header p {
+    font-size: 0.8125rem;
+  }
+}
