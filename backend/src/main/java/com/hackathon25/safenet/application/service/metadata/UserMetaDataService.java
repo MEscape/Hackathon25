@@ -22,6 +22,7 @@ public class UserMetaDataService implements UserMetaDataPort {
     public User updateUserMeta(UUID userId, Map<String, Object> metaData) {
         User user = userRepositoryPort.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+        System.out.println(user + "AAAAAA" + metaData);
         user.meta().putAll(metaData);
         userRepositoryPort.save(user);
         return user;
@@ -56,9 +57,9 @@ public class UserMetaDataService implements UserMetaDataPort {
     }
 
     @Override
-    public void addPreExistingConditions(UUID userId, String pre_existingConditions) {
+    public void addPreExistingConditions(UUID userId, String preExistingConditions) {
         Map<String, Object> data = new HashMap<>();
-        data.put("pre_existingConditions", pre_existingConditions);
+        data.put("preExistingConditions", preExistingConditions);
         updateUserMeta(userId, data);
     }
 
