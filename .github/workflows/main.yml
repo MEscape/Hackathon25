@@ -1,8 +1,11 @@
-name: Deploy to Server
+name: Deploy backend to Server
 
 on:
   push:
     branches: [ "main" ]
+    # optional nur triggern, wenn sich im Backend was ändert:
+    # paths:
+    #   - "backend/**"
   workflow_dispatch:
 
 jobs:
@@ -27,48 +30,35 @@ jobs:
         with:
           distribution: temurin
           java-version: "21"
-          cache: "maven"   # schadet Gradle nicht
+          cache: maven
 
-      - name: Build (detect Maven/Gradle + find JAR)
+      - name: Build backend (detect mvnw/mvn)
         id: build
         shell: bash
         run: |
           set -euo pipefail
 
-          echo "==> Project root:"
-          ls -la
-
-          ARTIFACT=""
+          cd backend
 
           if [ -f "./mvnw" ]; then
             chmod +x ./mvnw
             ./mvnw -B -DskipTests package
-            ARTIFACT=$(ls -1 target/*.jar | grep -v '\-sources\.jar' | grep -v '\-javadoc\.jar' | head -n1 || true)
           elif [ -f "pom.xml" ]; then
-            echo "mvnw nicht gefunden – benutze System-Maven."
-            mvn -v
             mvn -B -DskipTests package
-            ARTIFACT=$(ls -1 target/*.jar | grep -v '\-sources\.jar' | grep -v '\-javadoc\.jar' | head -n1 || true)
-          elif [ -f "./gradlew" ]; then
-            chmod +x ./gradlew
-            # Bevorzugt Spring Boot Task, sonst jar
-            ./gradlew -x test bootJar || ./gradlew -x test jar
-            ARTIFACT=$(ls -1 build/libs/*.jar | grep -v '\-plain\.jar' | head -n1 || true)
-          elif [ -f "build.gradle" ] || ls build.gradle.kts >/dev/null 2>&1; then
-            echo "::error::Kein gradlew im Repo. Füge den Gradle-Wrapper hinzu oder liefere mvnw/maven."
-            exit 1
           else
-            echo "::error::Kein pom.xml oder build.gradle gefunden – weiß nicht, wie ich bauen soll."
+            echo "::error::In backend/ fehlt pom.xml – kann nicht bauen."
             exit 1
           fi
 
+          ARTIFACT=$(ls -1 target/*.jar | grep -v '\-sources\.jar' | grep -v '\-javadoc\.jar' | head -n1 || true)
           if [ -z "${ARTIFACT:-}" ] || [ ! -f "$ARTIFACT" ]; then
-            echo "::error::Kein JAR erzeugt (target/ oder build/libs/ leer)."
+            echo "::error::Kein JAR erzeugt (backend/target/ leer)."
             exit 1
           fi
 
-          echo "artifact=$ARTIFACT" >> "$GITHUB_OUTPUT"
-          echo "Gefundenes Artefakt: $ARTIFACT"
+          # auf Repo-Root relativ machen
+          echo "artifact=backend/$ARTIFACT" >> "$GITHUB_OUTPUT"
+          echo "Gefundenes Artefakt: backend/$ARTIFACT"
 
       - name: Ensure target dir on server
         uses: appleboy/ssh-action@v1.2.0
@@ -80,7 +70,7 @@ jobs:
           script: |
             set -e
             sudo mkdir -p "$APP_DIR"
-            # Optional: Besitzer umsetzen, falls Service unter user 'safenet' läuft
+            # optional: Besitzer setzen, falls dein Dienst nicht als root läuft:
             # sudo chown -R safenet:safenet "$APP_DIR"
 
       - name: Copy JAR
