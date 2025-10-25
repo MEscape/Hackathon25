@@ -1,8 +1,8 @@
-package com.hackathon.safenet.application.service.ninapolice;
+package com.hackathon25.safenet.application.service.ninapolice;
 
-import com.hackathon.safenet.domain.model.ninapolice.NinaPoliceItem;
-import com.hackathon.safenet.domain.ports.inbound.NinaPolicePort;
-import com.hackathon.safenet.domain.ports.outbound.NinaPoliceFeedPort;
+import com.hackathon25.safenet.domain.model.ninapolice.NinaPoliceItem;
+import com.hackathon25.safenet.domain.port.inbound.NinaPolicePort;
+import com.hackathon25.safenet.domain.port.outbound.NinaPoliceFeedPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

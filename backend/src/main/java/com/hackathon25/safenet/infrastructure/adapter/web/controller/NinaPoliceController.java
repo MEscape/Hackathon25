@@ -1,10 +1,12 @@
-package com.hackathon.safenet.infrastructure.adapters.web.controller;
+package com.hackathon25.safenet.infrastructure.adapter.web.controller;
 
-import com.hackathon.safenet.application.service.ninapolice.NinaPoliceService;
-import com.hackathon.safenet.domain.model.ninapolice.NinaPoliceItem;
-import com.hackathon.safenet.infrastructure.adapters.web.dto.nina.NinaPoliceResponseDto;
+
 
 import java.util.List;
+
+import com.hackathon25.safenet.application.service.ninapolice.NinaPoliceService;
+import com.hackathon25.safenet.domain.model.ninapolice.NinaPoliceItem;
+import com.hackathon25.safenet.infrastructure.adapter.web.dto.ninaPolice.NinaPoliceResponseDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

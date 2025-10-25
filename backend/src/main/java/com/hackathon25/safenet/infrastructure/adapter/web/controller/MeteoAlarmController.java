@@ -1,7 +1,7 @@
-package com.hackathon.safenet.infrastructure.adapters.web.controller;
+package com.hackathon25.safenet.infrastructure.adapter.web.controller;
 
-import com.hackathon.safenet.application.service.meteo.MeteoAlarmService;
-import com.hackathon.safenet.domain.model.meteoalarm.MeteoAlarmResponse;
+import com.hackathon25.safenet.application.service.meteo.MeteoAlarmService;
+import com.hackathon25.safenet.domain.model.meteoalarm.MeteoAlarmResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

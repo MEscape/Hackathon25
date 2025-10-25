@@ -1,6 +1,6 @@
-package com.hackathon.safenet.domain.ports.outbound;
+package com.hackathon25.safenet.domain.port.outbound;
 
-import com.hackathon.safenet.domain.model.notfalltipps.NotfalltippsRoot;
+import com.hackathon25.safenet.domain.model.notfalltipps.NotfalltippsRoot;
 
 public interface NotfalltippsFeedPort {
     /**

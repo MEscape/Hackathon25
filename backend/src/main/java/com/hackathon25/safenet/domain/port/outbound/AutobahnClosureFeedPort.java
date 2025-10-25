@@ -1,6 +1,6 @@
-package com.hackathon.safenet.domain.ports.outbound;
+package com.hackathon25.safenet.domain.port.outbound;
 
-import com.hackathon.safenet.infrastructure.adapters.web.dto.autobahn.AutobahnClosureItemDto;
+import com.hackathon25.safenet.infrastructure.adapter.web.dto.autobahn.AutobahnClosureItemDto;
 
 import java.util.List;
 

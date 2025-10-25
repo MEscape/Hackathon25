@@ -1,4 +1,4 @@
-package com.hackathon.safenet.infrastructure.adapters.rss.mapper;
+package com.hackathon25.safenet.infrastructure.adapter.rss.mapper;
 
 /**
  * Generic API mapper interface for converting raw API data to domain models

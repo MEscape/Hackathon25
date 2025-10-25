@@ -1,7 +1,7 @@
-package com.hackathon.safenet.infrastructure.adapters.web.dto.notfalltipps;
+package com.hackathon25.safenet.infrastructure.adapter.web.dto.notfalltipps;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hackathon.safenet.domain.model.notfalltipps.NotfalltippsCategory;
+import com.hackathon25.safenet.domain.model.notfalltipps.NotfalltippsCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;

@@ -1,8 +1,8 @@
-package com.hackathon.safenet.infrastructure.adapters.rss.persistance;
+package com.hackathon25.safenet.infrastructure.adapter.rss.persistance;
 
-import com.hackathon.safenet.domain.ports.outbound.NotfalltippsFeedPort;
-import com.hackathon.safenet.domain.model.notfalltipps.NotfalltippsRoot;
-import com.hackathon.safenet.infrastructure.adapters.rss.mapper.NotfalltippsMapper;
+import com.hackathon25.safenet.domain.port.outbound.NotfalltippsFeedPort;
+import com.hackathon25.safenet.domain.model.notfalltipps.NotfalltippsRoot;
+import com.hackathon25.safenet.infrastructure.adapter.rss.mapper.NotfalltippsMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

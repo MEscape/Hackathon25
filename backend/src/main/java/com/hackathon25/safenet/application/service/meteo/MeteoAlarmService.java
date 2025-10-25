@@ -1,9 +1,9 @@
-package com.hackathon.safenet.application.service.meteo;
+package com.hackathon25.safenet.application.service.meteo;
 
-import com.hackathon.safenet.domain.model.meteoalarm.MeteoAlarmItem;
-import com.hackathon.safenet.domain.model.meteoalarm.MeteoAlarmResponse;
-import com.hackathon.safenet.domain.ports.inbound.MeteoAlarmPort;
-import com.hackathon.safenet.domain.ports.outbound.MeteoAlarmFeedPort;
+import com.hackathon25.safenet.domain.model.meteoalarm.MeteoAlarmItem;
+import com.hackathon25.safenet.domain.model.meteoalarm.MeteoAlarmResponse;
+import com.hackathon25.safenet.domain.port.inbound.MeteoAlarmPort;
+import com.hackathon25.safenet.domain.port.outbound.MeteoAlarmFeedPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -1,8 +1,8 @@
-package com.hackathon.safenet.application.service.ninapolice;
+package com.hackathon25.safenet.application.service.ninapolice;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hackathon.safenet.domain.model.ninapolice.NinaPoliceItem;
+import com.hackathon25.safenet.domain.model.ninapolice.NinaPoliceItem;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;

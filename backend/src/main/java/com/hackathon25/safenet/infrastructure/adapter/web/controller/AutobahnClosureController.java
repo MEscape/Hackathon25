@@ -1,8 +1,8 @@
-package com.hackathon.safenet.infrastructure.adapters.web.controller;
+package com.hackathon25.safenet.infrastructure.adapter.web.controller;
 
-import com.hackathon.safenet.domain.model.autobahn.AutobahnClosureItem;
-import com.hackathon.safenet.domain.ports.inbound.AutobahnClosurePort;
-import com.hackathon.safenet.infrastructure.adapters.web.dto.autobahn.AutobahnClosureItemDto;
+import com.hackathon25.safenet.domain.model.autobahn.AutobahnClosureItem;
+import com.hackathon25.safenet.domain.port.inbound.AutobahnClosurePort;
+import com.hackathon25.safenet.infrastructure.adapter.web.dto.autobahn.AutobahnClosureItemDto;
 
 import java.util.List;
 import java.util.stream.Collectors;

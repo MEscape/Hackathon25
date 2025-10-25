@@ -1,4 +1,4 @@
-package com.hackathon.safenet.domain.model.autobahn;
+package com.hackathon25.safenet.domain.model.autobahn;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
