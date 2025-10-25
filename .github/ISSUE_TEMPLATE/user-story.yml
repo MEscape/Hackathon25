@@ -5,16 +5,15 @@ labels: ["user story"]
 body:
   - type: textarea
     id: description
-    attributes:
-      label: Beschreibung
-      description: Beschreibe, was der User tun möchte und warum.
+    label: Beschreibung
+    description: Beschreibe, was der User tun möchte und warum.
+
   - type: textarea
     id: acceptance
-    attributes:
-      label: Akzeptanzkriterien
-      description: Liste die Bedingungen auf, wann die Story als fertig gilt.
+    label: Akzeptanzkriterien
+    description: Liste die Bedingungen auf, wann die Story als fertig gilt.
+
   - type: textarea
     id: notes
-    attributes:
-      label: Notizen
-      description: Optional: Design, technische Hinweise, etc.
+    label: Notizen
+    description: Optional: Design, technische Hinweise, etc.
