@@ -1,8 +1,11 @@
 export { AnimatedSplashScreen } from './AnimatedSplashScreen';
+export { ActionButton } from './ActionButton';
+export { AuthNavigationHandler } from './AuthNavigationHandler';
 export { Button } from './Button';
 export { Card } from './Card';
 export { Header } from './Header';
 export { Icon } from './Icon';
+export { IconContainer } from './IconContainer';
 export { Screen } from './Screen';
 export { Text } from './Text';
 export { ErrorBoundary } from './errorBoundary/ErrorBoundary';

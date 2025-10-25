@@ -11,14 +11,19 @@ import {
   REGISTER,
 } from 'redux-persist';
 
+import { apiSlice } from './api/baseApi';
+import authReducer from './slices/authSlice';
 import Config from "@/config";
 import * as app from 'app.json'
 
 // Root reducer
-const rootReducer = combineReducers({});
+const rootReducer = combineReducers({
+  auth: persistReducer(Config.redux.persist.auth, authReducer),
+  [apiSlice.reducerPath]: apiSlice.reducer,
+});
 
 // Persisted reducer
-const persistedReducer = persistReducer(rootReducer);
+const persistedReducer = persistReducer(Config.redux.persist.root, rootReducer);
 
 // Optimized error handling middleware
 const errorHandlingMiddleware: Middleware = () => next => action => {
@@ -54,6 +59,7 @@ export const store = configureStore({
       },
       immutableCheck: __DEV__ ? { warnAfter: 128 } : false,
     })
+      .concat(apiSlice.middleware)
       .concat(errorHandlingMiddleware);
 
     // Add logger only in development

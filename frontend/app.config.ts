@@ -20,6 +20,12 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
         extra: {
             ...config.extra,
             // Expose environment variables through Expo Constants
+            EXPO_PUBLIC_OAUTH_CLIENT_ID: process.env.EXPO_PUBLIC_OAUTH_CLIENT_ID,
+            EXPO_PUBLIC_OAUTH_CLIENT_SECRET: process.env.EXPO_PUBLIC_OAUTH_CLIENT_SECRET,
+            EXPO_PUBLIC_API_BASE_URL: process.env.EXPO_PUBLIC_API_BASE_URL,
+            EXPO_PUBLIC_OAUTH_REDIRECT_PATH: process.env.EXPO_PUBLIC_OAUTH_REDIRECT_PATH,
+            EXPO_PUBLIC_APP_SCHEME: process.env.EXPO_PUBLIC_APP_SCHEME,
+            EXPO_PUBLIC_OAUTH_ISSUER: process.env.EXPO_PUBLIC_OAUTH_ISSUER,
         },
         ios: {
             ...config.ios,
