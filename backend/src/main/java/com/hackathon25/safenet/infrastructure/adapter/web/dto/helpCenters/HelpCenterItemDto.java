@@ -40,7 +40,7 @@ class HelpCenterItemDto {
         }
         return HelpCenterItemDto.builder()
                 .name(helpCenter.getTags() != null ? helpCenter.getTags().getName() : null)
-                //.type(helpCenter.getTags() != null ? helpCenter.getTags().getAmenity() : null)
+                .type(helpCenter.getTags() != null ? helpCenter.getTags().getAmenity() : null)
                 .lat(helpCenter.getLat())
                 .lon(helpCenter.getLon())
                 .tags(tagsList)

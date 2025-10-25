@@ -10,10 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class HelpCenterTags {
-
         private String name;
         private String amenity;
-
-        // Getter & Setter
-
 }

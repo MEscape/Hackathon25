@@ -1,28 +1,18 @@
-package com.hackathon25.safenet.infrastructure.adapter.rss.persistance;
+package com.hackathon25.safenet.infrastructure.adapter.helpcenters.persistence;
 
 import com.hackathon25.safenet.domain.model.helpcenters.HelpCenter;
-import com.hackathon25.safenet.domain.model.helpcenters.HelpCenterTags;
-import com.hackathon25.safenet.domain.port.inbound.HelpCentersPort;
 import com.hackathon25.safenet.domain.port.outbound.HelpCentersFeedPort;
+import com.hackathon25.safenet.infrastructure.adapter.helpcenters.mapper.HelpCenterMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.configurationprocessor.json.JSONArray;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
-import com.hackathon25.safenet.domain.model.helpcenters.HelpCenter;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriUtils;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Adapter to fetch HelpCenters (like hospitals) from Overpass API
@@ -33,6 +23,7 @@ import java.util.stream.Collectors;
 public class HelpCenterAdapter implements HelpCentersFeedPort {
 
     private final RestTemplate restTemplate = new RestTemplate();
+    private final HelpCenterMapper helpCenterMapper;
 
     @Override
     public List<HelpCenter> getHelpCenters(double lat, double lon, double radiusMeters, String type) {
@@ -59,36 +50,13 @@ public class HelpCenterAdapter implements HelpCentersFeedPort {
             if (elements == null) return List.of();
 
             return elements.stream()
-                    .map(this::mapOverpassNode)
+                    .map(helpCenterMapper::mapOverpassNode)
                     .filter(Objects::nonNull)
                     .toList();
 
         } catch (Exception e) {
+            log.error("Error fetching HelpCenters from Overpass API: {}", e.getMessage());
             throw new RuntimeException("Fehler beim Abrufen der HelpCenters", e);
         }
     }
-
-    public HelpCenter mapOverpassNode(Map<String, Object> element) {
-        try {
-            HelpCenter hc = new HelpCenter();
-            hc.setType((String) element.get("type"));
-            hc.setId(((Number) element.get("id")).longValue());
-            hc.setLat(((Number) element.get("lat")).doubleValue());
-            hc.setLon(((Number) element.get("lon")).doubleValue());
-
-            Map<String, String> tagsMap = (Map<String, String>) element.get("tags");
-            if (tagsMap != null) {
-                HelpCenterTags tags = new HelpCenterTags();
-                tags.setName(tagsMap.get("name"));
-                tags.setAmenity(tagsMap.get("amenity"));
-                hc.setTags(tags);
-            }
-
-            return hc;
-        } catch (Exception e) {
-            return null;
-        }
-    }
 }
-
-
