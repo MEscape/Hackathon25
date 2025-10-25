@@ -31,7 +31,7 @@ jobs:
           java-version: "21"
           cache: maven
 
-      - name: Build backend (detect mvnw/mvn)
+      - name: Build backend (clean install, robust artifact detect)
         id: build
         shell: bash
         run: |
@@ -39,24 +39,38 @@ jobs:
 
           cd backend
 
-          if [ -f "./mvnw" ]; then
-            chmod +x ./mvnw
-            ./mvnw -B -DskipTests package
-          elif [ -f "pom.xml" ]; then
-            mvn -B -DskipTests package
+          MVN="./mvnw"
+          if [ ! -x "$MVN" ]; then
+            MVN="mvn"
           else
-            echo "::error::In backend/ fehlt pom.xml – kann nicht bauen."
+            chmod +x ./mvnw
+          fi
+
+          # Clean install ohne Tests, frische SNAPSHOTs, leiseres Log
+          "$MVN" -B -U -ntp -DskipTests clean install
+
+          # finalName + packaging deterministisch aus Maven lesen
+          FINAL_NAME=$("$MVN" -q -DforceStdout help:evaluate -Dexpression=project.build.finalName)
+          PACKAGING=$("$MVN" -q -DforceStdout help:evaluate -Dexpression=project.packaging || echo "jar")
+          CANDIDATE="target/${FINAL_NAME}.${PACKAGING}"
+
+          # Fallback: bestes .jar ohne sources/javadoc/original
+          if [ ! -f "$CANDIDATE" ]; then
+            CANDIDATE=$(find target -maxdepth 1 -type f -name "*.jar" \
+              ! -name "*-sources.jar" \
+              ! -name "*-javadoc.jar" \
+              ! -name "original-*.jar" \
+              -printf "%T@ %p\n" | sort -nr | awk 'NR==1{print $2}' || true)
+          fi
+
+          if [ -z "${CANDIDATE:-}" ] || [ ! -f "$CANDIDATE" ]; then
+            echo "::error::Kein JAR gefunden nach clean install (backend/target/ leer oder nur sources/javadoc)."
+            ls -al target || true
             exit 1
           fi
 
-          ARTIFACT=$(ls -1 target/*.jar | grep -v '\-sources\.jar' | grep -v '\-javadoc\.jar' | head -n1 || true)
-          if [ -z "${ARTIFACT:-}" ] || [ ! -f "$ARTIFACT" ]; then
-            echo "::error::Kein JAR erzeugt (backend/target/ leer)."
-            exit 1
-          fi
-
-          echo "artifact=backend/$ARTIFACT" >> "$GITHUB_OUTPUT"
-          echo "Gefundenes Artefakt: backend/$ARTIFACT"
+          echo "artifact=backend/$CANDIDATE" >> "$GITHUB_OUTPUT"
+          echo "Gefundenes Artefakt: backend/$CANDIDATE"
 
       - name: Ensure target dir on server
         uses: appleboy/ssh-action@v1.2.0
@@ -80,7 +94,7 @@ jobs:
           port:     ${{ env.SSH_PORT }}
           source:   ${{ steps.build.outputs.artifact }}   # backend/target/<file>.jar
           target:   ${{ env.APP_DIR }}                    # /opt/safenet
-          strip_components: 2                             # entfernt backend/target → legt Datei flach ab
+          strip_components: 2                             # entfernt backend/target → Datei liegt flach
 
       - name: Place as app.jar + restart + health
         uses: appleboy/ssh-action@v1.2.0
