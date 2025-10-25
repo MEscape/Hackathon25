@@ -1,0 +1,127 @@
+name: Deploy backend to Server
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      SSH_HOST:    ${{ secrets.SSH_HOST }}
+      SSH_USER:    ${{ secrets.SSH_USER }}      # z.B. deploy
+      SSH_PORT:    ${{ secrets.SSH_PORT }}      # z.B. 22
+      SSH_KEY:     ${{ secrets.SSH_KEY }}       # OpenSSH PRIVATE KEY Inhalt
+      APP_DIR:     /opt/safenet
+      SERVICE:     safenet
+      HEALTH_URL:  http://127.0.0.1:8080/actuator/health
+      JAVA_HOME:   /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.8-9/x64
+      JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.8-9/x64
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      - name: Build backend (detect mvnw/mvn)
+        id: build
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          cd backend
+
+          if [ -f "./mvnw" ]; then
+            chmod +x ./mvnw
+            ./mvnw -B -DskipTests package
+          elif [ -f "pom.xml" ]; then
+            mvn -B -DskipTests package
+          else
+            echo "::error::In backend/ fehlt pom.xml – kann nicht bauen."
+            exit 1
+          fi
+
+          ARTIFACT=$(ls -1 target/*.jar | grep -v '\-sources\.jar' | grep -v '\-javadoc\.jar' | head -n1 || true)
+          if [ -z "${ARTIFACT:-}" ] || [ ! -f "$ARTIFACT" ]; then
+            echo "::error::Kein JAR erzeugt (backend/target/ leer)."
+            exit 1
+          fi
+
+          echo "artifact=backend/$ARTIFACT" >> "$GITHUB_OUTPUT"
+          echo "Gefundenes Artefakt: backend/$ARTIFACT"
+
+      - name: Ensure target dir on server
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host:     ${{ env.SSH_HOST }}
+          username: ${{ env.SSH_USER }}
+          key:      ${{ env.SSH_KEY }}
+          port:     ${{ env.SSH_PORT }}
+          envs:     APP_DIR
+          script: |
+            set -e
+            echo "APP_DIR (remote) = '$APP_DIR'"
+            mkdir -p "$APP_DIR"
+
+      - name: Copy JAR (flat into APP_DIR)
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host:     ${{ env.SSH_HOST }}
+          username: ${{ env.SSH_USER }}
+          key:      ${{ env.SSH_KEY }}
+          port:     ${{ env.SSH_PORT }}
+          source:   ${{ steps.build.outputs.artifact }}   # backend/target/<file>.jar
+          target:   ${{ env.APP_DIR }}                    # /opt/safenet
+          strip_components: 2                             # entfernt backend/target → legt Datei flach ab
+
+      - name: Place as app.jar + restart + health
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          JAR_PATH: ${{ steps.build.outputs.artifact }}
+        with:
+          host:     ${{ env.SSH_HOST }}
+          username: ${{ env.SSH_USER }}
+          key:      ${{ env.SSH_KEY }}
+          port:     ${{ env.SSH_PORT }}
+          envs:     APP_DIR,SERVICE,HEALTH_URL,JAR_PATH
+          script: |
+            set -e
+
+            jar_name=$(basename "$JAR_PATH")
+
+            echo "Listing $APP_DIR before mv:"
+            ls -al "$APP_DIR"
+
+            if [ ! -f "$APP_DIR/$jar_name" ]; then
+              echo "ERROR: $APP_DIR/$jar_name nicht gefunden."
+              exit 1
+            fi
+
+            mv -f "$APP_DIR/$jar_name" "$APP_DIR/app.jar"
+            chmod 0644 "$APP_DIR/app.jar"
+
+            sudo systemctl restart "$SERVICE"
+            sleep 2
+
+            if command -v curl >/dev/null 2>&1; then
+              for i in $(seq 1 60); do
+                if curl -fsS "$HEALTH_URL" >/dev/null 2>&1; then
+                  echo "Health OK"
+                  exit 0
+                fi
+                sleep 1
+              done
+
+              echo "Health check failed after 60s"
+              sudo systemctl status "$SERVICE" --no-pager -n 100 || true
+              sudo journalctl -u "$SERVICE" -n 200 --no-pager || true
+              exit 1
+            fi
