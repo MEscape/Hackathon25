@@ -16,7 +16,7 @@ jobs:
       SSH_KEY:  ${{ secrets.SSH_KEY }}
       APP_DIR:  "/opt/safenet"
       SERVICE:  "safenet"
-      HEALTH_URL: "http://127.0.0.1:8080/actuator/health"  # optional, falls Actuator aktiv
+      HEALTH_URL: "http://127.0.0.1:8080/actuator/health"
 
     steps:
       - name: Checkout
@@ -27,24 +27,50 @@ jobs:
         with:
           distribution: temurin
           java-version: "21"
-          cache: maven
+          cache: "maven"   # schadet Gradle nicht
 
-      - name: Build (Maven)
+      - name: Build (detect Maven/Gradle + find JAR)
+        id: build
+        shell: bash
         run: |
-          chmod +x mvnw || true
-          ./mvnw -B -DskipTests package
+          set -euo pipefail
 
-      - name: Locate built JAR
-        id: jar
-        run: |
-          JAR=$(ls -1 target/*.jar | grep -v '\-javadoc\.jar' | grep -v '\-sources\.jar' | head -n1 || true)
-          if [ -z "$JAR" ]; then
-            echo "No JAR found in target/. Did the build succeed?" >&2
+          echo "==> Project root:"
+          ls -la
+
+          ARTIFACT=""
+
+          if [ -f "./mvnw" ]; then
+            chmod +x ./mvnw
+            ./mvnw -B -DskipTests package
+            ARTIFACT=$(ls -1 target/*.jar | grep -v '\-sources\.jar' | grep -v '\-javadoc\.jar' | head -n1 || true)
+          elif [ -f "pom.xml" ]; then
+            echo "mvnw nicht gefunden – benutze System-Maven."
+            mvn -v
+            mvn -B -DskipTests package
+            ARTIFACT=$(ls -1 target/*.jar | grep -v '\-sources\.jar' | grep -v '\-javadoc\.jar' | head -n1 || true)
+          elif [ -f "./gradlew" ]; then
+            chmod +x ./gradlew
+            # Bevorzugt Spring Boot Task, sonst jar
+            ./gradlew -x test bootJar || ./gradlew -x test jar
+            ARTIFACT=$(ls -1 build/libs/*.jar | grep -v '\-plain\.jar' | head -n1 || true)
+          elif [ -f "build.gradle" ] || ls build.gradle.kts >/dev/null 2>&1; then
+            echo "::error::Kein gradlew im Repo. Füge den Gradle-Wrapper hinzu oder liefere mvnw/maven."
+            exit 1
+          else
+            echo "::error::Kein pom.xml oder build.gradle gefunden – weiß nicht, wie ich bauen soll."
             exit 1
           fi
-          echo "jar=$JAR" >> "$GITHUB_OUTPUT"
 
-      - name: Prepare target dir on server
+          if [ -z "${ARTIFACT:-}" ] || [ ! -f "$ARTIFACT" ]; then
+            echo "::error::Kein JAR erzeugt (target/ oder build/libs/ leer)."
+            exit 1
+          fi
+
+          echo "artifact=$ARTIFACT" >> "$GITHUB_OUTPUT"
+          echo "Gefundenes Artefakt: $ARTIFACT"
+
+      - name: Ensure target dir on server
         uses: appleboy/ssh-action@v1.2.0
         with:
           host:     ${{ env.SSH_HOST }}
@@ -53,20 +79,21 @@ jobs:
           port:     ${{ env.SSH_PORT }}
           script: |
             set -e
-            sudo mkdir -p $APP_DIR
-            sudo chown -R $USER:$USER $APP_DIR || true
+            sudo mkdir -p "$APP_DIR"
+            # Optional: Besitzer umsetzen, falls Service unter user 'safenet' läuft
+            # sudo chown -R safenet:safenet "$APP_DIR"
 
-      - name: Copy JAR to server
+      - name: Copy JAR
         uses: appleboy/scp-action@v0.1.7
         with:
           host:     ${{ env.SSH_HOST }}
           username: ${{ env.SSH_USER }}
           key:      ${{ env.SSH_KEY }}
           port:     ${{ env.SSH_PORT }}
-          source:   ${{ steps.jar.outputs.jar }}
+          source:   ${{ steps.build.outputs.artifact }}
           target:   ${{ env.APP_DIR }}/app.jar
 
-      - name: Restart service + (optional) health check
+      - name: Restart service + health check
         uses: appleboy/ssh-action@v1.2.0
         with:
           host:     ${{ env.SSH_HOST }}
@@ -75,12 +102,15 @@ jobs:
           port:     ${{ env.SSH_PORT }}
           script: |
             set -e
-            sudo systemctl restart $SERVICE
+            sudo systemctl restart "$SERVICE"
             sleep 2
             if command -v curl >/dev/null 2>&1; then
               for i in $(seq 1 30); do
                 curl -fsS "$HEALTH_URL" && exit 0
                 sleep 1
               done
-              echo "Health check failed"; sudo systemctl status $SERVICE --no-pager -n 80; exit 1
+              echo "Health check failed"
+              sudo systemctl status "$SERVICE" --no-pager -n 100 || true
+              journalctl -u "$SERVICE" -n 200 --no-pager || true
+              exit 1
             fi
