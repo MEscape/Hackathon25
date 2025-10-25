@@ -2,33 +2,85 @@ name: Deploy to Server
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    env:
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      SSH_USER: ${{ secrets.SSH_USER }}
+      SSH_PORT: ${{ secrets.SSH_PORT }}
+      SSH_KEY:  ${{ secrets.SSH_KEY }}
+      APP_DIR:  "/opt/safenet"
+      SERVICE:  "safenet"
+      HEALTH_URL: "http://127.0.0.1:8080/actuator/health"  # optional, falls Actuator aktiv
+
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Copy artifact to server
-        uses: appleboy/scp-action@v0.1.7
+      - name: Setup Java
+        uses: actions/setup-java@v4
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          source: target/safenet.jar
-          target: /opt/safenet/safenet.jar
+          distribution: temurin
+          java-version: "21"
+          cache: maven
 
-      - name: Restart service
+      - name: Build (Maven)
+        run: |
+          chmod +x mvnw || true
+          ./mvnw -B -DskipTests package
+
+      - name: Locate built JAR
+        id: jar
+        run: |
+          JAR=$(ls -1 target/*.jar | grep -v '\-javadoc\.jar' | grep -v '\-sources\.jar' | head -n1 || true)
+          if [ -z "$JAR" ]; then
+            echo "No JAR found in target/. Did the build succeed?" >&2
+            exit 1
+          fi
+          echo "jar=$JAR" >> "$GITHUB_OUTPUT"
+
+      - name: Prepare target dir on server
         uses: appleboy/ssh-action@v1.2.0
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
+          host:     ${{ env.SSH_HOST }}
+          username: ${{ env.SSH_USER }}
+          key:      ${{ env.SSH_KEY }}
+          port:     ${{ env.SSH_PORT }}
           script: |
-            sudo systemctl restart safenet
-            sudo systemctl status safenet --no-pager -n 20
+            set -e
+            sudo mkdir -p $APP_DIR
+            sudo chown -R $USER:$USER $APP_DIR || true
+
+      - name: Copy JAR to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host:     ${{ env.SSH_HOST }}
+          username: ${{ env.SSH_USER }}
+          key:      ${{ env.SSH_KEY }}
+          port:     ${{ env.SSH_PORT }}
+          source:   ${{ steps.jar.outputs.jar }}
+          target:   ${{ env.APP_DIR }}/app.jar
+
+      - name: Restart service + (optional) health check
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host:     ${{ env.SSH_HOST }}
+          username: ${{ env.SSH_USER }}
+          key:      ${{ env.SSH_KEY }}
+          port:     ${{ env.SSH_PORT }}
+          script: |
+            set -e
+            sudo systemctl restart $SERVICE
+            sleep 2
+            if command -v curl >/dev/null 2>&1; then
+              for i in $(seq 1 30); do
+                curl -fsS "$HEALTH_URL" && exit 0
+                sleep 1
+              done
+              echo "Health check failed"; sudo systemctl status $SERVICE --no-pager -n 80; exit 1
+            fi
