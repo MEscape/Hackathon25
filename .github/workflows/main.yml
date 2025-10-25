@@ -1,0 +1,19 @@
+- name: Copy artifact to server
+  uses: appleboy/scp-action@v0.1.7
+  with:
+    host:     ${{ secrets.SSH_HOST }}
+    username: ${{ secrets.SSH_USER }}
+    key:      ${{ secrets.SSH_KEY }}
+    port:     ${{ secrets.SSH_PORT }}
+    source:   target/safenet.jar
+    target:   /opt/safenet/safenet.jar
+
+- name: Restart service
+  uses: appleboy/ssh-action@v1.2.0
+  with:
+    host:     ${{ secrets.SSH_HOST }}
+    username: ${{ secrets.SSH_USER }}
+    key:      ${{ secrets.SSH_KEY }}
+    script: |
+      sudo systemctl restart safenet
+      sudo systemctl status safenet --no-pager -n 20
