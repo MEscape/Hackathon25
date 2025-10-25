@@ -3,9 +3,6 @@ name: Deploy backend to Server
 on:
   push:
     branches: [ "main" ]
-    # optional nur triggern, wenn sich im Backend was ändert:
-    # paths:
-    #   - "backend/**"
   workflow_dispatch:
 
 jobs:
@@ -13,13 +10,13 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      SSH_HOST: ${{ secrets.SSH_HOST }}
-      SSH_USER: ${{ secrets.SSH_USER }}
-      SSH_PORT: ${{ secrets.SSH_PORT }}
-      SSH_KEY:  ${{ secrets.SSH_KEY }}
-      APP_DIR:  "/opt/safenet"
-      SERVICE:  "safenet"
-      HEALTH_URL: "http://127.0.0.1:8080/actuator/health"
+      SSH_HOST:    ${{ secrets.SSH_HOST }}
+      SSH_USER:    ${{ secrets.SSH_USER }}      # z.B. "deploy"
+      SSH_PORT:    ${{ secrets.SSH_PORT }}      # z.B. "22"
+      SSH_KEY:     ${{ secrets.SSH_KEY }}       # Inhalt des PRIVATE KEY
+      APP_DIR:     "/opt/safenet"
+      SERVICE:     "safenet"
+      HEALTH_URL:  "http://127.0.0.1:8080/actuator/health"
 
     steps:
       - name: Checkout
@@ -56,7 +53,6 @@ jobs:
             exit 1
           fi
 
-          # auf Repo-Root relativ machen
           echo "artifact=backend/$ARTIFACT" >> "$GITHUB_OUTPUT"
           echo "Gefundenes Artefakt: backend/$ARTIFACT"
 
@@ -69,9 +65,7 @@ jobs:
           port:     ${{ env.SSH_PORT }}
           script: |
             set -e
-            sudo mkdir -p "$APP_DIR"
-            # optional: Besitzer setzen, falls dein Dienst nicht als root läuft:
-            # sudo chown -R safenet:safenet "$APP_DIR"
+            mkdir -p "$APP_DIR"
 
       - name: Copy JAR
         uses: appleboy/scp-action@v0.1.7
@@ -81,9 +75,9 @@ jobs:
           key:      ${{ env.SSH_KEY }}
           port:     ${{ env.SSH_PORT }}
           source:   ${{ steps.build.outputs.artifact }}
-          target:   ${{ env.APP_DIR }}/app.jar
+          target:   ${{ env.APP_DIR }}
 
-      - name: Restart service + health check
+      - name: Place as app.jar + restart + health
         uses: appleboy/ssh-action@v1.2.0
         with:
           host:     ${{ env.SSH_HOST }}
@@ -92,15 +86,27 @@ jobs:
           port:     ${{ env.SSH_PORT }}
           script: |
             set -e
+
+            jar_name=$(basename "${{ steps.build.outputs.artifact }}")
+            mv -f "$APP_DIR/$jar_name" "$APP_DIR/app.jar"
+
+            # optional sicherstellen, dass Dienst lesen kann
+            chmod 0644 "$APP_DIR/app.jar"
+
             sudo systemctl restart "$SERVICE"
             sleep 2
+
             if command -v curl >/dev/null 2>&1; then
-              for i in $(seq 1 30); do
-                curl -fsS "$HEALTH_URL" && exit 0
+              for i in $(seq 1 60); do
+                if curl -fsS "$HEALTH_URL" >/dev/null 2>&1; then
+                  echo "Health OK"
+                  exit 0
+                fi
                 sleep 1
               done
-              echo "Health check failed"
+
+              echo "Health check failed after 60s"
               sudo systemctl status "$SERVICE" --no-pager -n 100 || true
-              journalctl -u "$SERVICE" -n 200 --no-pager || true
+              sudo journalctl -u "$SERVICE" -n 200 --no-pager || true
               exit 1
             fi
