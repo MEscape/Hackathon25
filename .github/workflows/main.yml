@@ -14,9 +14,13 @@ jobs:
       SSH_USER:    ${{ secrets.SSH_USER }}
       SSH_PORT:    ${{ secrets.SSH_PORT }}
       SSH_KEY:     ${{ secrets.SSH_KEY }}
-      APP_DIR:     /opt/safenet
-      SERVICE:     safenet
+
+      # Kein sudo nötig → ins Home deployen
+      APP_DIR:     /home/${{ secrets.SSH_USER }}/safenet
+      # Health der App (Port anpassen, falls nötig)
       HEALTH_URL:  http://127.0.0.1:8080/actuator/health
+
+      # Build-Java (Runner)
       JAVA_HOME:   /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.8-9/x64
       JAVA_HOME_21_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/21.0.8-9/x64
 
@@ -24,7 +28,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Java
+      - name: Setup Java (build)
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -36,17 +40,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-
           cd backend
 
-          MVN="./mvnw"
-          if [ ! -x "$MVN" ]; then
-            MVN="mvn"
-          else
-            chmod +x ./mvnw
-          fi
+          MVN="./mvnw"; [ -x "$MVN" ] || MVN="mvn"
+          [ "$MVN" = "./mvnw" ] && chmod +x ./mvnw
 
-          # Clean install ohne Tests
+          # Clean install ohne Tests, SNAPSHOTs aktualisieren
           "$MVN" -B -U -ntp -DskipTests clean install
 
           # finalName + packaging deterministisch aus Maven lesen
@@ -54,17 +53,15 @@ jobs:
           PACKAGING=$("$MVN" -q -DforceStdout help:evaluate -Dexpression=project.packaging || echo "jar")
           CANDIDATE="target/${FINAL_NAME}.${PACKAGING}"
 
-          # Fallback, falls kein deterministischer Name
+          # Fallback: neuestes brauchbares Jar finden
           if [ ! -f "$CANDIDATE" ]; then
             CANDIDATE=$(find target -maxdepth 1 -type f -name "*.jar" \
-              ! -name "*-sources.jar" \
-              ! -name "*-javadoc.jar" \
-              ! -name "original-*.jar" \
+              ! -name "*-sources.jar" ! -name "*-javadoc.jar" ! -name "original-*.jar" \
               -printf "%T@ %p\n" | sort -nr | awk 'NR==1{print $2}' || true)
           fi
 
           if [ -z "${CANDIDATE:-}" ] || [ ! -f "$CANDIDATE" ]; then
-            echo "::error::Kein JAR gefunden nach clean install (backend/target/ leer oder nur sources/javadoc)."
+            echo "::error::Kein JAR gefunden nach clean install."
             ls -al target || true
             exit 1
           fi
@@ -72,7 +69,7 @@ jobs:
           echo "artifact=backend/$CANDIDATE" >> "$GITHUB_OUTPUT"
           echo "Gefundenes Artefakt: backend/$CANDIDATE"
 
-      - name: Ensure target dir on server (and fix perms)
+      - name: Ensure user dirs (no sudo)
         uses: appleboy/ssh-action@v1.2.0
         with:
           host:     ${{ env.SSH_HOST }}
@@ -82,69 +79,93 @@ jobs:
           envs:     APP_DIR
           script: |
             set -euo pipefail
-            echo "Ensuring $APP_DIR exists and is writable by $(whoami)"
+            echo "Ensuring $APP_DIR and systemd user dir as $(whoami)"
+            mkdir -p "$APP_DIR" "$APP_DIR/logs"
+            mkdir -p "$HOME/.config/systemd/user"
+            ls -ld "$APP_DIR" "$HOME/.config/systemd/user"
 
-            u=$(id -un)
-            g=$(id -gn)
-            sudo -n mkdir -p "$APP_DIR"
-            sudo -n chown -R "$u:$g" "$APP_DIR"
-            sudo -n chmod 775 "$APP_DIR"
-
-            ls -ld "$APP_DIR"
-
-      - name: Copy JAR (flat into APP_DIR)
+      - name: Upload JAR (flat into APP_DIR)
         uses: appleboy/scp-action@v0.1.7
         with:
           host:     ${{ env.SSH_HOST }}
           username: ${{ env.SSH_USER }}
           key:      ${{ env.SSH_KEY }}
           port:     ${{ env.SSH_PORT }}
-          source:   ${{ steps.build.outputs.artifact }}
-          target:   ${{ env.APP_DIR }}
+          source:   ${{ steps.build.outputs.artifact }}   # backend/target/<file>.jar
+          target:   ${{ env.APP_DIR }}                    # ~/safenet
           strip_components: 2
 
-      - name: Place as app.jar + restart + health
+      - name: Install/Update user service & restart via systemd --user
         uses: appleboy/ssh-action@v1.2.0
         env:
+          APP_NAME: safenet
           JAR_PATH: ${{ steps.build.outputs.artifact }}
+          # Passe diese Optionen an deine Umgebung an:
+          JAVA_OPTS: "-Xms256m -Xmx512m"
+          SPRING_OPTS: "--spring.profiles.active=production --server.port=8080"
+          # Beispiel DB / OIDC (falls du nicht über env-Dateien arbeitest):
+          # SPRING_OPTS: "--spring.profiles.active=production --server.port=8080 --spring.datasource.url=jdbc:postgresql://127.0.0.1:5432/resourcedb --spring.datasource.username=safenet --spring.datasource.password=*** --spring.security.oauth2.resourceserver.jwt.issuer-uri=https://<host>:8081/realms/safenet"
+          HEALTH_URL: ${{ env.HEALTH_URL }}
         with:
           host:     ${{ env.SSH_HOST }}
           username: ${{ env.SSH_USER }}
           key:      ${{ env.SSH_KEY }}
           port:     ${{ env.SSH_PORT }}
-          envs:     APP_DIR,SERVICE,HEALTH_URL,JAR_PATH
+          envs:     APP_DIR,APP_NAME,JAR_PATH,JAVA_OPTS,SPRING_OPTS,HEALTH_URL
           script: |
-            set -e
-
+            set -euo pipefail
             jar_name=$(basename "$JAR_PATH")
-            echo "Using jar_name='$jar_name' in APP_DIR='$APP_DIR'"
 
+            # Jar konsistent benennen
             if [ ! -f "$APP_DIR/$jar_name" ]; then
-              echo "ERROR: $APP_DIR/$jar_name nicht gefunden."
+              echo "ERROR: $APP_DIR/$jar_name nicht gefunden"
+              ls -al "$APP_DIR" || true
               exit 1
             fi
-
             mv -f "$APP_DIR/$jar_name" "$APP_DIR/app.jar"
             chmod 0644 "$APP_DIR/app.jar"
 
-            if ! sudo -n /usr/bin/systemctl restart "$SERVICE"; then
-              echo "ERROR: systemctl restart benötigt NOPASSWD in sudoers."
-              exit 1
-            fi
+            UNIT="$HOME/.config/systemd/user/${APP_NAME}.service"
 
-            sleep 2
+            # User-Service-Unit schreiben/aktualisieren
+            cat > "$UNIT" <<EOF
+            [Unit]
+            Description=SafeNet Backend (user)
+            After=network.target
 
-            if command -v curl >/dev/null 2>&1; then
-              for i in $(seq 1 60); do
-                if curl -fsS "$HEALTH_URL" >/dev/null 2>&1; then
-                  echo "✅ Health OK"
-                  exit 0
-                fi
-                sleep 1
-              done
+            [Service]
+            Type=simple
+            WorkingDirectory=%h/safenet
+            ExecStart=/usr/bin/java ${JAVA_OPTS} -jar %h/safenet/app.jar ${SPRING_OPTS}
+            Restart=always
+            RestartSec=2
+            # Log landet in journald (journalctl --user -u ${APP_NAME}), zusätzlich schreiben wir in $APP_DIR/logs via nohup brauchen wir hier nicht.
 
-              echo "❌ Health check failed after 60s"
-              sudo -n systemctl status "$SERVICE" --no-pager -n 100 || true
-              sudo -n journalctl -u "$SERVICE" -n 200 --no-pager || true
-              exit 1
-            fi
+            [Install]
+            WantedBy=default.target
+            EOF
+
+            echo "Unit written to $UNIT"
+            systemctl --user daemon-reload
+            systemctl --user enable "${APP_NAME}.service" || true
+            systemctl --user restart "${APP_NAME}.service"
+
+            # Healthcheck (max 60s)
+            for i in $(seq 1 60); do
+              if command -v curl >/dev/null 2>&1 && curl -fsS "$HEALTH_URL" >/dev/null 2>&1; then
+                echo "✅ Health OK"
+                exit 0
+              fi
+              # Wenn Dienst schon abgestürzt ist, Logs zeigen
+              if ! systemctl --user is-active --quiet "${APP_NAME}.service"; then
+                echo "❌ Service not active. Logs:"
+                journalctl --user -u "${APP_NAME}.service" -n 200 --no-pager || true
+                exit 1
+              fi
+              sleep 1
+            done
+
+            echo "❌ Health check failed after 60s"
+            systemctl --user status "${APP_NAME}.service" --no-pager || true
+            journalctl --user -u "${APP_NAME}.service" -n 200 --no-pager || true
+            exit 1
