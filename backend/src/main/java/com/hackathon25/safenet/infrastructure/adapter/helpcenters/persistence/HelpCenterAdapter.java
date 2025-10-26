@@ -56,7 +56,7 @@ public class HelpCenterAdapter implements HelpCentersFeedPort {
 
         } catch (Exception e) {
             log.error("Error fetching HelpCenters from Overpass API: {}", e.getMessage());
-            throw new RuntimeException("Fehler beim Abrufen der HelpCenters", e);
+            throw new RuntimeException("An error occurred whgile trying to access HelpCenters", e);
         }
     }
 }
