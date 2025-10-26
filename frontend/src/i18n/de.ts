@@ -38,8 +38,9 @@ const de: Translations = {
       title: 'Schnellaktionen',
       emergency: {
         title: 'Notfallkontakte',
-        subtitle: 'Erreiche deine vertrauenswürdigen Kontakte schnell.',
-      },
+        subtitle: 'Halte 3 Sek., um Freunde zu alarmieren.',
+        messageSent: "Notfallnachricht erfolgreich an Ihre Kontakte gesendet!"
+},
       shareLocation: {
         title: 'Standort teilen',
         subtitle: 'Teile deinen aktuellen Standort sofort.',

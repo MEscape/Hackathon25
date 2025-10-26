@@ -2,17 +2,18 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
+import Toast from 'react-native-toast-message';
 
 import { Screen } from '@/components/Screen';
 import { Text } from '@/components/Text';
-import {Icon, IconTypes} from '@/components/Icon';
+import { Icon, IconTypes } from '@/components/Icon';
 import { IconContainer } from '@/components/IconContainer';
 import { Card } from '@/components/Card';
 import { ActionButton } from '@/components/ActionButton';
 import { useAuth } from '@/hooks/useAuth';
 import { useAppTheme } from '@/theme/context';
-import {translate, TxKeyPath} from '@/i18n';
-import {$infoCard, $infoContainer, $infoHeader, $infoText, $infoTitle, $actionButtonStyle, $sectionTitle} from '@/theme/styles';
+import { translate, TxKeyPath } from '@/i18n';
+import { $infoCard, $infoContainer, $infoHeader, $infoText, $infoTitle, $actionButtonStyle, $sectionTitle } from '@/theme/styles';
 import {
     $featuresContainer,
     $featuresGrid, $greetingText, $header,
@@ -74,6 +75,15 @@ function HomeScreen() {
         return translate('home:greeting.evening');
     };
 
+    const handleEmergencyContact = () => {
+        Toast.show({
+            type: 'success',
+            text1: translate('home:quickActions.emergency.messageSent'),
+            position: 'bottom',
+            visibilityTime: 3000,
+        });
+    };
+
     return (
         <Screen preset="scroll" contentContainerStyle={themed($screenContent)}>
             {/* Subtle gradient background */}
@@ -109,9 +119,9 @@ function HomeScreen() {
                             </View>
                             <Text preset="formHelper" style={themed($statusTime)} tx="home:status.lastUpdated" />
                         </View>
-                        <IconContainer 
-                            icon="shield-checkmark" 
-                            size="medium" 
+                        <IconContainer
+                            icon="shield-checkmark"
+                            size="medium"
                             variant="success"
                             iconSize={28}
                         />
@@ -129,10 +139,13 @@ function HomeScreen() {
                         icon="call"
                         iconColor="#FFFFFF"
                         iconSize={26}
-                        text={translate("home:quickActions.emergency.title")}
+                        text={translate("home:features.emergencyContacts.title")}
                         subtitle={translate("home:quickActions.emergency.subtitle")}
                         style={themed($actionButtonStyle)}
-                        onPress={() => router.push('/(actions)/emergency')}
+                        holdEnabled
+                        pressHoldDurationMs={3000}
+                        holdProgressColors={['#FFFFFF', '#ff6b6b']}
+                        onHoldComplete={handleEmergencyContact}
                     />
 
                     <ActionButton
@@ -141,7 +154,7 @@ function HomeScreen() {
                         icon="location"
                         iconColor="#FFFFFF"
                         iconSize={26}
-                        text={translate("home:quickActions.emergencyTips.title")}
+                        text={translate("home:quickActions.shareLocation.title")}
                         subtitle={translate("home:quickActions.emergencyTips.subtitle")}
                         style={themed($actionButtonStyle)}
                         onPress={() => router.push('/(actions)/emergency-assistant')}
