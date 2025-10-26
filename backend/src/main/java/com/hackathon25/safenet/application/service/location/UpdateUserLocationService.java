@@ -1,9 +1,9 @@
-package com.hackathon.safenet.application.service.location;
+package com.hackathon25.safenet.application.service.location;
 
-import com.hackathon.safenet.domain.model.user.UserLocation;
-import com.hackathon.safenet.domain.ports.inbound.UpdateUserLocationPort;
-import com.hackathon.safenet.domain.ports.outbound.UserLocationRepositoryPort;
-import com.hackathon.safenet.domain.ports.outbound.UserRepositoryPort;
+import com.hackathon25.safenet.domain.model.user.UserLocation;
+import com.hackathon25.safenet.domain.port.inbound.UpdateUserLocationPort;
+import com.hackathon25.safenet.domain.port.outbound.UserLocationRepositoryPort;
+import com.hackathon25.safenet.domain.port.outbound.UserRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

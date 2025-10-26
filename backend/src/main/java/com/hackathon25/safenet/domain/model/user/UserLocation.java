@@ -1,4 +1,4 @@
-package com.hackathon.safenet.domain.model.user;
+package com.hackathon25.safenet.domain.model.user;
 
 import java.math.BigDecimal;
 import java.time.Instant;

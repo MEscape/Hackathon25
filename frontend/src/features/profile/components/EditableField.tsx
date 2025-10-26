@@ -95,7 +95,7 @@ export const EditableField: React.FC<EditableFieldProps> = ({
         </View>
         <Text
           preset="formHelper"
-          text={value || placeholder || translate('profile:notSet')}
+          text={value || placeholder || translate('profile:messages.noData')}
           style={[
             themed($valueText),
             !value && themed($placeholderText),

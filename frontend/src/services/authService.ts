@@ -62,6 +62,12 @@ class OAuth2AuthService {
   async loadDiscovery(): Promise<AuthSession.DiscoveryDocument> {
     if (this.discovery) return this.discovery;
     try {
+      // Disable SSL pinning in development
+      if (__DEV__) {
+        // @ts-ignore
+        global.XMLHttpRequest = global.originalXMLHttpRequest || global.XMLHttpRequest;
+      }
+
       this.discovery = await AuthSession.fetchDiscoveryAsync(
         this.config.issuer
       );

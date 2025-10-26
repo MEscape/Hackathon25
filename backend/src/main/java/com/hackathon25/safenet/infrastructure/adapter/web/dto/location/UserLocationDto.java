@@ -1,7 +1,7 @@
-package com.hackathon.safenet.infrastructure.adapters.web.dto.location;
+package com.hackathon25.safenet.infrastructure.adapter.web.dto.location;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hackathon.safenet.domain.model.user.UserLocation;
+import com.hackathon25.safenet.domain.model.user.UserLocation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;

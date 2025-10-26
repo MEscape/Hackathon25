@@ -1,6 +1,6 @@
-package com.hackathon.safenet.domain.ports.inbound;
+package com.hackathon25.safenet.domain.port.inbound;
 
-import com.hackathon.safenet.domain.model.user.UserLocation;
+import com.hackathon25.safenet.domain.model.user.UserLocation;
 
 import java.math.BigDecimal;
 import java.util.UUID;

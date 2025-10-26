@@ -1,4 +1,4 @@
-package com.hackathon.safenet.infrastructure.adapters.supabase.entity;
+package com.hackathon25.safenet.infrastructure.adapter.postgres.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMax;

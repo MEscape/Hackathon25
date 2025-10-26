@@ -1,9 +1,9 @@
-package com.hackathon.safenet.infrastructure.adapters.supabase.mapper;
+package com.hackathon25.safenet.infrastructure.adapter.postgres.mapper;
 
-import com.hackathon.safenet.domain.model.user.UserLocation;
-import com.hackathon.safenet.infrastructure.adapters.supabase.entity.UserLocationEntity;
-import com.hackathon.safenet.infrastructure.adapters.supabase.entity.UserEntity;
-import com.hackathon.safenet.infrastructure.adapters.supabase.repository.UserJpaRepository;
+import com.hackathon25.safenet.domain.model.user.UserLocation;
+import com.hackathon25.safenet.infrastructure.adapter.postgres.entity.UserEntity;
+import com.hackathon25.safenet.infrastructure.adapter.postgres.entity.UserLocationEntity;
+import com.hackathon25.safenet.infrastructure.adapter.postgres.repository.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,6 @@
-package com.hackathon.safenet.infrastructure.adapters.supabase.repository;
+package com.hackathon25.safenet.infrastructure.adapter.postgres.repository;
 
-import com.hackathon.safenet.infrastructure.adapters.supabase.entity.UserLocationEntity;
+import com.hackathon25.safenet.infrastructure.adapter.postgres.entity.UserLocationEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
