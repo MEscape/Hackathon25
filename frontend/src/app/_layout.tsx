@@ -21,6 +21,7 @@ import { AuthNavigationHandler } from '@/components/AuthNavigationHandler';
 import { BottomSheetProvider } from '@/components/BottomSheet';
 import { ErrorBoundary } from '@/components/errorBoundary/ErrorBoundary';
 import { RootErrorBoundary } from '@/components/errorBoundary/RootErrorBoundary';
+import { LocationInitializer } from '@/components/LocationInitializer';
 import { createToastConfig } from '@/components/ToastConfig';
 import { initI18n } from '@/i18n';
 import { store, persistor } from '@/store';
@@ -101,10 +102,12 @@ export default function RootLayout(): React.ReactNode {
                                     }}
                                 >
                                     <AuthNavigationHandler>
-                                        <KeyboardProvider>
-                                            <Slot />
-                                            <Toast config={createToastConfig()} />
-                                        </KeyboardProvider>
+                                        <LocationInitializer>
+                                            <KeyboardProvider>
+                                                <Slot />
+                                                <Toast config={createToastConfig()} />
+                                            </KeyboardProvider>
+                                        </LocationInitializer>
                                     </AuthNavigationHandler>
                                 </ErrorBoundary>
                             </BottomSheetProvider>

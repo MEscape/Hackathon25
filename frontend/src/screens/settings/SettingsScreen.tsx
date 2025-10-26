@@ -18,39 +18,78 @@ import {
     $logoutText
 } from "./settingsScreenStyles";
 import { useAuth } from '@/hooks/useAuth';
+import { useLocation } from '@/hooks/useLocation';
 import BottomSheetModal from "@gorhom/bottom-sheet";
 
 export default function SettingsScreen() {
     const { themed, theme, themeContext, setThemeContextOverride } = useAppTheme();
     const { logout } = useAuth();
+    const { 
+        isVisible, 
+        trackingEnabled, 
+        isTracking,
+        hasPermission,
+        updateVisibility, 
+        setTrackingEnabledSetting,
+        startTracking,
+        stopTracking,
+        requestPermissions
+    } = useLocation();
 
     // BottomSheet refs
     const backgroundLocationSheetRef = React.useRef<BottomSheetModal>(null);
     const dataPrivacySheetRef = React.useRef<BottomSheetModal>(null);
     const aboutSheetRef = React.useRef<BottomSheetModal>(null);
 
-    // Mock state for location sharing - in real app this would come from store
-    const [locationSharingEnabled, setLocationSharingEnabled] = React.useState(true);
+    // Emergency alerts state (this would be separate from location settings)
     const [emergencyAlertsEnabled, setEmergencyAlertsEnabled] = React.useState(true);
-    const [backgroundLocationEnabled, setBackgroundLocationEnabled] = React.useState(false);
 
     const handleThemeToggle = () => {
         setThemeContextOverride(themeContext === 'dark' ? 'light' : 'dark');
     };
 
-    const handleLocationSharingToggle = () => {
-        setLocationSharingEnabled(!locationSharingEnabled);
+    const [localIsVisible, setLocalIsVisible] = React.useState(isVisible);
+
+    // Sync local state with Redux state
+    React.useEffect(() => {
+        setLocalIsVisible(isVisible);
+    }, [isVisible]);
+
+    const handleLocationSharingToggle = async () => {
+        const newValue = !localIsVisible;
+        
+        // Optimistic update
+        setLocalIsVisible(newValue);
+        
+        try {
+            const success = await updateVisibility(newValue);
+            if (!success) {
+                // Revert on failure
+                setLocalIsVisible(!newValue);
+            }
+        } catch (error) {
+            // Revert on error
+            setLocalIsVisible(!newValue);
+        }
     };
 
     const handleEmergencyAlertsToggle = () => {
         setEmergencyAlertsEnabled(!emergencyAlertsEnabled);
     };
 
-    const handleBackgroundLocationToggle = () => {
-        if (!backgroundLocationEnabled) {
-            backgroundLocationSheetRef.current?.expand();
+    const handleBackgroundLocationToggle = async () => {
+        if (!trackingEnabled) {
+            if (!hasPermission) {
+                backgroundLocationSheetRef.current?.expand();
+            } else {
+                setTrackingEnabledSetting(true);
+                await startTracking();
+            }
         } else {
-            setBackgroundLocationEnabled(false);
+            setTrackingEnabledSetting(false);
+            if (isTracking) {
+                await stopTracking();
+            }
         }
     };
 
@@ -70,7 +109,13 @@ export default function SettingsScreen() {
     const backgroundLocationActions: BottomSheetAction[] = [
         {
             text: 'Enable',
-            onPress: () => setBackgroundLocationEnabled(true),
+            onPress: async () => {
+                setTrackingEnabledSetting(true);
+                const granted = await requestPermissions();
+                if (!granted) {
+                    setTrackingEnabledSetting(false);
+                }
+            },
             preset: 'primary'
         },
         {
@@ -129,7 +174,7 @@ export default function SettingsScreen() {
                             <Text preset="formHelper" text="Allow emergency contacts to see your location" style={themed($settingDescription)} />
                         </View>
                         <Switch
-                            value={locationSharingEnabled}
+                            value={localIsVisible}
                             onValueChange={handleLocationSharingToggle}
                             trackColor={{ false: theme.colors.borderStrong, true: theme.colors.tint }}
                             thumbColor={theme.colors.background}
@@ -145,7 +190,7 @@ export default function SettingsScreen() {
                             <Text preset="formHelper" text="Track location when app is closed" style={themed($settingDescription)} />
                         </View>
                         <Switch
-                            value={backgroundLocationEnabled}
+                            value={trackingEnabled}
                             onValueChange={handleBackgroundLocationToggle}
                             trackColor={{ false: theme.colors.borderStrong, true: theme.colors.tint }}
                             thumbColor={theme.colors.background}

@@ -60,6 +60,28 @@ const de: Translations = {
 
   map: {
     title: 'Karte',
+    helpCenterTypes: {
+      hospital: 'Krankenhaus',
+      police: 'Polizei',
+      fire_station: 'Feuerwehr',
+      pharmacy: 'Apotheke',
+      shelter: 'Notunterkunft',
+    },
+    information: 'Informationen',
+    tags: 'Eigenschaften',
+    call: 'Anrufen',
+    directions: 'Route',
+    error: 'Fehler',
+    cannotOpenMaps: 'Karten-App konnte nicht geöffnet werden',
+    noPhoneNumber: 'Keine Telefonnummer verfügbar',
+    helpCentersRadius: 'Hilfseinrichtungen im Umkreis von {{radius}}km',
+    loading: 'Wird geladen...',
+    loadingError: 'Fehler beim Laden',
+    locationShared: 'Standort geteilt',
+    locationPrivate: 'Standort privat',
+    friendsVisible: 'Freunde sichtbar',
+    noFriendsVisible: 'Keine Freunde sichtbar',
+    helpCentersActive: 'Hilfszentren aktiv',
   },
 
   actions: {
@@ -232,6 +254,45 @@ const de: Translations = {
     tryAgain: 'Erneut versuchen',
     reportIssue: 'Problem melden',
     footer: 'Wenn das Problem weiterhin besteht, kontaktiere den Support.',
+  },
+
+  location: {
+    permission: {
+      title: 'Standortzugriff',
+      description: 'SafeNet benötigt Standortzugriff, um Sicherheitsfunktionen bereitzustellen und Ihnen in Notfällen zu helfen.',
+      features: {
+        emergencyResponse: 'Notfallreaktion',
+        friendsLocation: 'Standort mit Freunden teilen',
+        safetyAlerts: 'Standortbasierte Sicherheitswarnungen',
+      },
+      buttons: {
+        allow: 'Standortzugriff erlauben',
+        skip: 'Vorerst überspringen',
+      },
+      privacy: 'Ihre Standortdaten sind verschlüsselt und werden nur mit Ihren vertrauenswürdigen Kontakten geteilt.',
+    },
+    tracking: {
+      started: 'Standortverfolgung gestartet',
+      stopped: 'Standortverfolgung gestoppt',
+      error: 'Standortverfolgung konnte nicht gestartet werden',
+      backgroundTitle: 'SafeNet Standortverfolgung',
+      backgroundBody: 'Verfolgt Ihren Standort für Sicherheitszwecke',
+    },
+    visibility: {
+      visible: 'Standort für Freunde sichtbar',
+      hidden: 'Standort vor Freunden verborgen',
+      error: 'Standortsichtbarkeit konnte nicht aktualisiert werden',
+    },
+
+    permissionDenied: 'Standortberechtigung verweigert',
+    backgroundPermissionDenied: 'Hintergrund-Standortberechtigung verweigert',
+    backgroundPermissionTitle: 'Hintergrund-Standortzugriff',
+    backgroundPermissionMessage: 'SafeNet benötigt Hintergrund-Standortzugriff, um Ihren Standort auch bei geschlossener App zu verfolgen.',
+    permissionError: 'Standortberechtigung konnte nicht angefordert werden',
+    trackingStartedMessage: 'Ihr Standort wird jetzt zu Sicherheitszwecken verfolgt',
+    trackingStartError: 'Standortverfolgung konnte nicht gestartet werden',
+    trackingStopError: 'Standortverfolgung konnte nicht gestoppt werden',
+    getCurrentLocationError: 'Aktueller Standort konnte nicht abgerufen werden',
   },
 
   toast: {

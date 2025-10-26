@@ -18,7 +18,6 @@ export const useAuthNavigation = () => {
   }, []);
 
   useEffect(() => {
-    console.log(isAuthenticated);
     // Only handle navigation after initial sync is complete
     if (hasInitialized.current && !isLoading) {
       if (isAuthenticated) {

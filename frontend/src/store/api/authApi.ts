@@ -22,6 +22,7 @@ export const authApi = apiSlice.injectEndpoints({
           const result = await oauth2AuthService.authorize({
             kc_locale: currentLocale,
           });
+
           if (result.type !== 'success' || !result.params?.code) {
             return {
               error: {
