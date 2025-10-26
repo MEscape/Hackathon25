@@ -1,57 +1,192 @@
-# Welcome to your Expo app 👋
+# 📱 SafeNet — Frontend Setup (Expo)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A cross-platform mobile application built with **Expo**, **React Native**, and **TypeScript**, providing real-time disaster awareness, secure routing, and safe communication — powered by **Keycloak OAuth2** and the **SafeNet backend**.
 
-## Get started
+---
 
-1. Install dependencies
+## ⚙️ 1. Prerequisites
 
-   ```bash
-   npm install
-   ```
+Before running the project, ensure the following tools are installed:
 
-2. Start the app
+| Tool               | Version     | Installation Guide                                             |
+| ------------------ | ----------- | -------------------------------------------------------------- |
+| **Node.js**        | ≥ 20.0      | [Download Node.js](https://nodejs.org/en/download/)            |
+| **npm**            | ≥ 10.0      | Comes with Node.js                                             |
+| **Expo CLI**       | ≥ 7.0       | `npm install -g expo-cli`                                      |
+| **Android Studio** | Latest      | [Install Android Studio](https://developer.android.com/studio) |
+| **Java (JDK)**     | ≤ 19 (≤ 17 recommended) | [Download OpenJDK 17](https://adoptium.net/temurin/releases/?version=17) |
 
-   ```bash
-   npx expo start
-   ```
+> ⚠️ **Important:**  
+> Gradle and React Native currently do **not support JDK 20+**.  
+> Using Java 21 or newer will cause build errors such as  
+> “Unsupported class file major version”.  
+> Please use **JDK 17 or 19** instead.
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## API Configuration
-
-- Set `EXPO_PUBLIC_API_BASE_URL` in `.env` to your backend, e.g. `http://localhost:8080`.
-- On Android emulator, use `http://10.0.2.2:8080`.
-- OAuth is integrated; sign in to acquire a bearer token automatically.
-- The Safety Alerts screen fetches `GET /api/v1/nina/police/alerts` via RTK Query.
-
-## Get a fresh project
-
-When you're ready, run:
+Verify installation:
 
 ```bash
-npm run reset-project
+node -v
+npm -v
+expo --version
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-## Learn more
+## 📁 2. Clone Repository
 
-To learn more about developing your project with Expo, look at the following resources:
+```bash
+git clone https://github.com/<your-org>/SafeNet-App.git
+cd SafeNet-App
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+---
 
-## Join the community
+## 🌍 3. Environment Configuration
 
-Join our community of developers creating universal apps.
+Create a `.env` file in the project root and paste the following:
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```bash
+# ---------------------------
+# OAuth2 Configuration
+# ---------------------------
+EXPO_PUBLIC_OAUTH_CLIENT_ID=frontend-app
+EXPO_PUBLIC_OAUTH_CLIENT_SECRET=change-me
+EXPO_PUBLIC_OAUTH_REDIRECT_PATH=/
+EXPO_PUBLIC_OAUTH_ISSUER=http://10.0.2.2:8081/realms/safenet
+
+# ---------------------------
+# App Configuration
+# ---------------------------
+EXPO_PUBLIC_APP_SCHEME=safenet
+EXPO_PUBLIC_API_BASE_URL=http://10.0.2.2:8080
+```
+
+> 🧠 **Note:**
+> `10.0.2.2` points to your host machine when running inside the Android emulator.
+> For physical devices or iOS, replace it with your machine’s LAN IP (e.g., `192.168.x.x`).
+
+---
+
+## 📦 4. Install Dependencies
+
+Use npm to install all project dependencies:
+
+```bash
+npm install
+```
+
+---
+
+## 🚀 5. Running the App (Required: Prebuild)
+
+Since the project uses **MMKV** and the **new architecture**, you **cannot use Expo Go**.
+You must always prebuild the native project and run it via the local development build.
+
+### 🧱 Build and Run (Android)
+
+```bash
+npm run android
+```
+
+This internally executes:
+
+```bash
+expo prebuild && expo run:android
+```
+
+### 🍏 (Optional) iOS Build
+
+If you’re on macOS and have Xcode installed:
+
+```bash
+npm run ios
+```
+
+### 🌐 Web Preview (Development Only)
+
+```bash
+npm run web
+```
+
+---
+
+## 🔐 6. Keycloak Configuration
+
+Make sure your backend’s **Keycloak instance** is running (see backend setup).
+Then configure the frontend client:
+
+| Setting                  | Value                                          |
+| ------------------------ | ---------------------------------------------- |
+| **Realm**                | `safenet`                                      |
+| **Client ID**            | `frontend-app`                                 |
+| **Access Type**          | Public                                         |
+| **Redirect URIs**        | `safenet://*`, `exp://*`, `http://localhost:*` |
+| **Web Origins**          | `*`                                            |
+| **Direct Access Grants** | Enabled ✅                                      |
+
+> 🔑 This allows Expo’s OAuth2 flow to redirect correctly back into the app after login.
+
+---
+
+## 🧰 7. NPM Scripts
+
+| Script             | Description                                           |
+| ------------------ | ----------------------------------------------------- |
+| `npm start`        | Start the Expo Metro bundler                          |
+| `npm run android`  | Prebuild and launch app on Android emulator/device    |
+| `npm run ios`      | Prebuild and launch app on iOS simulator (macOS only) |
+| `npm run web`      | Start web version (for UI preview only)               |
+| `npm run lint`     | Run ESLint checks                                     |
+| `npm run lint:fix` | Auto-fix lint issues                                  |
+| `npm run ts:check` | Run TypeScript type checking                          |
+
+---
+
+## 🧩 8. Tech Stack
+
+| Layer                | Technology                    |
+| -------------------- | ----------------------------- |
+| **Framework**        | Expo (React Native)           |
+| **Language**         | TypeScript                    |
+| **Navigation**       | Expo Router                   |
+| **Auth**             | Keycloak via Expo AuthSession |
+| **State Management** | Redux Toolkit + Persist       |
+| **Storage**          | MMKV (native, encrypted)      |
+| **Localization**     | i18next + react-i18next       |
+| **Animations**       | React Native Reanimated       |
+| **Validation**       | Zod                           |
+| **UI System**        | Custom Theming (light/dark)   |
+
+---
+
+## ⚙️ 9. Development Notes
+
+* 🚫 **Do not use Expo Go.** MMKV and new-architecture libraries require native prebuild.
+* ✅ Always run using `npm run android` or `npm run ios`.
+* 🔄 After editing native modules or `.env` values, re-run `expo prebuild`.
+* 🧠 Backend and Keycloak must both be running locally (see backend README).
+
+---
+
+## 🧪 10. Troubleshooting
+
+| Issue                                 | Possible Cause / Fix                                       |
+| ------------------------------------- | ---------------------------------------------------------- |
+| **App fails to launch after changes** | Run `expo prebuild --clean && npm run android`.            |
+| **Network request failed**            | Use `10.0.2.2` instead of `localhost` for emulator access. |
+| **Redirect URI mismatch**             | Check Keycloak client → Valid Redirect URIs.               |
+| **Invalid token or 401**              | Ensure Keycloak realm and issuer match `.env` config.      |
+| **MMKV build errors**                 | Clear build folders: `rm -rf android && expo prebuild`.    |
+
+---
+
+## 🧠 11. Quick Lookup
+
+| Action                 | Command                            |
+| ---------------------- | ---------------------------------- |
+| Install deps           | `npm install`                      |
+| Run Android            | `npm run android`                  |
+| Run iOS (macOS only)   | `npm run ios`                      |
+| Lint & Type check      | `npm run lint && npm run ts:check` |
+| Rebuild native project | `expo prebuild --clean`            |
+ | Fix Path Length Error | https://github.com/AppAndFlow/react-native-safe-area-context/issues/424#issuecomment-2454869033 |

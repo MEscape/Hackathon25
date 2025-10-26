@@ -35,7 +35,8 @@ const en = {
       title: 'Quick Actions',
       emergency: {
         title: 'Emergency Contacts',
-        subtitle: 'Quickly reach your trusted contacts.',
+        subtitle: 'Hold 3s to alert friends of danger.',
+        messageSent: "Emergency message successfully sent to your contacts!"
       },
       shareLocation: {
         title: 'Share Location',
