@@ -7,9 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Generic response DTO for friend request operations
- */
+/** Generic response DTO for friend request operations */
 @Data
 @Builder
 @NoArgsConstructor
@@ -17,25 +15,21 @@ import lombok.NoArgsConstructor;
 @Schema(description = "Response for friend request operations")
 public class FriendRequestResponseDto {
 
-    @JsonProperty("success")
-    @Schema(description = "Whether the operation was successful", example = "true")
-    private boolean success;
+  @JsonProperty("success")
+  @Schema(description = "Whether the operation was successful", example = "true")
+  private boolean success;
 
-    @JsonProperty("message")
-    @Schema(description = "Optional message about the operation", example = "Friend request sent successfully")
-    private String message;
+  @JsonProperty("message")
+  @Schema(
+      description = "Optional message about the operation",
+      example = "Friend request sent successfully")
+  private String message;
 
-    public static FriendRequestResponseDto success(String message) {
-        return FriendRequestResponseDto.builder()
-                .success(true)
-                .message(message)
-                .build();
-    }
+  public static FriendRequestResponseDto success(String message) {
+    return FriendRequestResponseDto.builder().success(true).message(message).build();
+  }
 
-    public static FriendRequestResponseDto error(String message) {
-        return FriendRequestResponseDto.builder()
-                .success(false)
-                .message(message)
-                .build();
-    }
+  public static FriendRequestResponseDto error(String message) {
+    return FriendRequestResponseDto.builder().success(false).message(message).build();
+  }
 }

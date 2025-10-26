@@ -12,24 +12,24 @@ import { Header, HeaderProps } from '@/components/Header';
  * @param {any[]} deps - The dependencies to watch for changes to update the header.
  */
 export function useHeader(
-    headerProps: HeaderProps,
-    deps: Parameters<typeof useLayoutEffect>[1] = []
+  headerProps: HeaderProps,
+  deps: Parameters<typeof useLayoutEffect>[1] = []
 ) {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
 
-    /**
-     * We need to have multiple implementations of this hook for web and mobile.
-     * Web needs to use useEffect to avoid a rendering loop.
-     * In mobile and also to avoid a visible header jump when navigating between screens, we use
-     * `useLayoutEffect`, which will apply the settings before the screen renders.
-     */
-    const usePlatformEffect = Platform.OS === 'web' ? useEffect : useLayoutEffect;
+  /**
+   * We need to have multiple implementations of this hook for web and mobile.
+   * Web needs to use useEffect to avoid a rendering loop.
+   * In mobile and also to avoid a visible header jump when navigating between screens, we use
+   * `useLayoutEffect`, which will apply the settings before the screen renders.
+   */
+  const usePlatformEffect = Platform.OS === 'web' ? useEffect : useLayoutEffect;
 
-    usePlatformEffect(() => {
-        navigation.setOptions({
-            headerShown: true,
-            header: () => <Header {...headerProps} />,
-        });
-        // intentionally created API to have user set when they want to update the header via `deps`
-    }, [...deps, navigation]);
+  usePlatformEffect(() => {
+    navigation.setOptions({
+      headerShown: true,
+      header: () => <Header {...headerProps} />,
+    });
+    // intentionally created API to have user set when they want to update the header via `deps`
+  }, [...deps, navigation]);
 }

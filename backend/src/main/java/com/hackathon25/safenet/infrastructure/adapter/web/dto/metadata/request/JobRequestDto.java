@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 @Schema(description = "Request to update user job")
 public class JobRequestDto {
 
-    @JsonProperty("job")
-    @NotNull
-    @Schema(description = "Job title of the user", example = "Software Engineer")
-    private String job;
+  @JsonProperty("job")
+  @NotNull
+  @Schema(description = "Job title of the user", example = "Software Engineer")
+  private String job;
 }

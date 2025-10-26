@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
+
 import { View, ViewStyle } from 'react-native';
 
 import { Screen } from '@/components/Screen';
-import { Text } from '@/components/Text';
 import { Skeleton } from '@/components/Skeleton';
-import { useAuth } from '@/hooks/useAuth';
-import { useProfile } from '@/features/profile/hooks';
+import { Text } from '@/components/Text';
 import { EditableField, ProfileSection } from '@/features/profile/components';
+import { useProfile } from '@/features/profile/hooks';
+import { useAuth } from '@/hooks/useAuth';
+import { translate } from '@/i18n';
 import { useAppTheme } from '@/theme/context';
 import { ThemedStyle } from '@/theme/types';
-import { translate } from '@/i18n';
 
 export default function ProfileScreen() {
   const { themed } = useAppTheme();
@@ -62,11 +63,22 @@ export default function ProfileScreen() {
           subtitle={translate('profile:subtitle')}
         >
           <View style={themed($row)}>
-            <Text preset="default" weight="semiBold" text={translate('profile:fields.name')} />
-            <Text preset="formHelper" text={user?.preferred_username || user?.given_name} />
+            <Text
+              preset="default"
+              weight="semiBold"
+              text={translate('profile:fields.name')}
+            />
+            <Text
+              preset="formHelper"
+              text={user?.preferred_username || user?.given_name}
+            />
           </View>
           <View style={themed($row)}>
-            <Text preset="default" weight="semiBold" text={translate('profile:fields.email')} />
+            <Text
+              preset="default"
+              weight="semiBold"
+              text={translate('profile:fields.email')}
+            />
             <Text preset="formHelper" text={user?.email} />
           </View>
         </ProfileSection>
@@ -94,7 +106,9 @@ export default function ProfileScreen() {
           <EditableField
             label={translate('profile:fields.preExistingConditions')}
             value={preExistingConditions}
-            placeholder={translate('profile:placeholders.preExistingConditions')}
+            placeholder={translate(
+              'profile:placeholders.preExistingConditions'
+            )}
             onSave={updatePreExistingConditions}
             isLoading={isLoading}
             multiline

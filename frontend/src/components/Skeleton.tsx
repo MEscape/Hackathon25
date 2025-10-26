@@ -1,8 +1,10 @@
 import React, { useEffect, useRef } from 'react';
+
 import { View, Animated, Easing } from 'react-native';
+import type { ViewStyle } from 'react-native';
+
 import { useAppTheme } from '@/theme/context';
 import type { ThemedStyle } from '@/theme/types';
-import type { ViewStyle } from 'react-native';
 
 interface SkeletonProps {
   width?: number | `${number}%` | 'auto';
@@ -11,11 +13,11 @@ interface SkeletonProps {
   style?: ViewStyle | ViewStyle[];
 }
 
-export function Skeleton({ 
-  width = '100%', 
-  height = 20, 
-  borderRadius = 4, 
-  style 
+export function Skeleton({
+  width = '100%',
+  height = 20,
+  borderRadius = 4,
+  style,
 }: SkeletonProps) {
   const { themed } = useAppTheme();
   const animatedValue = useRef(new Animated.Value(0)).current;
@@ -45,7 +47,10 @@ export function Skeleton({
 
   const backgroundColor = animatedValue.interpolate({
     inputRange: [0, 1],
-    outputRange: [themed($skeleton).backgroundColor as string, themed($skeletonHighlight).backgroundColor as string],
+    outputRange: [
+      themed($skeleton).backgroundColor as string,
+      themed($skeletonHighlight).backgroundColor as string,
+    ],
   });
 
   return (

@@ -62,10 +62,9 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
                 ],
             },
         },
-        // Always include ONNX runtime plugin. Add splash plugin if available.
+        // Add splash plugin if available.
         plugins: [
             ...existingPlugins,
-            "onnxruntime-react-native",
             ...(splashPlugin ? [splashPlugin] : []),
         ],
     }

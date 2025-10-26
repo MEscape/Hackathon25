@@ -3,7 +3,10 @@ import { apiSlice } from './baseApi';
 export const userMetadataApi = apiSlice.injectEndpoints({
   overrideExisting: true,
   endpoints: builder => ({
-    registerExpoPushToken: builder.mutation<string, { userId: string; token: string }>({
+    registerExpoPushToken: builder.mutation<
+      string,
+      { userId: string; token: string }
+    >({
       query: ({ userId, token }) => ({
         url: `/api/v1/users/${userId}/expoPushToken?token=${encodeURIComponent(token)}`,
         method: 'POST',
@@ -20,7 +23,5 @@ export const userMetadataApi = apiSlice.injectEndpoints({
   }),
 });
 
-export const {
-  useRegisterExpoPushTokenMutation,
-  useTriggerEmergencyMutation,
-} = userMetadataApi;
+export const { useRegisterExpoPushTokenMutation, useTriggerEmergencyMutation } =
+  userMetadataApi;

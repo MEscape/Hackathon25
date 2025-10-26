@@ -1,4 +1,5 @@
 import Constants from 'expo-constants';
+
 // Import model from assets (no Python needed!)
 // @ts-ignore
 import MODEL_FILE from '@assets/models/e5-small/model.onnx';
@@ -14,7 +15,7 @@ if (!isExpoGo) {
   try {
     // More robust ONNX Runtime import with better error handling
     const onnx = require('onnxruntime-react-native');
-    
+
     // Check if the ONNX Runtime is properly loaded
     if (onnx && onnx.InferenceSession && onnx.Tensor) {
       InferenceSession = onnx.InferenceSession;
@@ -22,7 +23,9 @@ if (!isExpoGo) {
       onnxAvailable = true;
       console.log('✅ ONNX Runtime successfully loaded in embeddingModel');
     } else {
-      console.log('⚠️ ONNX Runtime module loaded but InferenceSession/Tensor not available');
+      console.log(
+        '⚠️ ONNX Runtime module loaded but InferenceSession/Tensor not available'
+      );
     }
   } catch (error) {
     console.log('❌ ONNX Runtime nicht verfügbar in embeddingModel:', error);
@@ -36,7 +39,7 @@ if (!isExpoGo) {
 }
 
 export class EmbeddingModel {
-  private session: typeof InferenceSession | null = null;
+  private session: any = null;
   private readonly MAX_LENGTH = 512;
   private readonly EMBEDDING_DIM = 384;
 

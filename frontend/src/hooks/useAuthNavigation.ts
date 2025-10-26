@@ -1,8 +1,13 @@
 import { useEffect, useRef } from 'react';
+
 import { useRouter } from 'expo-router';
+
 import { useSelector } from 'react-redux';
 
-import { selectIsAuthenticated, selectAuthLoading } from '@/store/slices/authSlice';
+import {
+  selectIsAuthenticated,
+  selectAuthLoading,
+} from '@/store/slices/authSlice';
 
 export const useAuthNavigation = () => {
   const router = useRouter();

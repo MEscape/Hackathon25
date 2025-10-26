@@ -1,4 +1,5 @@
 import { ViewStyle, TextStyle } from 'react-native';
+
 import type { ThemedStyle } from './types';
 
 /* Use this file to define styles that are used in multiple places in your app. */
@@ -9,7 +10,7 @@ export const $styles = {
 };
 
 /* Generic Card Base */
-export const $cardBase: ThemedStyle<ViewStyle> = (theme) => ({
+export const $cardBase: ThemedStyle<ViewStyle> = theme => ({
   backgroundColor: theme.colors.card,
   borderRadius: 14,
   padding: theme.spacing.md,
@@ -25,7 +26,7 @@ export const $cardBase: ThemedStyle<ViewStyle> = (theme) => ({
 });
 
 /* Error Card */
-export const $errorContainer: ThemedStyle<ViewStyle> = (theme) => ({
+export const $errorContainer: ThemedStyle<ViewStyle> = theme => ({
   flexDirection: 'row',
   alignItems: 'center',
   gap: theme.spacing.xs,
@@ -38,67 +39,67 @@ export const $errorContainer: ThemedStyle<ViewStyle> = (theme) => ({
   width: '100%',
 });
 
-export const $errorText: ThemedStyle<TextStyle> = (theme) => ({
+export const $errorText: ThemedStyle<TextStyle> = theme => ({
   color: theme.colors.error,
   flex: 1,
   fontSize: 13,
 });
 
 /* Info Card */
-export const $infoContainer: ThemedStyle<ViewStyle> = (theme) => ({
+export const $infoContainer: ThemedStyle<ViewStyle> = theme => ({
   paddingHorizontal: theme.spacing.lg,
   paddingBottom: theme.spacing.md,
 });
 
-export const $infoCard: ThemedStyle<ViewStyle> = (theme) => ({
+export const $infoCard: ThemedStyle<ViewStyle> = theme => ({
   backgroundColor: theme.isDark
-      ? 'rgba(61, 148, 255, 0.08)'
-      : 'rgba(0, 122, 255, 0.06)',
+    ? 'rgba(61, 148, 255, 0.08)'
+    : 'rgba(0, 122, 255, 0.06)',
   borderRadius: 14,
   padding: theme.spacing.md,
   borderWidth: 1,
   borderColor: theme.isDark
-      ? 'rgba(61, 148, 255, 0.15)'
-      : 'rgba(0, 122, 255, 0.12)',
+    ? 'rgba(61, 148, 255, 0.15)'
+    : 'rgba(0, 122, 255, 0.12)',
   gap: theme.spacing.sm,
 });
 
-export const $infoHeader: ThemedStyle<ViewStyle> = (theme) => ({
+export const $infoHeader: ThemedStyle<ViewStyle> = theme => ({
   flexDirection: 'row',
   alignItems: 'center',
   gap: theme.spacing.xs,
 });
 
-export const $infoTitle: ThemedStyle<TextStyle> = (theme) => ({
+export const $infoTitle: ThemedStyle<TextStyle> = theme => ({
   fontSize: 15,
   color: theme.colors.text,
 });
 
-export const $infoText: ThemedStyle<TextStyle> = (theme) => ({
+export const $infoText: ThemedStyle<TextStyle> = theme => ({
   fontSize: 13,
   color: theme.colors.textDim,
   lineHeight: 18,
 });
 
 /* Common Card Content Styles */
-export const $cardContent: ThemedStyle<ViewStyle> = (theme) => ({
+export const $cardContent: ThemedStyle<ViewStyle> = theme => ({
   flex: 1,
   gap: theme.spacing.xxxs,
 });
 
-export const $cardTitle: ThemedStyle<TextStyle> = (theme) => ({
+export const $cardTitle: ThemedStyle<TextStyle> = theme => ({
   fontSize: 15,
   color: theme.colors.text,
   letterSpacing: -0.2,
 });
 
-export const $cardSubtitle: ThemedStyle<TextStyle> = (theme) => ({
+export const $cardSubtitle: ThemedStyle<TextStyle> = theme => ({
   fontSize: 13,
   color: theme.colors.textMuted,
 });
 
 /* Settings/Profile Card Style */
-export const $settingsCard: ThemedStyle<ViewStyle> = (theme) => ({
+export const $settingsCard: ThemedStyle<ViewStyle> = theme => ({
   backgroundColor: theme.colors.palette.neutral100,
   borderRadius: theme.spacing.sm,
   padding: theme.spacing.lg,
@@ -106,7 +107,7 @@ export const $settingsCard: ThemedStyle<ViewStyle> = (theme) => ({
 });
 
 /* Section Title Style */
-export const $sectionTitle: ThemedStyle<TextStyle> = (theme) => ({
+export const $sectionTitle: ThemedStyle<TextStyle> = theme => ({
   fontSize: 20,
   color: theme.colors.text,
   letterSpacing: -0.3,
@@ -118,7 +119,7 @@ export const $actionButtonStyle: ThemedStyle<ViewStyle> = () => ({
 });
 
 /* Common Icon Container Styles */
-export const $iconContainer: ThemedStyle<ViewStyle> = (theme) => ({
+export const $iconContainer: ThemedStyle<ViewStyle> = theme => ({
   width: 44,
   height: 44,
   borderRadius: 11,
@@ -127,7 +128,7 @@ export const $iconContainer: ThemedStyle<ViewStyle> = (theme) => ({
   marginRight: theme.spacing.md,
 });
 
-export const $actionIconContainer: ThemedStyle<ViewStyle> = (theme) => ({
+export const $actionIconContainer: ThemedStyle<ViewStyle> = theme => ({
   width: 40,
   height: 40,
   borderRadius: 20,
@@ -136,7 +137,7 @@ export const $actionIconContainer: ThemedStyle<ViewStyle> = (theme) => ({
   marginBottom: theme.spacing.xs,
 });
 
-export const $featureIconContainer: ThemedStyle<ViewStyle> = (theme) => ({
+export const $featureIconContainer: ThemedStyle<ViewStyle> = theme => ({
   width: 40,
   height: 40,
   borderRadius: 10,
@@ -147,12 +148,12 @@ export const $featureIconContainer: ThemedStyle<ViewStyle> = (theme) => ({
   justifyContent: 'center',
 });
 
-export const $errorIconContainer: ThemedStyle<ViewStyle> = (theme) => ({
+export const $errorIconContainer: ThemedStyle<ViewStyle> = theme => ({
   alignItems: 'center',
   marginBottom: theme.spacing.lg,
 });
 
-export const $errorIconCircle: ThemedStyle<ViewStyle> = (theme) => ({
+export const $errorIconCircle: ThemedStyle<ViewStyle> = theme => ({
   width: 80,
   height: 80,
   borderRadius: 40,
@@ -164,7 +165,7 @@ export const $errorIconCircle: ThemedStyle<ViewStyle> = (theme) => ({
 });
 
 /* Common Shadow Styles */
-export const $lightShadow: ThemedStyle<ViewStyle> = (theme) => ({
+export const $lightShadow: ThemedStyle<ViewStyle> = theme => ({
   shadowColor: theme.colors.shadowColor,
   shadowOffset: { width: 0, height: 1 },
   shadowOpacity: 0.05,
@@ -172,7 +173,7 @@ export const $lightShadow: ThemedStyle<ViewStyle> = (theme) => ({
   elevation: 1,
 });
 
-export const $mediumShadow: ThemedStyle<ViewStyle> = (theme) => ({
+export const $mediumShadow: ThemedStyle<ViewStyle> = theme => ({
   shadowColor: theme.colors.palette.overlay20,
   shadowOffset: { width: 0, height: 2 },
   shadowOpacity: 0.1,
@@ -180,7 +181,7 @@ export const $mediumShadow: ThemedStyle<ViewStyle> = (theme) => ({
   elevation: 3,
 });
 
-export const $heavyShadow: ThemedStyle<ViewStyle> = (theme) => ({
+export const $heavyShadow: ThemedStyle<ViewStyle> = theme => ({
   shadowColor: theme.colors.palette.neutral900,
   shadowOffset: { width: 0, height: 10 },
   shadowOpacity: theme.isDark ? 0.3 : 0.1,
@@ -188,7 +189,7 @@ export const $heavyShadow: ThemedStyle<ViewStyle> = (theme) => ({
   elevation: 8,
 });
 
-export const $primaryButtonShadow: ThemedStyle<ViewStyle> = (theme) => ({
+export const $primaryButtonShadow: ThemedStyle<ViewStyle> = theme => ({
   shadowColor: theme.colors.tint,
   shadowOffset: { width: 0, height: 4 },
   shadowOpacity: theme.isDark ? 0.3 : 0.2,
@@ -196,7 +197,7 @@ export const $primaryButtonShadow: ThemedStyle<ViewStyle> = (theme) => ({
   elevation: 4,
 });
 
-export const $dangerButtonShadow: ThemedStyle<ViewStyle> = (theme) => ({
+export const $dangerButtonShadow: ThemedStyle<ViewStyle> = theme => ({
   shadowColor: theme.colors.error,
   shadowOffset: { width: 0, height: 4 },
   shadowOpacity: theme.isDark ? 0.3 : 0.2,
@@ -211,7 +212,7 @@ export const $buttonContainer: ThemedStyle<ViewStyle> = () => ({
   marginBottom: 24,
 });
 
-export const $buttonsContainer: ThemedStyle<ViewStyle> = (theme) => ({
+export const $buttonsContainer: ThemedStyle<ViewStyle> = theme => ({
   width: '100%',
   gap: theme.spacing.sm,
   marginBottom: theme.spacing.lg,

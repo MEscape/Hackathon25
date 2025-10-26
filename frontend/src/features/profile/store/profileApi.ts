@@ -1,3 +1,13 @@
+import { apiSlice } from '@/store/api/baseApi';
+import { validateApiResponse } from '@/utils/validation';
+
+import {
+  setMetadata,
+  updateMetadataField,
+  setLoading,
+  setError,
+  clearError,
+} from './profileSlice';
 import {
   UserMetadata,
   UserMetadataSchema,
@@ -8,15 +18,6 @@ import {
   UserMedicationSchema,
   UserVaccinationSchema,
 } from '../schemas/profile.schema';
-import { validateApiResponse } from '@/utils/validation';
-import { apiSlice } from '@/store/api/baseApi';
-import { 
-  setMetadata, 
-  updateMetadataField, 
-  setLoading, 
-  setError, 
-  clearError 
-} from './profileSlice';
 
 export const profileApi = apiSlice.injectEndpoints({
   overrideExisting: true,
@@ -27,9 +28,7 @@ export const profileApi = apiSlice.injectEndpoints({
       transformResponse: (response: unknown) => {
         return validateApiResponse(UserMetadataSchema, response);
       },
-      providesTags: () => [
-        { type: 'User', id: 'CURRENT' },
-      ],
+      providesTags: () => [{ type: 'User', id: 'CURRENT' }],
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         dispatch(setLoading(true));
         dispatch(clearError());
@@ -45,12 +44,15 @@ export const profileApi = apiSlice.injectEndpoints({
     }),
 
     // Update specific profile fields
-    updateProfileField: builder.mutation<UserMetadata, { 
-      field: string; 
-      value: any;
-      endpoint: string;
-      schema: any;
-    }>({
+    updateProfileField: builder.mutation<
+      UserMetadata,
+      {
+        field: string;
+        value: any;
+        endpoint: string;
+        schema: any;
+      }
+    >({
       query: ({ value, endpoint }) => ({
         url: `/api/v1/users/profile/${endpoint}`,
         method: 'POST',
@@ -63,10 +65,14 @@ export const profileApi = apiSlice.injectEndpoints({
         dispatch(updateMetadataField({ field, value }));
 
         const patchResult = dispatch(
-          profileApi.util.updateQueryData('getUserMetadata', undefined, (draft) => {
-            (draft as any)[field] = value;
-            return draft;
-          })
+          profileApi.util.updateQueryData(
+            'getUserMetadata',
+            undefined,
+            draft => {
+              (draft as any)[field] = value;
+              return draft;
+            }
+          )
         );
 
         try {
@@ -77,17 +83,13 @@ export const profileApi = apiSlice.injectEndpoints({
           dispatch(setError(`Failed to update ${field}`));
         }
       },
-      invalidatesTags: () => [
-        { type: 'User', id: 'CURRENT' },
-      ],
+      invalidatesTags: () => [{ type: 'User', id: 'CURRENT' }],
     }),
   }),
 });
 
-export const {
-  useGetUserMetadataQuery,
-  useUpdateProfileFieldMutation,
-} = profileApi;
+export const { useGetUserMetadataQuery, useUpdateProfileFieldMutation } =
+  profileApi;
 
 // Helper hooks for specific field updates
 export const useUpdateBloodType = () => {

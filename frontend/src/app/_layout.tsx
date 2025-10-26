@@ -5,14 +5,14 @@ import React, { useEffect, useState } from 'react';
 import { useFonts } from 'expo-font';
 import { Slot } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import Toast from 'react-native-toast-message';
 
-import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 import {
-    initialWindowMetrics,
-    SafeAreaProvider,
+  initialWindowMetrics,
+  SafeAreaProvider,
 } from 'react-native-safe-area-context';
+import Toast from 'react-native-toast-message';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
@@ -36,86 +36,83 @@ SplashScreen.preventAutoHideAsync();
  * @returns {React.ReactNode} The rendered `App` component.
  */
 export default function RootLayout(): React.ReactNode {
-    const [fontsLoaded, fontError] = useFonts(customFontsToLoad);
-    const [isI18nInitialized, setIsI18nInitialized] = useState(false);
-    const [showAnimatedSplash, setShowAnimatedSplash] = useState(true);
+  const [fontsLoaded, fontError] = useFonts(customFontsToLoad);
+  const [isI18nInitialized, setIsI18nInitialized] = useState(false);
+  const [showAnimatedSplash, setShowAnimatedSplash] = useState(true);
 
-    useEffect(() => {
-        initI18n()
-            .then(() => setIsI18nInitialized(true))
-            .then(() => loadDateFnsLocale());
-    }, []);
+  useEffect(() => {
+    initI18n()
+      .then(() => setIsI18nInitialized(true))
+      .then(() => loadDateFnsLocale());
+  }, []);
 
-    useEffect(() => {
-        if (fontError) throw fontError;
-    }, [fontError]);
+  useEffect(() => {
+    if (fontError) throw fontError;
+  }, [fontError]);
 
-    useEffect(() => {
-        if (fontsLoaded && isI18nInitialized) {
-            SplashScreen.hideAsync();
-        }
-    }, [fontsLoaded, isI18nInitialized]);
-
-    if (!fontsLoaded || !isI18nInitialized) {
-        return null;
+  useEffect(() => {
+    if (fontsLoaded && isI18nInitialized) {
+      SplashScreen.hideAsync();
     }
+  }, [fontsLoaded, isI18nInitialized]);
 
-    if (showAnimatedSplash) {
-        return (
-            <AnimatedSplashScreen
-                onComplete={() => {
-                    setShowAnimatedSplash(false);
-                }}
-            />
-        );
-    }
+  if (!fontsLoaded || !isI18nInitialized) {
+    return null;
+  }
 
-    // otherwise, we're ready to render the app
+  if (showAnimatedSplash) {
     return (
-        <GestureHandlerRootView style={{ flex: 1 }}>
-            <RootErrorBoundary
-                onError={(error, errorInfo) => {
-                    // Log to your error tracking service for theme/provider errors
-                    console.log('Provider Error logged:', error, errorInfo);
-                }}
-                onReset={() => {
-                    // Clean up any state
-                    console.log('Provider error boundary reset');
-                }}
-            >
-                <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-                <Provider store={store}>
-                    <PersistGate
-                        loading={null}
-                        persistor={persistor}
-                    >
-                        <ThemeProvider>
-                            <BottomSheetProvider>
-                                <ErrorBoundary
-                                    onError={(error, errorInfo) => {
-                                        // Log to your error tracking service for app errors
-                                        console.log('App Error logged:', error, errorInfo);
-                                    }}
-                                    onReset={() => {
-                                        // Clean up any state
-                                        console.log('App error boundary reset');
-                                    }}
-                                >
-                                    <AuthNavigationHandler>
-                                        <LocationInitializer>
-                                            <KeyboardProvider>
-                                                <Slot />
-                                                <Toast config={createToastConfig()} />
-                                            </KeyboardProvider>
-                                        </LocationInitializer>
-                                    </AuthNavigationHandler>
-                                </ErrorBoundary>
-                            </BottomSheetProvider>
-                        </ThemeProvider>
-                    </PersistGate>
-                </Provider>
-            </SafeAreaProvider>
-        </RootErrorBoundary>
-        </GestureHandlerRootView>
+      <AnimatedSplashScreen
+        onComplete={() => {
+          setShowAnimatedSplash(false);
+        }}
+      />
     );
+  }
+
+  // otherwise, we're ready to render the app
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <RootErrorBoundary
+        onError={(error, errorInfo) => {
+          // Log to your error tracking service for theme/provider errors
+          console.log('Provider Error logged:', error, errorInfo);
+        }}
+        onReset={() => {
+          // Clean up any state
+          console.log('Provider error boundary reset');
+        }}
+      >
+        <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+          <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+              <ThemeProvider>
+                <BottomSheetProvider>
+                  <ErrorBoundary
+                    onError={(error, errorInfo) => {
+                      // Log to your error tracking service for app errors
+                      console.log('App Error logged:', error, errorInfo);
+                    }}
+                    onReset={() => {
+                      // Clean up any state
+                      console.log('App error boundary reset');
+                    }}
+                  >
+                    <AuthNavigationHandler>
+                      <LocationInitializer>
+                        <KeyboardProvider>
+                          <Slot />
+                          <Toast config={createToastConfig()} />
+                        </KeyboardProvider>
+                      </LocationInitializer>
+                    </AuthNavigationHandler>
+                  </ErrorBoundary>
+                </BottomSheetProvider>
+              </ThemeProvider>
+            </PersistGate>
+          </Provider>
+        </SafeAreaProvider>
+      </RootErrorBoundary>
+    </GestureHandlerRootView>
+  );
 }

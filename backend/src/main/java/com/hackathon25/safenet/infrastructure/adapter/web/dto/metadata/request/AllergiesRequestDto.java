@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 @Schema(description = "Request to update user allergies")
 public class AllergiesRequestDto {
 
-    @JsonProperty("allergies")
-    @NotNull
-    @Schema(description = "Allergies of the user", example = "Peanuts, Shellfish")
-    private String allergies;
+  @JsonProperty("allergies")
+  @NotNull
+  @Schema(description = "Allergies of the user", example = "Peanuts, Shellfish")
+  private String allergies;
 }

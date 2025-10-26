@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 @Schema(description = "Request to update user pre-existing conditions")
 public class PreExistingConditionsRequestDto {
 
-    @JsonProperty("preExistingConditions")
-    @NotNull
-    @Schema(description = "Pre-existing conditions of the user", example = "Diabetes, Hypertension")
-    private String preExistingConditions;
+  @JsonProperty("preExistingConditions")
+  @NotNull
+  @Schema(description = "Pre-existing conditions of the user", example = "Diabetes, Hypertension")
+  private String preExistingConditions;
 }

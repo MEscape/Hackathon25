@@ -1,6 +1,9 @@
 import React from 'react';
+
 import { View, Text } from 'react-native';
+
 import { translate } from '@/i18n';
+
 import { styles } from '../styles/styles';
 
 interface ChatHeaderProps {
@@ -10,10 +13,10 @@ interface ChatHeaderProps {
 }
 
 export const ChatHeader: React.FC<ChatHeaderProps> = ({
-                                                        isModelReady,
-                                                        modelLoadProgress,
-                                                        modelLoadStage
-                                                      }) => {
+  isModelReady,
+  modelLoadProgress,
+  modelLoadStage,
+}) => {
   return (
     <View style={styles.header}>
       <Text style={styles.headerTitle}>
@@ -23,8 +26,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
         <Text style={styles.loadingText}>
           {modelLoadStage
             ? `${modelLoadStage}: ${modelLoadProgress}%`
-            : `${translate('emergencyAssistant:modelLoading')}: ${modelLoadProgress}%`
-          }
+            : `${translate('emergencyAssistant:modelLoading')}: ${modelLoadProgress}%`}
         </Text>
       )}
     </View>

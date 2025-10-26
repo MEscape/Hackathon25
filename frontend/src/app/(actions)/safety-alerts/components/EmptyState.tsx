@@ -1,8 +1,11 @@
 import React from 'react';
+
 import { View } from 'react-native';
-import { Text } from '@/components/Text';
+
 import { Icon } from '@/components/Icon';
+import { Text } from '@/components/Text';
 import { useAppTheme } from '@/theme/context';
+
 import { $emptyState, $emptyIcon, $emptyText } from '../styles';
 
 export type EmptyStateProps = {

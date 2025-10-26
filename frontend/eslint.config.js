@@ -1,10 +1,9 @@
-const tsParser = require('@typescript-eslint/parser');
 const tsPlugin = require('@typescript-eslint/eslint-plugin');
-const reactPlugin = require('eslint-plugin-react');
-const reactHooksPlugin = require('eslint-plugin-react-hooks');
-const reactNativePlugin = require('eslint-plugin-react-native');
-const prettierPlugin = require('eslint-plugin-prettier');
+const tsParser = require('@typescript-eslint/parser');
 const expoConfig = require('eslint-config-expo/flat');
+const prettierPlugin = require('eslint-plugin-prettier');
+const reactPlugin = require('eslint-plugin-react');
+const reactNativePlugin = require('eslint-plugin-react-native');
 
 module.exports = [
   ...expoConfig,
@@ -39,7 +38,7 @@ module.exports = [
     plugins: {
       '@typescript-eslint': tsPlugin,
       react: reactPlugin,
-      'react-hooks': reactHooksPlugin,
+      // Remove 'react-hooks' from here - it's already defined by expoConfig
       'react-native': reactNativePlugin,
       prettier: prettierPlugin,
     },
@@ -69,14 +68,25 @@ module.exports = [
         {
           alphabetize: { order: 'asc', caseInsensitive: true },
           'newlines-between': 'always',
-          groups: [['builtin', 'external'], 'internal', 'unknown', ['parent', 'sibling'], 'index'],
+          groups: [
+            ['builtin', 'external'],
+            'internal',
+            'unknown',
+            ['parent', 'sibling'],
+            'index',
+          ],
           pathGroups: [
             { pattern: 'react', group: 'external', position: 'before' },
             { pattern: 'react-native', group: 'external', position: 'before' },
             { pattern: 'expo{,-*}', group: 'external', position: 'before' },
             { pattern: '@/**', group: 'unknown', position: 'after' },
           ],
-          pathGroupsExcludedImportTypes: ['react', 'react-native', 'expo', 'expo-*'],
+          pathGroupsExcludedImportTypes: [
+            'react',
+            'react-native',
+            'expo',
+            'expo-*',
+          ],
         },
       ],
       'import/newline-after-import': 'warn',

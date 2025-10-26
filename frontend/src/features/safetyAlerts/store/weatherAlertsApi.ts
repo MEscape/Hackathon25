@@ -1,17 +1,24 @@
 import { apiSlice } from '@/store/api/baseApi';
 import { validateApiResponse } from '@/utils/validation';
-import { WeatherAlertsResponseSchema, WeatherAlert } from '../schemas/weatherAlerts.schema';
+
+import {
+  WeatherAlertsResponseSchema,
+  WeatherAlert,
+} from '../schemas/weatherAlerts.schema';
 
 export const weatherAlertsApi = apiSlice.injectEndpoints({
   overrideExisting: true,
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     getWeatherAlertsEnglish: builder.query<WeatherAlert[], void>({
       query: () => ({
-        url: '/api/weather/alerts/english',
+        url: '/api/v1/weather/alerts/english',
         method: 'GET',
       }),
       transformResponse: (response: unknown): WeatherAlert[] => {
-        const validated = validateApiResponse(WeatherAlertsResponseSchema, response);
+        const validated = validateApiResponse(
+          WeatherAlertsResponseSchema,
+          response
+        );
         return validated.items;
       },
       providesTags: ['WeatherAlerts'],

@@ -30,7 +30,7 @@ You can start developing by editing the files inside the **app** directory. This
 - Set `EXPO_PUBLIC_API_BASE_URL` in `.env` to your backend, e.g. `http://localhost:8080`.
 - On Android emulator, use `http://10.0.2.2:8080`.
 - OAuth is integrated; sign in to acquire a bearer token automatically.
-- The Safety Alerts screen fetches `GET /api/nina/police/alerts` via RTK Query.
+- The Safety Alerts screen fetches `GET /api/v1/nina/police/alerts` via RTK Query.
 
 ## Get a fresh project
 

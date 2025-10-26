@@ -1,8 +1,9 @@
 import React from 'react';
+
 import { View, ViewStyle, TextStyle } from 'react-native';
 
-import { Text } from '@/components/Text';
 import { Card } from '@/components/Card';
+import { Text } from '@/components/Text';
 import { useAppTheme } from '@/theme/context';
 import { ThemedStyle } from '@/theme/types';
 
@@ -27,9 +28,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({
           <Text preset="formHelper" text={subtitle} style={themed($subtitle)} />
         )}
       </View>
-      <Card style={themed($card)}>
-        {children}
-      </Card>
+      <Card style={themed($card)}>{children}</Card>
     </View>
   );
 };

@@ -1,6 +1,8 @@
 import { useEffect, useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+
 import * as Location from 'expo-location';
+
+import { useSelector, useDispatch } from 'react-redux';
 
 import { locationService } from '@/services/locationService';
 import { RootState } from '@/store';
@@ -30,7 +32,7 @@ export interface UseLocationReturn {
   error: string | null;
   isLoading: boolean;
   hasRequestedPermissions: boolean;
-  
+
   // Actions
   requestPermissions: () => Promise<boolean>;
   startTracking: () => Promise<boolean>;
@@ -51,14 +53,16 @@ export const useLocation = (): UseLocationReturn => {
     if (locationState.isInitialized) return;
 
     dispatch(setLoading(true));
-    
+
     try {
       // Check current permissions
       const permissionStatus = await locationService.checkPermissions();
-      dispatch(setPermissionStatus({
-        hasPermission: permissionStatus.granted,
-        status: permissionStatus.status,
-      }));
+      dispatch(
+        setPermissionStatus({
+          hasPermission: permissionStatus.granted,
+          status: permissionStatus.status,
+        })
+      );
 
       // Get current service state
       const serviceState = locationService.getState();
@@ -84,12 +88,14 @@ export const useLocation = (): UseLocationReturn => {
 
     try {
       const result = await locationService.requestPermissions();
-      
-      dispatch(setPermissionStatus({
-        hasPermission: result.granted,
-        status: result.status,
-      }));
-      
+
+      dispatch(
+        setPermissionStatus({
+          hasPermission: result.granted,
+          status: result.status,
+        })
+      );
+
       dispatch(setPermissionsRequested());
 
       if (result.granted && locationState.trackingEnabled) {
@@ -115,7 +121,7 @@ export const useLocation = (): UseLocationReturn => {
     try {
       const success = await locationService.startTracking();
       dispatch(setTrackingStatus(success));
-      
+
       if (success) {
         // Get initial location
         const location = await locationService.getCurrentLocation();
@@ -150,57 +156,74 @@ export const useLocation = (): UseLocationReturn => {
   }, [dispatch]);
 
   // Get current location once
-  const getCurrentLocation = useCallback(async (): Promise<Location.LocationObject | null> => {
-    dispatch(setLoading(true));
-    dispatch(clearError());
+  const getCurrentLocation =
+    useCallback(async (): Promise<Location.LocationObject | null> => {
+      dispatch(setLoading(true));
+      dispatch(clearError());
 
-    try {
-      const location = await locationService.getCurrentLocation();
-      if (location) {
-        dispatch(updateCurrentLocation(location));
+      try {
+        const location = await locationService.getCurrentLocation();
+        if (location) {
+          dispatch(updateCurrentLocation(location));
+        }
+        return location;
+      } catch (error) {
+        console.error('Error getting current location:', error);
+        dispatch(setError('Failed to get current location'));
+        return null;
+      } finally {
+        dispatch(setLoading(false));
       }
-      return location;
-    } catch (error) {
-      console.error('Error getting current location:', error);
-      dispatch(setError('Failed to get current location'));
-      return null;
-    } finally {
-      dispatch(setLoading(false));
-    }
-  }, [dispatch]);
+    }, [dispatch]);
 
   // Update location visibility
-  const updateVisibility = useCallback(async (visible: boolean): Promise<boolean> => {
-    dispatch(setLoading(true));
+  const updateVisibility = useCallback(
+    async (visible: boolean): Promise<boolean> => {
+      dispatch(setLoading(true));
 
-    try {
-      const success = await locationService.updateLocationVisibility(visible);
-      if (success) {
-        dispatch(setLocationVisibility(visible));
+      try {
+        const success = await locationService.updateLocationVisibility(visible);
+        if (success) {
+          dispatch(setLocationVisibility(visible));
+        }
+        return success;
+      } catch (error) {
+        console.error('Error updating visibility:', error);
+        dispatch(setError('Failed to update location visibility'));
+        return false;
+      } finally {
+        dispatch(setLoading(false));
       }
-      return success;
-    } catch (error) {
-      console.error('Error updating visibility:', error);
-      dispatch(setError('Failed to update location visibility'));
-      return false;
-    } finally {
-      dispatch(setLoading(false));
-    }
-  }, [dispatch]);
+    },
+    [dispatch]
+  );
 
   // Set tracking enabled setting
-  const setTrackingEnabledSetting = useCallback((enabled: boolean) => {
-    dispatch(setTrackingEnabled(enabled));
-    
-    // If disabling tracking, stop it
-    if (!enabled && locationState.isTracking) {
-      stopTracking();
-    }
-    // If enabling tracking and we have permissions, start it
-    else if (enabled && locationState.hasPermission && !locationState.isTracking) {
-      startTracking();
-    }
-  }, [dispatch, locationState.isTracking, locationState.hasPermission, stopTracking, startTracking]);
+  const setTrackingEnabledSetting = useCallback(
+    (enabled: boolean) => {
+      dispatch(setTrackingEnabled(enabled));
+
+      // If disabling tracking, stop it
+      if (!enabled && locationState.isTracking) {
+        stopTracking();
+      }
+      // If enabling tracking and we have permissions, start it
+      else if (
+        enabled &&
+        locationState.hasPermission &&
+        !locationState.isTracking
+      ) {
+        startTracking();
+      }
+    },
+    [
+      dispatch,
+      locationState.isTracking,
+      locationState.hasPermission,
+      stopTracking,
+      startTracking,
+    ]
+  );
 
   // Clear location error
   const clearLocationError = useCallback(() => {
@@ -226,7 +249,7 @@ export const useLocation = (): UseLocationReturn => {
     error: locationState.error,
     isLoading: locationState.isLoading,
     hasRequestedPermissions: locationState.hasRequestedPermissions,
-    
+
     // Actions
     requestPermissions,
     startTracking,

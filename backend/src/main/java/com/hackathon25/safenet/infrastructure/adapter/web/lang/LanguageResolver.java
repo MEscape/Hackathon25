@@ -5,8 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class LanguageResolver {
-    public Language resolve(String pathLang) {
-        return Language.fromCodeOrDefault(pathLang, Language.DE);
-    }
-
+  public Language resolve(String pathLang) {
+    return Language.fromCodeOrDefault(pathLang, Language.DE);
+  }
 }

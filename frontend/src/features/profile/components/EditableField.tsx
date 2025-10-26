@@ -1,13 +1,14 @@
 import React, { useState, useCallback } from 'react';
+
 import { View, ViewStyle, TextStyle } from 'react-native';
 
-import { Text } from '@/components/Text';
-import { TextField } from '@/components/TextField';
 import { Button } from '@/components/Button';
 import { PressableIcon } from '@/components/Icon';
+import { Text } from '@/components/Text';
+import { TextField } from '@/components/TextField';
+import { translate } from '@/i18n';
 import { useAppTheme } from '@/theme/context';
 import { ThemedStyle } from '@/theme/types';
-import { translate } from '@/i18n';
 
 interface EditableFieldProps {
   label: string;
@@ -96,10 +97,7 @@ export const EditableField: React.FC<EditableFieldProps> = ({
         <Text
           preset="formHelper"
           text={value || placeholder || translate('profile:messages.noData')}
-          style={[
-            themed($valueText),
-            !value && themed($placeholderText),
-          ]}
+          style={[themed($valueText), !value && themed($placeholderText)]}
         />
       </View>
     </View>

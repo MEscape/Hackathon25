@@ -1,13 +1,15 @@
 import { useCallback, useEffect } from 'react';
+
 import Toast from 'react-native-toast-message';
 
+import { translate } from '@/i18n';
+import { oauth2AuthService } from '@/services/authService';
 import {
   useGetCurrentUserQuery,
   useLoginMutation,
   useLogoutMutation,
   useRefreshTokenMutation,
 } from '@/store/api/authApi';
-import { translate } from '@/i18n';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
   setCredentials,
@@ -23,8 +25,6 @@ import {
   setUser,
   selectAuthError,
 } from '@/store/slices/authSlice';
-import { oauth2AuthService } from '@/services/authService';
-
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();
@@ -82,18 +82,18 @@ export const useAuth = () => {
     try {
       // Clear tokens from SecureStore first
       await oauth2AuthService.clearTokens();
-      
+
       // Then call the logout API
       await logoutMutation().unwrap();
-      
+
       // Clear Redux state
       dispatch(clearAuth());
-      
+
       Toast.show({
         type: 'success',
         text1: translate('toast:logoutSuccess'),
       });
-      
+
       return { success: true };
     } catch (error: any) {
       // Even if API call fails, clear local state and tokens

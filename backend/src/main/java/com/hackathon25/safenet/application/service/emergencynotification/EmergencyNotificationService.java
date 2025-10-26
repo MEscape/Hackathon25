@@ -5,33 +5,31 @@ import com.hackathon25.safenet.domain.port.inbound.NotificationPort;
 import com.hackathon25.safenet.domain.port.outbound.FriendshipRepositoryPort;
 import com.hackathon25.safenet.domain.port.outbound.NotificationRepositoryPort;
 import com.hackathon25.safenet.domain.port.outbound.UserRepositoryPort;
+import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.UUID;
-
 @Service
 @RequiredArgsConstructor
 @Primary
-public class EmergencyNotificationService implements  NotificationPort {
+public class EmergencyNotificationService implements NotificationPort {
 
-    private final UserRepositoryPort userRepository;
-    private final FriendshipRepositoryPort friendshipRepository;
-    private final NotificationRepositoryPort notificationPort;
+  private final UserRepositoryPort userRepository;
+  private final FriendshipRepositoryPort friendshipRepository;
+  private final NotificationRepositoryPort notificationPort;
 
-    @Override
-    public void triggerEmergencyCall(UUID userId) {
-        List<User> friends = friendshipRepository.findFriendsByUserId(userId);
+  @Override
+  public void triggerEmergencyCall(UUID userId) {
+    List<User> friends = friendshipRepository.findFriendsByUserId(userId);
 
-        for (User friend : friends) {
-            String token = (String) friend.meta().get("expoPushToken");
-            if (token != null && !token.isBlank()) {
-                notificationPort.sendEmergencyNotification(token, userId.toString());
-                System.out.println(friend.id() + " sent emergency notification");
-            }
-        }
+    for (User friend : friends) {
+      String token = (String) friend.meta().get("expoPushToken");
+      if (token != null && !token.isBlank()) {
+        notificationPort.sendEmergencyNotification(token, userId.toString());
+        System.out.println(friend.id() + " sent emergency notification");
+      }
     }
-
+  }
 }

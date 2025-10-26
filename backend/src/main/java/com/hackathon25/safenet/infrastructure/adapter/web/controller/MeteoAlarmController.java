@@ -15,50 +15,56 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/weather")
+@RequestMapping("/api/v1/weather")
 @RequiredArgsConstructor
 @Tag(name = "MeteoAlarm", description = "Weather alerts from MeteoAlarm Germany")
 public class MeteoAlarmController {
 
-    private final MeteoAlarmService meteoAlarmService;
+  private final MeteoAlarmService meteoAlarmService;
 
-    @Operation(
-        summary = "Get weather alerts in English",
-        description = "Fetches current weather alerts from MeteoAlarm Germany RSS feed and returns them in JSON format with English descriptions"
-    )
-    @ApiResponses(value = {
+  @Operation(
+      summary = "Get weather alerts in English",
+      description =
+          "Fetches current weather alerts from MeteoAlarm Germany RSS feed and returns them in JSON format with English descriptions")
+  @ApiResponses(
+      value = {
         @ApiResponse(responseCode = "200", description = "Successfully retrieved weather alerts"),
-        @ApiResponse(responseCode = "500", description = "Internal server error while fetching weather data")
-    })
-    @GetMapping("/alerts/english")
-    public ResponseEntity<MeteoAlarmResponse> getWeatherAlertsEnglish() {
-        log.info("Fetching weather alerts in English");
-        try {
-            MeteoAlarmResponse response = meteoAlarmService.getMeteoAlarmData("english");
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            log.error("Error fetching English weather alerts", e);
-            return ResponseEntity.internalServerError().build();
-        }
+        @ApiResponse(
+            responseCode = "500",
+            description = "Internal server error while fetching weather data")
+      })
+  @GetMapping("/alerts/english")
+  public ResponseEntity<MeteoAlarmResponse> getWeatherAlertsEnglish() {
+    log.info("Fetching weather alerts in English");
+    try {
+      MeteoAlarmResponse response = meteoAlarmService.getMeteoAlarmData("english");
+      return ResponseEntity.ok(response);
+    } catch (Exception e) {
+      log.error("Error fetching English weather alerts", e);
+      return ResponseEntity.internalServerError().build();
     }
+  }
 
-    @Operation(
-        summary = "Get weather alerts in German", 
-        description = "Fetches current weather alerts from MeteoAlarm Germany RSS feed and returns them in JSON format with German descriptions"
-    )
-    @ApiResponses(value = {
+  @Operation(
+      summary = "Get weather alerts in German",
+      description =
+          "Fetches current weather alerts from MeteoAlarm Germany RSS feed and returns them in JSON format with German descriptions")
+  @ApiResponses(
+      value = {
         @ApiResponse(responseCode = "200", description = "Successfully retrieved weather alerts"),
-        @ApiResponse(responseCode = "500", description = "Internal server error while fetching weather data")
-    })
-    @GetMapping("/alerts/german")
-    public ResponseEntity<MeteoAlarmResponse> getWeatherAlertsGerman() {
-        log.info("Fetching weather alerts in German");
-        try {
-            MeteoAlarmResponse response = meteoAlarmService.getMeteoAlarmData("german");
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            log.error("Error fetching German weather alerts", e);
-            return ResponseEntity.internalServerError().build();
-        }
+        @ApiResponse(
+            responseCode = "500",
+            description = "Internal server error while fetching weather data")
+      })
+  @GetMapping("/alerts/german")
+  public ResponseEntity<MeteoAlarmResponse> getWeatherAlertsGerman() {
+    log.info("Fetching weather alerts in German");
+    try {
+      MeteoAlarmResponse response = meteoAlarmService.getMeteoAlarmData("german");
+      return ResponseEntity.ok(response);
+    } catch (Exception e) {
+      log.error("Error fetching German weather alerts", e);
+      return ResponseEntity.internalServerError().build();
     }
+  }
 }

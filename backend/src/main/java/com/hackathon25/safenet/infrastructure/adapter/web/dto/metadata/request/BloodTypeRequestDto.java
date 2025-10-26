@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 @Schema(description = "Request to update user blood type")
 public class BloodTypeRequestDto {
 
-    @JsonProperty("bloodType")
-    @NotNull
-    @Schema(description = "Blood type of the user", example = "A+")
-    private String bloodType;
+  @JsonProperty("bloodType")
+  @NotNull
+  @Schema(description = "Blood type of the user", example = "A+")
+  private String bloodType;
 }

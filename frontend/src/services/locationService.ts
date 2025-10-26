@@ -1,11 +1,12 @@
 import * as Location from 'expo-location';
 import * as TaskManager from 'expo-task-manager';
+
 import Toast from 'react-native-toast-message';
 
+import { translate } from '@/i18n';
 import { store } from '@/store';
 import { locationApi } from '@/store/api/locationApi';
 import { updateCurrentLocation } from '@/store/slices/locationSlice';
-import { translate } from '@/i18n';
 
 // Background task name
 const LOCATION_TASK_NAME = 'background-location-task';
@@ -74,10 +75,10 @@ class LocationService {
 
         if (location) {
           this.state.lastLocation = location;
-          
+
           // Update Redux store with new location
           store.dispatch(updateCurrentLocation(location));
-          
+
           // Send location to backend
           await this.sendLocationToBackend(location);
         }
@@ -91,12 +92,13 @@ class LocationService {
   public async requestPermissions(): Promise<LocationPermissionStatus> {
     try {
       // Request foreground permissions first
-      const foregroundPermission = await Location.requestForegroundPermissionsAsync();
-      
+      const foregroundPermission =
+        await Location.requestForegroundPermissionsAsync();
+
       if (foregroundPermission.status !== 'granted') {
         this.state.hasPermission = false;
         this.state.error = translate('location:permissionDenied');
-        
+
         return {
           granted: false,
           canAskAgain: foregroundPermission.canAskAgain,
@@ -105,11 +107,12 @@ class LocationService {
       }
 
       // Request background permissions for continuous tracking
-      const backgroundPermission = await Location.requestBackgroundPermissionsAsync();
-      
+      const backgroundPermission =
+        await Location.requestBackgroundPermissionsAsync();
+
       const granted = backgroundPermission.status === 'granted';
       this.state.hasPermission = granted;
-      
+
       if (!granted) {
         this.state.error = translate('location:backgroundPermissionDenied');
         Toast.show({
@@ -131,7 +134,7 @@ class LocationService {
       console.error('Error requesting location permissions:', error);
       this.state.error = translate('location:permissionError');
       this.state.hasPermission = false;
-      
+
       return {
         granted: false,
         canAskAgain: true,
@@ -145,16 +148,22 @@ class LocationService {
    */
   public async checkPermissions(): Promise<LocationPermissionStatus> {
     try {
-      const foregroundPermission = await Location.getForegroundPermissionsAsync();
-      const backgroundPermission = await Location.getBackgroundPermissionsAsync();
-      
-      const granted = foregroundPermission.granted && backgroundPermission.granted;
+      const foregroundPermission =
+        await Location.getForegroundPermissionsAsync();
+      const backgroundPermission =
+        await Location.getBackgroundPermissionsAsync();
+
+      const granted =
+        foregroundPermission.granted && backgroundPermission.granted;
       this.state.hasPermission = granted;
-      
+
       return {
         granted,
-        canAskAgain: foregroundPermission.canAskAgain && backgroundPermission.canAskAgain,
-        status: granted ? Location.PermissionStatus.GRANTED : foregroundPermission.status,
+        canAskAgain:
+          foregroundPermission.canAskAgain && backgroundPermission.canAskAgain,
+        status: granted
+          ? Location.PermissionStatus.GRANTED
+          : foregroundPermission.status,
       };
     } catch (error) {
       console.error('Error checking location permissions:', error);
@@ -179,7 +188,8 @@ class LocationService {
       }
 
       // Check if task is already running
-      const isTaskRunning = await TaskManager.isTaskRegisteredAsync(LOCATION_TASK_NAME);
+      const isTaskRunning =
+        await TaskManager.isTaskRegisteredAsync(LOCATION_TASK_NAME);
       if (isTaskRunning) {
         console.log('Location tracking already running');
         this.state.isTracking = true;
@@ -187,31 +197,34 @@ class LocationService {
       }
 
       // Start background location tracking
-      await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, LOCATION_CONFIG);
-      
+      await Location.startLocationUpdatesAsync(
+        LOCATION_TASK_NAME,
+        LOCATION_CONFIG
+      );
+
       this.state.isTracking = true;
       this.state.error = null;
-      
+
       console.log('Location tracking started successfully');
-      
+
       Toast.show({
         type: 'success',
         text1: translate('location:tracking.started'),
         text2: translate('location:trackingStartedMessage'),
       });
-      
+
       return true;
     } catch (error) {
       console.error('Error starting location tracking:', error);
       this.state.error = translate('location:trackingStartError');
       this.state.isTracking = false;
-      
+
       Toast.show({
         type: 'error',
         text1: translate('location:trackingStartError'),
         text2: error instanceof Error ? error.message : 'Unknown error',
       });
-      
+
       return false;
     }
   }
@@ -221,14 +234,15 @@ class LocationService {
    */
   public async stopTracking(): Promise<void> {
     try {
-      const isTaskRunning = await TaskManager.isTaskRegisteredAsync(LOCATION_TASK_NAME);
+      const isTaskRunning =
+        await TaskManager.isTaskRegisteredAsync(LOCATION_TASK_NAME);
       if (isTaskRunning) {
         await Location.stopLocationUpdatesAsync(LOCATION_TASK_NAME);
       }
-      
+
       this.state.isTracking = false;
       console.log('Location tracking stopped');
-      
+
       Toast.show({
         type: 'info',
         text1: translate('location:tracking.stopped'),
@@ -252,12 +266,12 @@ class LocationService {
       }
 
       const location = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.High
+        accuracy: Location.Accuracy.High,
       });
 
       this.state.lastLocation = location;
       await this.sendLocationToBackend(location);
-      
+
       return location;
     } catch (error) {
       console.error('Error getting current location:', error);
@@ -269,12 +283,14 @@ class LocationService {
   /**
    * Send location data to backend
    */
-  private async sendLocationToBackend(location: Location.LocationObject): Promise<void> {
+  private async sendLocationToBackend(
+    location: Location.LocationObject
+  ): Promise<void> {
     try {
       // Get current visibility setting from Redux store
       const state = store.getState();
       const isVisible = state.location.isVisible;
-      
+
       const locationData = {
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
@@ -286,9 +302,9 @@ class LocationService {
       console.log('Location sent:', locationData);
 
       // Use RTK Query mutation to send location
-      await store.dispatch(
-        locationApi.endpoints.updateLocation.initiate(locationData)
-      ).unwrap();
+      await store
+        .dispatch(locationApi.endpoints.updateLocation.initiate(locationData))
+        .unwrap();
 
       console.log('Location sent to backend successfully');
     } catch (error) {
@@ -316,17 +332,19 @@ class LocationService {
    */
   public async updateLocationVisibility(visible: boolean): Promise<boolean> {
     try {
-      await store.dispatch(
-        locationApi.endpoints.updateLocationVisibility.initiate({ visible })
-      ).unwrap();
-      
+      await store
+        .dispatch(
+          locationApi.endpoints.updateLocationVisibility.initiate({ visible })
+        )
+        .unwrap();
+
       Toast.show({
         type: 'success',
-        text1: visible 
+        text1: visible
           ? translate('location:visibility.visible')
           : translate('location:visibility.hidden'),
       });
-      
+
       return true;
     } catch (error) {
       console.error('Error updating location visibility:', error);

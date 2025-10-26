@@ -1,4 +1,3 @@
-
 /**
  * Example: Tokenize text for model input
  */
@@ -32,4 +31,3 @@ export const processModelOutput = (output: any): any => {
   console.log('Processing model output:', output);
   return output;
 };
-

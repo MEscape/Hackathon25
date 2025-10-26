@@ -11,24 +11,33 @@ export interface PixelPosition {
 /**
  * Convert lat/lon to tile coordinates at given zoom level
  */
-export function latLonToTile(lat: number, lon: number, zoom: number): TileCoordinate {
+export function latLonToTile(
+  lat: number,
+  lon: number,
+  zoom: number
+): TileCoordinate {
   const latRad = (lat * Math.PI) / 180;
   const n = Math.pow(2, zoom);
   const xTile = ((lon + 180) / 360) * n;
-  const yTile = ((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2) * n;
-  
+  const yTile =
+    ((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2) * n;
+
   return { xTile, yTile };
 }
 
 /**
  * Convert tile coordinates back to lat/lon
  */
-export function tileToLatLon(x: number, y: number, zoom: number): { lat: number; lon: number } {
+export function tileToLatLon(
+  x: number,
+  y: number,
+  zoom: number
+): { lat: number; lon: number } {
   const n = Math.pow(2, zoom);
   const lon = (x / n) * 360 - 180;
   const latRad = Math.atan(Math.sinh(Math.PI * (1 - (2 * y) / n)));
   const lat = (latRad * 180) / Math.PI;
-  
+
   return { lat, lon };
 }
 
@@ -80,7 +89,10 @@ export function isPositionVisible(
 /**
  * Calculate search radius based on zoom level
  */
-export function calculateSearchRadius(zoom: number, baseRadius: number = 5000): number {
+export function calculateSearchRadius(
+  zoom: number,
+  baseRadius: number = 5000
+): number {
   const zoomFactor = Math.max(0.1, Math.min(2, (20 - zoom) / 10));
   return Math.round(baseRadius * zoomFactor);
 }

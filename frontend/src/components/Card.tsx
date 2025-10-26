@@ -1,13 +1,22 @@
 import React from 'react';
+
 import { TouchableOpacity, View } from 'react-native';
 import type { ViewStyle, TextStyle } from 'react-native';
 
 import { Icon, IconTypes } from '@/components/Icon';
 import { Text } from '@/components/Text';
-import { useAppTheme } from '@/theme/context';
-import type { ThemedStyle } from '@/theme/types';
-import { $iconContainer, $actionIconContainer, $cardContent, $cardTitle, $cardSubtitle, $lightShadow, $mediumShadow } from '@/theme/styles';
 import { TxKeyPath } from '@/i18n';
+import { useAppTheme } from '@/theme/context';
+import {
+  $iconContainer,
+  $actionIconContainer,
+  $cardContent,
+  $cardTitle,
+  $cardSubtitle,
+  $lightShadow,
+  $mediumShadow,
+} from '@/theme/styles';
+import type { ThemedStyle } from '@/theme/types';
 
 interface BaseCardProps {
   /**
@@ -112,11 +121,21 @@ interface CompactCardProps extends BaseCardProps {
   iconColor?: string;
 }
 
-type CardProps = BaseCardProps | FeatureCardProps | ActionCardProps | CompactCardProps;
+type CardProps =
+  | BaseCardProps
+  | FeatureCardProps
+  | ActionCardProps
+  | CompactCardProps;
 
 export function Card(props: CardProps) {
   const { themed, theme } = useAppTheme();
-  const { variant = 'default', style, onPress, activeOpacity = 0.7, children } = props;
+  const {
+    variant = 'default',
+    style,
+    onPress,
+    activeOpacity = 0.7,
+    children,
+  } = props;
 
   const getCardStyle = (): ThemedStyle<ViewStyle> => {
     switch (variant) {
@@ -149,81 +168,106 @@ export function Card(props: CardProps) {
   };
 
   const renderFeatureContent = (featureProps: FeatureCardProps) => {
-    const { 
-      titleTx, 
-      title, 
-      subtitleTx, 
-      subtitle, 
-      icon, 
-      iconColor, 
+    const {
+      titleTx,
+      title,
+      subtitleTx,
+      subtitle,
+      icon,
+      iconColor,
       iconBackgroundColor,
-      showChevron = true 
+      showChevron = true,
     } = featureProps;
 
-    const autoIconBgColor = iconColor 
-      ? (theme.isDark ? iconColor + '20' : iconColor + '15')
+    const autoIconBgColor = iconColor
+      ? theme.isDark
+        ? iconColor + '20'
+        : iconColor + '15'
       : undefined;
 
     return (
       <>
         {icon && (
-          <View style={[
-            themed($iconContainer), 
-            { backgroundColor: iconBackgroundColor || autoIconBgColor }
-          ]}>
-            <Icon icon={icon} size={24} color={iconColor || theme.colors.tint} />
+          <View
+            style={[
+              themed($iconContainer),
+              { backgroundColor: iconBackgroundColor || autoIconBgColor },
+            ]}
+          >
+            <Icon
+              icon={icon}
+              size={24}
+              color={iconColor || theme.colors.tint}
+            />
           </View>
         )}
         <View style={themed($cardContent)}>
           {(titleTx || title) && (
-            <Text 
-              preset="default" 
-              weight="semiBold" 
-              style={themed($cardTitle)} 
+            <Text
+              preset="default"
+              weight="semiBold"
+              style={themed($cardTitle)}
               tx={titleTx}
               text={title}
             />
           )}
           {(subtitleTx || subtitle) && (
-            <Text 
-              preset="formHelper" 
-              style={themed($cardSubtitle)} 
+            <Text
+              preset="formHelper"
+              style={themed($cardSubtitle)}
               tx={subtitleTx}
               text={subtitle}
             />
           )}
         </View>
         {showChevron && (
-          <Icon icon="chevron-forward" size={20} color={theme.colors.textMuted} />
+          <Icon
+            icon="chevron-forward"
+            size={20}
+            color={theme.colors.textMuted}
+          />
         )}
       </>
     );
   };
 
   const renderActionContent = (actionProps: ActionCardProps) => {
-    const { titleTx, title, subtitleTx, subtitle, icon, iconColor, iconBackgroundColor } = actionProps;
+    const {
+      titleTx,
+      title,
+      subtitleTx,
+      subtitle,
+      icon,
+      iconColor,
+      iconBackgroundColor,
+    } = actionProps;
 
     return (
       <>
         {icon && (
-          <View style={[
-            themed($actionIconContainer), 
-            { backgroundColor: iconBackgroundColor || theme.colors.tint + '15' }
-          ]}>
-            <Icon icon={icon} size={20} color={iconColor || theme.colors.tint} />
+          <View
+            style={[
+              themed($actionIconContainer),
+              {
+                backgroundColor:
+                  iconBackgroundColor || theme.colors.tint + '15',
+              },
+            ]}
+          >
+            <Icon
+              icon={icon}
+              size={20}
+              color={iconColor || theme.colors.tint}
+            />
           </View>
         )}
         <View style={themed($actionTextContainer)}>
           {(titleTx || title) && (
-            <Text 
-              style={themed($actionTitle)} 
-              tx={titleTx}
-              text={title}
-            />
+            <Text style={themed($actionTitle)} tx={titleTx} text={title} />
           )}
           {(subtitleTx || subtitle) && (
-            <Text 
-              style={themed($actionSubtitle)} 
+            <Text
+              style={themed($actionSubtitle)}
               tx={subtitleTx}
               text={subtitle}
             />
@@ -247,9 +291,9 @@ export function Card(props: CardProps) {
 
   if (onPress) {
     return (
-      <TouchableOpacity 
-        style={[themed(getCardStyle()), style]} 
-        onPress={onPress} 
+      <TouchableOpacity
+        style={[themed(getCardStyle()), style]}
+        onPress={onPress}
         activeOpacity={activeOpacity}
       >
         {renderContent()}
@@ -257,15 +301,11 @@ export function Card(props: CardProps) {
     );
   }
 
-  return (
-    <View style={[themed(getCardStyle()), style]}>
-      {renderContent()}
-    </View>
-  );
+  return <View style={[themed(getCardStyle()), style]}>{renderContent()}</View>;
 }
 
 // Card variant styles
-const $defaultCard: ThemedStyle<ViewStyle> = (theme) => ({
+const $defaultCard: ThemedStyle<ViewStyle> = theme => ({
   backgroundColor: theme.colors.card,
   borderRadius: 12,
   padding: theme.spacing.md,
@@ -274,20 +314,20 @@ const $defaultCard: ThemedStyle<ViewStyle> = (theme) => ({
   ...$lightShadow(theme),
 });
 
-const $featureCard: ThemedStyle<ViewStyle> = (theme) => ({
+const $featureCard: ThemedStyle<ViewStyle> = theme => ({
   ...$defaultCard(theme),
   flexDirection: 'row',
   alignItems: 'center',
   borderRadius: 14,
 });
 
-const $actionCard: ThemedStyle<ViewStyle> = (theme) => ({
+const $actionCard: ThemedStyle<ViewStyle> = theme => ({
   ...$defaultCard(theme),
   alignItems: 'center',
   ...$mediumShadow(theme),
 });
 
-const $compactCard: ThemedStyle<ViewStyle> = (theme) => ({
+const $compactCard: ThemedStyle<ViewStyle> = theme => ({
   backgroundColor: theme.colors.card,
   borderRadius: 8,
   padding: theme.spacing.sm,
@@ -312,7 +352,7 @@ const $actionTitle: ThemedStyle<TextStyle> = () => ({
   marginBottom: 2,
 });
 
-const $actionSubtitle: ThemedStyle<TextStyle> = (theme) => ({
+const $actionSubtitle: ThemedStyle<TextStyle> = theme => ({
   fontSize: 10,
   textAlign: 'center',
   color: theme.colors.textDim,

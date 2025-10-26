@@ -1,15 +1,31 @@
 import React from 'react';
-import { TouchableOpacity, View, Platform, StyleProp, ViewStyle } from 'react-native';
+
+import {
+  TouchableOpacity,
+  View,
+  Platform,
+  StyleProp,
+  ViewStyle,
+} from 'react-native';
 import type { TextStyle } from 'react-native';
 
-import { Text } from '@/components/Text';
 import { Icon, IconTypes } from '@/components/Icon';
 import { IconContainer } from '@/components/IconContainer';
+import { Text } from '@/components/Text';
 import { useAppTheme } from '@/theme/context';
+import {
+  $primaryButtonShadow,
+  $dangerButtonShadow,
+  $mediumShadow,
+} from '@/theme/styles';
 import type { ThemedStyle, ThemedStyleArray } from '@/theme/types';
-import { $primaryButtonShadow, $dangerButtonShadow, $mediumShadow } from '@/theme/styles';
 
-type ActionButtonVariants = 'primary' | 'secondary' | 'danger' | 'simple' | 'icon';
+type ActionButtonVariants =
+  | 'primary'
+  | 'secondary'
+  | 'danger'
+  | 'simple'
+  | 'icon';
 type ActionButtonSizes = 'small' | 'medium' | 'large';
 
 export interface ActionButtonProps {
@@ -121,7 +137,10 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
       );
     }
 
-    if (icon && (variant === 'primary' || variant === 'secondary' || variant === 'danger')) {
+    if (
+      icon &&
+      (variant === 'primary' || variant === 'secondary' || variant === 'danger')
+    ) {
       return (
         <View style={themed($quickActionContent)}>
           <IconContainer
@@ -155,19 +174,29 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
 // Helper functions
 const getSizeIconSize = (size: ActionButtonSizes): number => {
   switch (size) {
-    case 'small': return 18;
-    case 'medium': return 24;
-    case 'large': return 26;
-    default: return 24;
+    case 'small':
+      return 18;
+    case 'medium':
+      return 24;
+    case 'large':
+      return 26;
+    default:
+      return 24;
   }
 };
 
-const getSizeIconContainerSize = (size: ActionButtonSizes): 'small' | 'medium' | 'large' => {
+const getSizeIconContainerSize = (
+  size: ActionButtonSizes
+): 'small' | 'medium' | 'large' => {
   switch (size) {
-    case 'small': return 'small';
-    case 'medium': return 'medium';
-    case 'large': return 'large';
-    default: return 'medium';
+    case 'small':
+      return 'small';
+    case 'medium':
+      return 'medium';
+    case 'large':
+      return 'large';
+    default:
+      return 'medium';
   }
 };
 
@@ -224,7 +253,10 @@ const $sizeStyles: Record<ActionButtonSizes, ThemedStyleArray<ViewStyle>> = {
   ],
 };
 
-const $sizeTextStyles: Record<ActionButtonSizes, ThemedStyleArray<TextStyle>> = {
+const $sizeTextStyles: Record<
+  ActionButtonSizes,
+  ThemedStyleArray<TextStyle>
+> = {
   small: [
     () => ({
       fontSize: 14,
@@ -246,7 +278,10 @@ const $sizeTextStyles: Record<ActionButtonSizes, ThemedStyleArray<TextStyle>> = 
 };
 
 // Variant styles
-const $variantStyles: Record<ActionButtonVariants, ThemedStyleArray<ViewStyle>> = {
+const $variantStyles: Record<
+  ActionButtonVariants,
+  ThemedStyleArray<ViewStyle>
+> = {
   primary: [
     theme => ({
       backgroundColor: theme.colors.tint,
@@ -284,7 +319,10 @@ const $variantStyles: Record<ActionButtonVariants, ThemedStyleArray<ViewStyle>> 
   ],
 };
 
-const $variantTextStyles: Record<ActionButtonVariants, ThemedStyleArray<TextStyle>> = {
+const $variantTextStyles: Record<
+  ActionButtonVariants,
+  ThemedStyleArray<TextStyle>
+> = {
   primary: [
     () => ({
       color: '#FFFFFF',
@@ -312,7 +350,10 @@ const $variantTextStyles: Record<ActionButtonVariants, ThemedStyleArray<TextStyl
   ],
 };
 
-const $variantSubtitleStyles: Record<ActionButtonVariants, ThemedStyleArray<TextStyle>> = {
+const $variantSubtitleStyles: Record<
+  ActionButtonVariants,
+  ThemedStyleArray<TextStyle>
+> = {
   primary: [
     () => ({
       color: 'rgba(255, 255, 255, 0.8)',

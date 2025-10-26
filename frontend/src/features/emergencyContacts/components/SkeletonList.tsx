@@ -1,9 +1,12 @@
 import React from 'react';
+
 import { View } from 'react-native';
-import { ContactCardSkeleton } from './CardSkeleton';
+import type { ViewStyle } from 'react-native';
+
 import { useAppTheme } from '@/theme/context';
 import type { ThemedStyle } from '@/theme/types';
-import type { ViewStyle } from 'react-native';
+
+import { ContactCardSkeleton } from './CardSkeleton';
 
 interface SkeletonListProps {
   count?: number;

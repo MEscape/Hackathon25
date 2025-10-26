@@ -1,5 +1,7 @@
 import { useCallback, useEffect } from 'react';
+
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
+
 import {
   useGetEmergencyContactsQuery,
   useGetDiscoverableUsersQuery,
@@ -44,10 +46,14 @@ export const useEmergencyContacts = () => {
   } = useGetDiscoverableUsersQuery();
 
   // Mutations
-  const [sendRequestMutation, { isLoading: isSending }] = useSendFriendRequestMutation();
-  const [acceptRequestMutation, { isLoading: isAccepting }] = useAcceptFriendRequestMutation();
-  const [declineRequestMutation, { isLoading: isDeclining }] = useDeclineFriendRequestMutation();
-  const [removeContactMutation, { isLoading: isRemoving }] = useRemoveEmergencyContactMutation();
+  const [sendRequestMutation, { isLoading: isSending }] =
+    useSendFriendRequestMutation();
+  const [acceptRequestMutation, { isLoading: isAccepting }] =
+    useAcceptFriendRequestMutation();
+  const [declineRequestMutation, { isLoading: isDeclining }] =
+    useDeclineFriendRequestMutation();
+  const [removeContactMutation, { isLoading: isRemoving }] =
+    useRemoveEmergencyContactMutation();
 
   // Sync store when data updates
   useEffect(() => {
@@ -63,90 +69,113 @@ export const useEmergencyContacts = () => {
   }, [usersData, dispatch]);
 
   const sendFriendRequest = useCallback(
-      async (userId: string) => {
-        dispatch(setLoading(true));
-        dispatch(clearError());
+    async (userId: string) => {
+      dispatch(setLoading(true));
+      dispatch(clearError());
 
-        try {
-          const response = await sendRequestMutation(userId).unwrap();
-          return { success: true, data: response };
-        } catch (error: any) {
-          console.error('Send friend request error:', error);
-          const errorMessage = error?.data?.message || error?.message || error?.error || 'Failed to send friend request';
-          dispatch(setError(errorMessage));
-          return { success: false, error: errorMessage };
-        } finally {
-          dispatch(setLoading(false));
-        }
-      },
-      [sendRequestMutation, dispatch]
+      try {
+        const response = await sendRequestMutation(userId).unwrap();
+        return { success: true, data: response };
+      } catch (error: any) {
+        console.error('Send friend request error:', error);
+        const errorMessage =
+          error?.data?.message ||
+          error?.message ||
+          error?.error ||
+          'Failed to send friend request';
+        dispatch(setError(errorMessage));
+        return { success: false, error: errorMessage };
+      } finally {
+        dispatch(setLoading(false));
+      }
+    },
+    [sendRequestMutation, dispatch]
   );
 
   const acceptFriendRequest = useCallback(
-      async (userId: string) => {
-        dispatch(setLoading(true));
-        dispatch(clearError());
+    async (userId: string) => {
+      dispatch(setLoading(true));
+      dispatch(clearError());
 
-        try {
-          const response = await acceptRequestMutation(userId).unwrap();
-          return { success: true, data: response };
-        } catch (error: any) {
-          console.error('Accept friend request error:', error);
-          const errorMessage = error?.data?.message || error?.message || error?.error || 'Failed to accept friend request';
-          dispatch(setError(errorMessage));
-          return { success: false, error: errorMessage };
-        } finally {
-          dispatch(setLoading(false));
-        }
-      },
-      [acceptRequestMutation, dispatch]
+      try {
+        const response = await acceptRequestMutation(userId).unwrap();
+        return { success: true, data: response };
+      } catch (error: any) {
+        console.error('Accept friend request error:', error);
+        const errorMessage =
+          error?.data?.message ||
+          error?.message ||
+          error?.error ||
+          'Failed to accept friend request';
+        dispatch(setError(errorMessage));
+        return { success: false, error: errorMessage };
+      } finally {
+        dispatch(setLoading(false));
+      }
+    },
+    [acceptRequestMutation, dispatch]
   );
 
   const declineFriendRequest = useCallback(
-      async (userId: string) => {
-        dispatch(setLoading(true));
-        dispatch(clearError());
+    async (userId: string) => {
+      dispatch(setLoading(true));
+      dispatch(clearError());
 
-        try {
-          const response = await declineRequestMutation(userId).unwrap();
-          return { success: true, data: response };
-        } catch (error: any) {
-          console.error('Decline friend request error:', error);
-          const errorMessage = error?.data?.message || error?.message || error?.error || 'Failed to decline friend request';
-          dispatch(setError(errorMessage));
-          return { success: false, error: errorMessage };
-        } finally {
-          dispatch(setLoading(false));
-        }
-      },
-      [declineRequestMutation, dispatch]
+      try {
+        const response = await declineRequestMutation(userId).unwrap();
+        return { success: true, data: response };
+      } catch (error: any) {
+        console.error('Decline friend request error:', error);
+        const errorMessage =
+          error?.data?.message ||
+          error?.message ||
+          error?.error ||
+          'Failed to decline friend request';
+        dispatch(setError(errorMessage));
+        return { success: false, error: errorMessage };
+      } finally {
+        dispatch(setLoading(false));
+      }
+    },
+    [declineRequestMutation, dispatch]
   );
 
   const removeEmergencyContact = useCallback(
-      async (userId: string) => {
-        dispatch(setLoading(true));
-        dispatch(clearError());
+    async (userId: string) => {
+      dispatch(setLoading(true));
+      dispatch(clearError());
 
-        try {
-          const response = await removeContactMutation(userId).unwrap();
-          return { success: true, data: response };
-        } catch (error: any) {
-          console.error('Remove contact error:', error);
-          const errorMessage = error?.data?.message || error?.message || error?.error || 'Failed to remove contact';
-          dispatch(setError(errorMessage));
-          return { success: false, error: errorMessage };
-        } finally {
-          dispatch(setLoading(false));
-        }
-      },
-      [removeContactMutation, dispatch]
+      try {
+        const response = await removeContactMutation(userId).unwrap();
+        return { success: true, data: response };
+      } catch (error: any) {
+        console.error('Remove contact error:', error);
+        const errorMessage =
+          error?.data?.message ||
+          error?.message ||
+          error?.error ||
+          'Failed to remove contact';
+        dispatch(setError(errorMessage));
+        return { success: false, error: errorMessage };
+      } finally {
+        dispatch(setLoading(false));
+      }
+    },
+    [removeContactMutation, dispatch]
   );
 
   return {
     contacts,
     discoverableUsers,
     pendingRequests,
-    isLoading: isLoading || isLoadingContacts || isLoadingUsers || isSending || isAccepting || isDeclining || isRemoving,
+    isLoading:
+      isLoading ||
+      isLoadingContacts ||
+      isLoadingUsers ||
+      isSending ||
+      isAccepting ||
+      isDeclining ||
+      isRemoving,
     error,
     sendFriendRequest,
     acceptFriendRequest,

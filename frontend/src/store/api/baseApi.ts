@@ -7,18 +7,18 @@ import {
 } from '@reduxjs/toolkit/query/react';
 import Toast from 'react-native-toast-message';
 
+import Config from '@/config';
+import { translate } from '@/i18n';
 import { AuthTokensSchema } from '@/schemas/auth.schema';
 import { oauth2AuthService } from '@/services/authService';
 import type { RootState } from '@/store';
 import { setTokens, clearAuth } from '@/store/slices/authSlice';
 import { safeValidateApiResponse } from '@/utils/validation';
-import { translate } from '@/i18n';
-import Config from "@/config";
 
 // Helper function to show toast messages based on HTTP status codes
 const showApiErrorToast = (status: number | string, data?: any) => {
   let message: string;
-  
+
   switch (status) {
     case 400:
       message = translate('toast:badRequest');
@@ -50,7 +50,7 @@ const showApiErrorToast = (status: number | string, data?: any) => {
         message = translate('toast:serverError');
       }
   }
-  
+
   Toast.show({
     type: 'error',
     text1: message,
@@ -131,7 +131,7 @@ const baseQueryWithReauth: BaseQueryFn<
           });
           return false;
         } catch (_err) {
-          console.log(_err)
+          console.log(_err);
           api.dispatch(clearAuth());
           Toast.show({
             type: 'error',
@@ -166,6 +166,18 @@ const baseQueryWithReauth: BaseQueryFn<
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithReauth,
-  tagTypes: ['User', 'Auth', 'EmergencyContacts', 'DiscoverableUsers', 'UserMetadata', 'SafetyAlerts', 'WeatherAlerts', 'EmergencyTips'],
+  tagTypes: [
+    'User',
+    'Auth',
+    'EmergencyContacts',
+    'DiscoverableUsers',
+    'UserMetadata',
+    'SafetyAlerts',
+    'WeatherAlerts',
+    'EmergencyTips',
+    'Warnings',
+    'UserLocation',
+    'HelpCenter',
+  ],
   endpoints: () => ({}),
 });

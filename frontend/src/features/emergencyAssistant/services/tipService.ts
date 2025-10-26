@@ -1,18 +1,22 @@
 import type { EmergencyTipsResponse, FlattenedTip } from '../types';
 
-export const flattenTips = (response: EmergencyTipsResponse): FlattenedTip[] => {
+export const flattenTips = (
+  response: EmergencyTipsResponse
+): FlattenedTip[] => {
   const flattened: FlattenedTip[] = [];
   let idCounter = 0;
 
-  response.category.forEach((category) => {
-    category.tips.forEach((tip) => {
-      tip.articles.forEach((article) => {
+  response.category.forEach(category => {
+    category.tips.forEach(tip => {
+      tip.articles.forEach(article => {
         const searchableText = [
           category.title,
           tip.title,
           article.title,
           article.bodyText.replace(/<[^>]*>/g, ''),
-        ].join(' ').toLowerCase();
+        ]
+          .join(' ')
+          .toLowerCase();
 
         flattened.push({
           id: `tip_${idCounter++}`,
@@ -36,7 +40,10 @@ export const findRelevantTips = (
   tips: FlattenedTip[],
   maxResults = 3
 ): FlattenedTip[] => {
-  const searchTerms = query.toLowerCase().split(' ').filter(term => term.length > 2);
+  const searchTerms = query
+    .toLowerCase()
+    .split(' ')
+    .filter(term => term.length > 2);
 
   const scoredTips = tips.map(tip => {
     let score = 0;

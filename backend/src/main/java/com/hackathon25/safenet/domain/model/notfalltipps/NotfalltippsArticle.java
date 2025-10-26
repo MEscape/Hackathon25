@@ -6,8 +6,8 @@ import lombok.Data;
 @Data
 @Builder
 public class NotfalltippsArticle {
-    private String title;
-    private String bodyText;
-    private NotfalltippsImage image;
-    private long lastModificationDate;
+  private String title;
+  private String bodyText;
+  private NotfalltippsImage image;
+  private long lastModificationDate;
 }

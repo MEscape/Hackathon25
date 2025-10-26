@@ -56,17 +56,17 @@ export const HELP_CENTER_TYPES = {
 export type HelpCenterType = keyof typeof HELP_CENTER_TYPES;
 
 export const helpCentersApi = apiSlice.injectEndpoints({
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     getHelpCenters: builder.query<HelpCenterResponse, HelpCenterQuery>({
       query: ({ lat, lon, radius, type }) => ({
-        url: '/helpcenters',
+        url: '/api/v1/helpcenters',
         params: { lat, lon, radius, type },
       }),
       providesTags: (result, error, { type, lat, lon, radius }) => [
         { type: 'HelpCenter', id: `${type}-${lat}-${lon}-${radius}` },
       ],
     }),
-    
+
     getMultipleHelpCenters: builder.query<
       Record<HelpCenterType, HelpCenterResponse>,
       Omit<HelpCenterQuery, 'type'> & { types: HelpCenterType[] }
@@ -84,22 +84,31 @@ export const helpCentersApi = apiSlice.injectEndpoints({
           return { type, result: result.data };
         });
 
-        const results: Array<{ type: HelpCenterType; result: HelpCenterResponse | undefined }> = await Promise.all(promises);
+        const results: {
+          type: HelpCenterType;
+          result: HelpCenterResponse | undefined;
+        }[] = await Promise.all(promises);
 
         const data: Record<HelpCenterType, HelpCenterResponse> = results.reduce(
-          (acc: Record<HelpCenterType, HelpCenterResponse>, { type, result }: { type: HelpCenterType; result: HelpCenterResponse | undefined }) => {
+          (
+            acc: Record<HelpCenterType, HelpCenterResponse>,
+            {
+              type,
+              result,
+            }: { type: HelpCenterType; result: HelpCenterResponse | undefined }
+          ) => {
             acc[type] = result || { items: [] };
             return acc;
-          }, 
+          },
           {} as Record<HelpCenterType, HelpCenterResponse>
         );
 
         return { data };
       },
       providesTags: (result, error, { types, lat, lon, radius }) => [
-        ...types.map(type => ({ 
-          type: 'HelpCenter' as const, 
-          id: `${type}-${lat}-${lon}-${radius}` 
+        ...types.map(type => ({
+          type: 'HelpCenter' as const,
+          id: `${type}-${lat}-${lon}-${radius}`,
         })),
         { type: 'HelpCenter', id: `multi-${lat}-${lon}-${radius}` },
       ],

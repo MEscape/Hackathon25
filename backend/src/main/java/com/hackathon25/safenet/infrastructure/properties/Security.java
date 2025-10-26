@@ -5,9 +5,7 @@ import lombok.Data;
 @Data
 public class Security {
 
-    private boolean httpsOnly = false;
+  private boolean httpsOnly = false;
 
-    private String[] corsAllowedOrigins = {
-            "http://localhost:8081"
-    };
+  private String[] corsAllowedOrigins = {"http://localhost:8081"};
 }

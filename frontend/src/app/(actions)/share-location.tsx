@@ -1,8 +1,10 @@
 import React from 'react';
+
 import { View, ViewStyle } from 'react-native';
+
+import { Button } from '@/components/Button';
 import { Screen } from '@/components/Screen';
 import { Text } from '@/components/Text';
-import { Button } from '@/components/Button';
 import { useAppTheme } from '@/theme/context';
 import { ThemedStyle } from '@/theme/types';
 
@@ -18,8 +20,16 @@ export default function ShareLocationScreen() {
       <Text preset="formHelper" tx="actions:shareLocation.subtitle" />
 
       <View style={themed($box)}>
-        <Text preset="default" weight="semiBold" text={`Latitude: ${MOCK_LAT.toFixed(4)}`} />
-        <Text preset="default" weight="semiBold" text={`Longitude: ${MOCK_LON.toFixed(4)}`} />
+        <Text
+          preset="default"
+          weight="semiBold"
+          text={`Latitude: ${MOCK_LAT.toFixed(4)}`}
+        />
+        <Text
+          preset="default"
+          weight="semiBold"
+          text={`Longitude: ${MOCK_LON.toFixed(4)}`}
+        />
       </View>
 
       <Button preset="primary" text="Copy Coordinates" onPress={() => {}} />

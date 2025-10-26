@@ -1,3 +1,4 @@
+import { getCurrentLocale } from '@/i18n';
 import {
   User,
   LoginResponse,
@@ -8,7 +9,6 @@ import {
 } from '@/schemas/auth.schema';
 import { oauth2AuthService } from '@/services/authService';
 import { validateApiResponse } from '@/utils/validation';
-import { getCurrentLocale } from '@/i18n';
 
 import { apiSlice } from './baseApi';
 

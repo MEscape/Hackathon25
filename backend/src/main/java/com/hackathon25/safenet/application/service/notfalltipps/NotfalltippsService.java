@@ -11,10 +11,10 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class NotfalltippsService implements NotfalltippsPort {
-    private final NotfalltippsFeedPort notfalltippsFeedPort;
+  private final NotfalltippsFeedPort notfalltippsFeedPort;
 
-    @Override
-    public NotfalltippsRoot getNotfalltipps() {
-        return notfalltippsFeedPort.fetchFeedContent();
-    }
+  @Override
+  public NotfalltippsRoot getNotfalltipps() {
+    return notfalltippsFeedPort.fetchFeedContent();
+  }
 }

@@ -1,8 +1,10 @@
 import React, { useRef, useEffect, useState } from 'react';
+
 import { ScrollView } from 'react-native';
+
 import type { Message } from '../types';
-import { MessageBubble } from './MessageBubble';
 import { LoadingIndicator } from './LoadingIndicator';
+import { MessageBubble } from './MessageBubble';
 import { styles } from '../styles/styles';
 
 interface MessageListProps {
@@ -11,9 +13,9 @@ interface MessageListProps {
 }
 
 export const MessageList: React.FC<MessageListProps> = ({
-                                                          messages,
-                                                          isLoading
-                                                        }) => {
+  messages,
+  isLoading,
+}) => {
   const scrollViewRef = useRef<ScrollView>(null);
   const [isUserScrolling, setIsUserScrolling] = useState(false);
   const [shouldAutoScroll, setShouldAutoScroll] = useState(true);
@@ -48,7 +50,7 @@ export const MessageList: React.FC<MessageListProps> = ({
       onScrollEndDrag={handleScrollEndDrag}
       showsVerticalScrollIndicator={true}
     >
-      {messages.map((message) => (
+      {messages.map(message => (
         <MessageBubble key={message.id} message={message} />
       ))}
       {isLoading && <LoadingIndicator />}
