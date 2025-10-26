@@ -1,14 +1,25 @@
 const en = {
   common: {
-    ok: 'OK',
+    ok: 'OK!',
     cancel: 'Cancel',
-    noData: 'No data available',
+    back: 'Back',
     loading: 'Loading...',
-    lastSeen: 'Last seen',
+    error: 'Error',
+    retry: 'Retry',
     save: 'Save',
-    error: 'Error'
+    delete: 'Delete',
+    edit: 'Edit',
+    close: 'Close',
+    confirm: 'Confirm',
+    yes: 'Yes',
+    no: 'No',
+    or: 'or',
+    send: 'Send',
+    errors: {
+      general: 'Sorry, there was an error. Please try again.',
+      loading: 'Sorry, there was an error loading. Please try again later.',
+    },
   },
-
   home: {
     title: 'Home',
     greeting: {
@@ -62,6 +73,28 @@ const en = {
 
   map: {
     title: 'Map',
+    helpCenterTypes: {
+      hospital: 'Hospital',
+      police: 'Police',
+      fire_station: 'Fire Station',
+      pharmacy: 'Pharmacy',
+      shelter: 'Shelter',
+    },
+    information: 'Information',
+    tags: 'Tags',
+    call: 'Call',
+    directions: 'Directions',
+    error: 'Error',
+    cannotOpenMaps: 'Cannot open maps application',
+    noPhoneNumber: 'No phone number available',
+    helpCentersRadius: 'Help centers within {{radius}}km radius',
+    loading: 'Loading...',
+    loadingError: 'Error loading',
+    locationShared: 'Location shared',
+    locationPrivate: 'Location private',
+    friendsVisible: 'friends visible',
+    noFriendsVisible: 'No friends visible',
+    helpCentersActive: 'Help centers active',
   },
 
   actions: {
@@ -234,6 +267,45 @@ const en = {
     tryAgain: 'Try again',
     reportIssue: 'Report issue',
     footer: 'If the problem persists, contact support.',
+  },
+
+  location: {
+    permission: {
+      title: 'Location Access',
+      description: 'SafeNet needs location access to provide safety features and help you in emergencies.',
+      features: {
+        emergencyResponse: 'Emergency response',
+        friendsLocation: 'Share location with friends',
+        safetyAlerts: 'Location-based safety alerts',
+      },
+      buttons: {
+        allow: 'Allow Location Access',
+        skip: 'Skip for Now',
+      },
+      privacy: 'Your location data is encrypted and only shared with your trusted contacts.',
+    },
+    tracking: {
+      started: 'Location tracking started',
+      stopped: 'Location tracking stopped',
+      error: 'Failed to start location tracking',
+      backgroundTitle: 'SafeNet Location Tracking',
+      backgroundBody: 'Tracking your location for safety purposes',
+    },
+    visibility: {
+      visible: 'Location visible to friends',
+      hidden: 'Location hidden from friends',
+      error: 'Failed to update location visibility',
+    },
+
+    permissionDenied: 'Location permission denied',
+    backgroundPermissionDenied: 'Background location permission denied',
+    backgroundPermissionTitle: 'Background Location Access',
+    backgroundPermissionMessage: 'SafeNet needs background location access to track your location even when the app is closed.',
+    permissionError: 'Failed to request location permission',
+    trackingStartedMessage: 'Your location is now being tracked for safety purposes',
+    trackingStartError: 'Failed to start location tracking',
+    trackingStopError: 'Failed to stop location tracking',
+    getCurrentLocationError: 'Failed to get current location',
   },
 
   toast: {

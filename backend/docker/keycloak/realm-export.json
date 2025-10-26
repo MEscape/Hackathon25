@@ -9,20 +9,17 @@
   "registrationAllowed": true,
   "rememberMe": true,
   "bruteForceProtected": true,
-
   "internationalizationEnabled": true,
   "supportedLocales": [
     "en",
     "de"
   ],
   "defaultLocale": "en",
-
   "accessTokenLifespan": 300,
   "accessTokenLifespanForImplicitFlow": 900,
   "ssoSessionIdleTimeout": 1800,
   "ssoSessionMaxLifespan": 36000,
   "passwordPolicy": "length(8) and upperCase and lowerCase and digits and specialChars and notUsername",
-
   "clients": [
     {
       "clientId": "frontend-app",
@@ -35,16 +32,15 @@
       "secret": "s3cureR@nd0mStr1ng123!",
       "redirectUris": [
         "safenet:///",
-        "https://193.111.249.251.sslip.io/*",
-        "https://193.111.249.251.sslip.io/swagger-ui/oauth2-redirect.html"
+        "http://193.111.249.251.sslip.io/*",
+        "http://193.111.249.251.sslip.io/swagger-ui/oauth2-redirect.html"
       ],
       "webOrigins": [
-        "https://193.111.249.251.sslip.io/",
-        "https://193.111.249.251.sslip.io/"
+        "safenet:///",
+        "http://193.111.249.251.sslip.io/"
       ]
     }
   ],
-
   "roles": {
     "realm": [
       {
@@ -61,7 +57,6 @@
       }
     ]
   },
-
   "identityProviders": [
     {
       "alias": "google",
@@ -83,9 +78,10 @@
       }
     }
   ],
-
   "eventsEnabled": true,
-  "eventsListeners": ["jboss-logging"],
+  "eventsListeners": [
+    "jboss-logging"
+  ],
   "enabledEventTypes": [
     "LOGIN",
     "LOGOUT",
@@ -94,7 +90,6 @@
     "UPDATE_EMAIL",
     "DELETE_ACCOUNT"
   ],
-
   "adminEventsEnabled": true,
   "adminEventsDetailsEnabled": true
 }
