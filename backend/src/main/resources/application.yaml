@@ -74,18 +74,18 @@ safenet:
       app-version: 1.0
       external-docs:
         - description: OpenID Provider Configuration
-          url: ${HOST}/realms/safenet/.well-known/openid-configuration
+          url: ${KEYCLOAK_ISSUER_URI}/.well-known/openid-configuration
 
     swagger-ui:
       oauth:
-        authorization-url: ${HOST}/realms/safenet/protocol/openid-connect/auth
-        token-url: ${HOST}/realms/safenet/protocol/openid-connect/token
+        authorization-url: ${KEYCLOAK_ISSUER_URI}/protocol/openid-connect/auth
+        token-url: ${KEYCLOAK_ISSUER_URI}/protocol/openid-connect/token
 
   # Security configuration
   security:
     https-only: false
     cors-allowed-origins:
-      - ${HOST}
+      - ${KEYCLOAK_ISSUER_URI}
       - ${HOST}
 
 # Logging configuration

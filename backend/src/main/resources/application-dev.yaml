@@ -13,8 +13,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${HOST}/realms/safenet
-          jwk-set-uri: ${HOST}/realms/safenet/protocol/openid-connect/certs
+          issuer-uri: ${KEYCLOAK_ISSUER_URI}
+          jwk-set-uri: ${KEYCLOAK_ISSUER_URI}/protocol/openid-connect/certs
 
 logging:
   level:

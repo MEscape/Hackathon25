@@ -38,9 +38,9 @@ public class UserService implements UserPort {
     @Override
     public List<DiscoverableUser> getDiscoverableUsers(UUID currentUserId) {
         log.debug("Getting discoverable users for user: {}", currentUserId);
-        
+
         List<User> allUsers = userRepository.findAll();
-        
+
         return allUsers.stream()
                 .filter(user -> !user.id().equals(currentUserId))
                 .map(user -> mapToDiscoverableUser(user, currentUserId))
@@ -92,9 +92,8 @@ public class UserService implements UserPort {
                 .map(req -> {
                     if (req.requesterId().equals(currentUserId)) {
                         return DiscoverableUser.RequestStatus.SENT;
-                    } else {
-                        return DiscoverableUser.RequestStatus.RECEIVED;
                     }
+                    return DiscoverableUser.RequestStatus.RECEIVED;
                 })
                 .orElse(DiscoverableUser.RequestStatus.NONE);
     }
