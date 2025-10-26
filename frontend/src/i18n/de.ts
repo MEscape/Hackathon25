@@ -66,6 +66,16 @@ const de: Translations = {
     safetyAlerts: {
       title: 'Sicherheitswarnungen',
       subtitle: 'Empfange und verwalte Warnungen in deiner Umgebung.',
+      sections: {
+        police: 'Polizeiwarnungen',
+        weather: 'Wetterwarnungen',
+      },
+      search: {
+        titleLabel: 'Nach Titel suchen',
+        titlePlaceholder: 'Titel eingeben…',
+        locationLabel: 'Nach Ort filtern',
+        locationPlaceholder: 'Region oder Ort eingeben…',
+      },
     },
     profile: {
       title: 'Profil',
