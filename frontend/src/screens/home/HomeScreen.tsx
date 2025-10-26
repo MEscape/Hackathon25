@@ -141,10 +141,10 @@ function HomeScreen() {
                         icon="location"
                         iconColor="#FFFFFF"
                         iconSize={26}
-                        text={translate("home:quickActions.shareLocation.title")}
-                        subtitle={translate("home:quickActions.shareLocation.subtitle")}
+                        text={translate("home:quickActions.emergencyTips.title")}
+                        subtitle={translate("home:quickActions.emergencyTips.subtitle")}
                         style={themed($actionButtonStyle)}
-                        onPress={() => router.push('/(actions)/share-location')}
+                        onPress={() => router.push('/(actions)/emergency-assistant')}
                     />
                 </View>
             </View>

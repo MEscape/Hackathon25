@@ -1,8 +1,9 @@
 import React, { useCallback } from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import { TextField, TextFieldAccessoryProps } from '@/components/TextField';
+import { TextField } from '@/components/TextField';
 import { Icon } from '@/components/Icon';
 import { useAppTheme } from '@/theme/context';
+import { TxKeyPath } from '@/i18n';
 import { 
   $searchInputContainer,
   $searchInputWrapper,
@@ -15,7 +16,7 @@ export type SearchInputProps = {
   value: string;
   onChangeText: (text: string) => void;
   onClear: () => void;
-  placeholderTx?: string;
+  placeholderTx?: TxKeyPath;
 };
 
 export function SearchInput({ value, onChangeText, onClear, placeholderTx }: SearchInputProps) {
@@ -37,7 +38,7 @@ export function SearchInput({ value, onChangeText, onClear, placeholderTx }: Sea
 
   return (
     <TextField
-      placeholder={placeholderTx}
+      placeholderTx={placeholderTx}
       value={value}
       onChangeText={onChangeText}
       autoCapitalize="none"

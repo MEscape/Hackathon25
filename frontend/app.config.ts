@@ -4,7 +4,12 @@ import { ExpoConfig, ConfigContext } from "@expo/config"
  * Use ts-node here so we can use TypeScript for our Config Plugins
  * and not have to compile them to JavaScript
  */
-require("ts-node/register")
+// Try to enable TS support for config plugins; fall back to JS plugin if unavailable
+try {
+    require("ts-node/register")
+} catch (e) {
+    console.warn("ts-node/register not found. Falling back to JS plugin. Install 'ts-node' to enable TypeScript config plugins.")
+}
 
 /**
  * @param config ExpoConfig coming from the static config app.json if it exists
@@ -14,6 +19,19 @@ require("ts-node/register")
  */
 module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
     const existingPlugins = config.plugins ?? []
+
+    // Resolve splash plugin: prefer TS, fallback to JS
+    let splashPlugin: any
+    try {
+        splashPlugin = require("./plugins/withSplashScreen").withSplashScreen
+    } catch (_err) {
+        try {
+            splashPlugin = require("./plugins/withSplashScreen.js").withSplashScreen
+        } catch (_err2) {
+            console.warn("Could not load splash plugin. Proceeding without it.")
+            splashPlugin = null
+        }
+    }
 
     return {
         ...config,
@@ -44,6 +62,11 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
                 ],
             },
         },
-        plugins: [...existingPlugins, require("./plugins/withSplashScreen").withSplashScreen],
+        // Always include ONNX runtime plugin. Add splash plugin if available.
+        plugins: [
+            ...existingPlugins,
+            "onnxruntime-react-native",
+            ...(splashPlugin ? [splashPlugin] : []),
+        ],
     }
 }
