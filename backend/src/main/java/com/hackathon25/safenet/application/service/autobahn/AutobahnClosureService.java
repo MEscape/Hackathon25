@@ -7,6 +7,7 @@ import com.hackathon25.safenet.domain.port.outbound.AutobahnClosureFeedPort;
 import com.hackathon25.safenet.infrastructure.adapter.web.dto.autobahn.AutobahnClosureItemDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class AutobahnClosureService implements AutobahnClosurePort {
     private final AutobahnClosureFeedPort autobahnClosureFeedPort;
     
     @Override
+    @Cacheable(value = "autobahnClosuresCache", key = "#autobahnId")
     public List<AutobahnClosureItem> getAutobahnClosureData(String autobahnId) {
         try {
             log.info("Fetching closure data for Autobahn: {}", autobahnId);
