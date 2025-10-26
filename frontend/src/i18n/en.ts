@@ -64,6 +64,16 @@ const en = {
     safetyAlerts: {
       title: 'Safety Alerts',
       subtitle: 'Receive and manage alerts in your area.',
+      sections: {
+        police: 'Police Alerts',
+        weather: 'Weather Alerts',
+      },
+      search: {
+        titleLabel: 'Search by title',
+        titlePlaceholder: 'Type a title…',
+        locationLabel: 'Filter by location',
+        locationPlaceholder: 'Type a region or place…',
+      },
     },
     profile: {
       title: 'Profile',
