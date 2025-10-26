@@ -5,6 +5,7 @@ import com.hackathon25.safenet.domain.port.inbound.NotfalltippsPort;
 import com.hackathon25.safenet.domain.port.outbound.NotfalltippsFeedPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -14,6 +15,7 @@ public class NotfalltippsService implements NotfalltippsPort {
     private final NotfalltippsFeedPort notfalltippsFeedPort;
 
     @Override
+    @Cacheable(value = "notfalltippsCache")
     public NotfalltippsRoot getNotfalltipps() {
         return notfalltippsFeedPort.fetchFeedContent();
     }

@@ -6,6 +6,7 @@ import com.hackathon25.safenet.domain.port.inbound.MeteoAlarmPort;
 import com.hackathon25.safenet.domain.port.outbound.MeteoAlarmFeedPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -26,6 +27,7 @@ public class MeteoAlarmService implements MeteoAlarmPort {
 
     private final MeteoAlarmFeedPort meteoAlarmFeedPort;
 
+    @Cacheable(value = "meteoAlarmCache", key = "#language")
     public MeteoAlarmResponse getMeteoAlarmData(String language) {
         try {
             log.info("Fetching MeteoAlarm data for language: {}", language);
