@@ -102,6 +102,18 @@ services:
     profiles:
       - tools  # Only start with: docker-compose --profile tools up
 
+  # LibreTranslate (self-hosted)
+  libretranslate:
+    image: libretranslate/libretranslate:latest
+    container_name: libretranslate
+    environment:
+      LT_LOAD_ONLY: "de,en"
+    ports:
+      - "5001:5000"
+    restart: unless-stopped
+    networks:
+      - safe-net-network
+
 volumes:
   postgres_data:
     driver: local

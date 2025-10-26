@@ -54,4 +54,6 @@ public interface UserRepositoryPort {
      * @param id the user ID
      */
     void deleteById(UUID id);
+
+    String getExpoPushToken(UUID userId);
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAuthNavigation } from '@/hooks/useAuthNavigation';
+import { usePushNotificationsRegistration } from '@/hooks/usePushNotificationsRegistration';
 
 interface AuthNavigationHandlerProps {
   children: React.ReactNode;
@@ -11,5 +12,6 @@ interface AuthNavigationHandlerProps {
  */
 export const AuthNavigationHandler: React.FC<AuthNavigationHandlerProps> = ({ children }) => {
   useAuthNavigation();
+  usePushNotificationsRegistration();
   return <>{children}</>;
 };

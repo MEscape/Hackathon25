@@ -132,7 +132,7 @@ function HomeScreen() {
                         text={translate("home:quickActions.emergency.title")}
                         subtitle={translate("home:quickActions.emergency.subtitle")}
                         style={themed($actionButtonStyle)}
-                        onPress={() => router.push('/(actions)/emergency-contacts')}
+                        onPress={() => router.push('/(actions)/emergency')}
                     />
 
                     <ActionButton
