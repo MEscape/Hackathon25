@@ -1,29 +1,99 @@
-# Production profile
+# Main application configuration
 spring:
+  application:
+    name: SafeNet
+
   config:
     activate:
       on-profile: prod
 
-  jpa:
-    show-sql: false
-    hibernate:
-      ddl-auto: update
-
+  # Database configuration
   datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+    # HikariCP connection pool (production-ready defaults)
     hikari:
-      maximum-pool-size: 50
-      minimum-idle: 10
+      maximum-pool-size: ${MAXIMUM_POOL_SIZE}
+      minimum-idle: ${MINIMUM_IDLE}
+      connection-timeout: ${CONNECTION_TIMEOUT}
+      idle-timeout: ${IDLE_TIMEOUT}
+      max-lifetime: ${MAX_LIFETIME}
 
+  # JPA/Hibernate configuration
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate  # Production: never use 'update' or 'create-drop'
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+    show-sql: false  # Enable in dev profile
+
+# Server configuration
+server:
+  port: ${SERVER_PORT}
+  shutdown: graceful  # Graceful shutdown for Kubernetes
+
+# Actuator configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,metrics,prometheus"
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when_authorized
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+# OpenAPI documentation
+springdoc:
+  swagger-ui:
+    oauth:
+      use-pkce-with-authorization-code-grant: true
+      use-basic-authentication-with-access-code-grant: true
+
+    # UI Configuration
+    persist-authorization: true
+
+safenet:
+  # OpenAPI documentation
+  springdoc:
+    api-docs:
+      title: ${spring.application.name}
+      description: SafePath ist eine mobile/webbasierte App, die in Katastrophenfällen sichere Evakuierungsrouten anzeigt, Statusmeldungen ermöglicht und die Koordination von Betroffenen und Rettungskräften unterstützt.
+      app-version: 1.0
+      external-docs:
+        - description: OpenID Provider Configuration
+          url: ${KEYCLOAK_ISSUER_URI}/.well-known/openid-configuration
+
+    swagger-ui:
+      oauth:
+        authorization-url: ${KEYCLOAK_ISSUER_URI}/protocol/openid-connect/auth
+        token-url: ${KEYCLOAK_ISSUER_URI}/protocol/openid-connect/token
+
+  # Security configuration
   security:
-    oauth2:
-      resourceserver:
-        opaquetoken:
-          introspection-uri: ${KEYCLOAK_ISSUER_URI}/protocol/openid-connect/token/introspect
-          client-id: ${KEYCLOAK_CLIENT_ID}
-          client-secret: ${KEYCLOAK_CLIENT_SECRET}
+    https-only: false
+    cors-allowed-origins:
+      - ${KEYCLOAK_ISSUER_URI}
+      - ${HOST}
 
+# Logging configuration
 logging:
   level:
-    root: WARN
-    com.hackathon.safenet: INFO
-    org.springframework.security: INFO
+    root: INFO
+    com.hackathon.safenet: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
