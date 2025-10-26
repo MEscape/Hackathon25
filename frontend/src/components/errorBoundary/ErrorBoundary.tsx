@@ -9,8 +9,8 @@ import { Button } from '@/components/Button';
 import { Screen } from '@/components/Screen';
 import { Text } from '@/components/Text';
 import { useAppTheme } from '@/theme/context';
-import type { ThemedStyle } from '@/theme/types';
 import { $errorIconContainer, $errorIconCircle } from '@/theme/styles';
+import type { ThemedStyle } from '@/theme/types';
 
 interface ErrorFallbackProps {
   error: Error;
@@ -34,14 +34,26 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({
         </View>
 
         {/* Error Title */}
-        <Text preset="heading" style={themed($title)} tx="errorFallback:title" />
+        <Text
+          preset="heading"
+          style={themed($title)}
+          tx="errorFallback:title"
+        />
 
         {/* Error Description */}
-        <Text preset="default" style={themed($description)} tx="errorFallback:description" />
+        <Text
+          preset="default"
+          style={themed($description)}
+          tx="errorFallback:description"
+        />
 
         {/* Error Details (collapsible section) */}
         <View style={themed($errorDetailsContainer)}>
-          <Text preset="formLabel" style={themed($errorDetailsTitle)} tx="errorFallback:technicalDetails" />
+          <Text
+            preset="formLabel"
+            style={themed($errorDetailsTitle)}
+            tx="errorFallback:technicalDetails"
+          />
           <View style={themed($errorDetailsBox)}>
             <Text style={themed($errorDetailsText)} numberOfLines={6}>
               {error.message}
@@ -71,7 +83,11 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({
 
         {/* Footer */}
         <View style={themed($footer)}>
-          <Text preset="formHelper" style={themed($footerText)} tx="errorFallback:footer" />
+          <Text
+            preset="formHelper"
+            style={themed($footerText)}
+            tx="errorFallback:footer"
+          />
         </View>
       </View>
     </Screen>

@@ -8,5 +8,8 @@ export const cleanHtmlText = (text: string, maxLength?: number): string => {
 };
 
 export const extractSearchTerms = (query: string, minLength = 2): string[] => {
-  return query.toLowerCase().split(' ').filter(term => term.length > minLength);
+  return query
+    .toLowerCase()
+    .split(' ')
+    .filter(term => term.length > minLength);
 };

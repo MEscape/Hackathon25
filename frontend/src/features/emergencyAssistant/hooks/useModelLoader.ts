@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+
 import { modelService, ModelLoadProgress } from '../services/modelService';
 
 interface UseModelLoaderReturn {

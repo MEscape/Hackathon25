@@ -10,9 +10,7 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "safenet")
 public class ApplicationProperties {
 
-    @NotNull
-    private Security security = new Security();
+  @NotNull private Security security = new Security();
 
-    @NotNull
-    private SpringDoc springDoc = new SpringDoc();
+  @NotNull private SpringDoc springDoc = new SpringDoc();
 }

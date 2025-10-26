@@ -1,11 +1,13 @@
 import React from 'react';
+
 import { View, TouchableOpacity } from 'react-native';
-import { Text } from '@/components/Text';
-import { useAppTheme } from '@/theme/context';
-import { translate } from '@/i18n';
-import type { ThemedStyle } from '@/theme/types';
 import type { ViewStyle, TextStyle } from 'react-native';
-import {TabType} from "@/features/emergencyContacts/screens/EmergencyContactsScreen";
+
+import { Text } from '@/components/Text';
+import { TabType } from '@/features/emergencyContacts/screens/EmergencyContactsScreen';
+import { translate } from '@/i18n';
+import { useAppTheme } from '@/theme/context';
+import type { ThemedStyle } from '@/theme/types';
 
 interface TabBarProps {
   activeTab: TabType;
@@ -14,7 +16,12 @@ interface TabBarProps {
   requestsCount: number;
 }
 
-export function TabBar({ activeTab, onTabChange, contactsCount, requestsCount }: TabBarProps) {
+export function TabBar({
+  activeTab,
+  onTabChange,
+  contactsCount,
+  requestsCount,
+}: TabBarProps) {
   const { themed } = useAppTheme();
 
   const tabs = [
@@ -37,7 +44,7 @@ export function TabBar({ activeTab, onTabChange, contactsCount, requestsCount }:
 
   return (
     <View style={themed($tabBar)}>
-      {tabs.map((tab) => (
+      {tabs.map(tab => (
         <TouchableOpacity
           key={tab.key}
           style={[themed($tab), activeTab === tab.key && themed($activeTab)]}
@@ -53,7 +60,12 @@ export function TabBar({ activeTab, onTabChange, contactsCount, requestsCount }:
             {tab.label}
           </Text>
           {tab.count > 0 && (
-            <View style={[themed($badge), activeTab === tab.key && themed($activeBadge)]}>
+            <View
+              style={[
+                themed($badge),
+                activeTab === tab.key && themed($activeBadge),
+              ]}
+            >
               <Text
                 style={[
                   themed($badgeText),
@@ -70,7 +82,7 @@ export function TabBar({ activeTab, onTabChange, contactsCount, requestsCount }:
   );
 }
 
-const $tabBar: ThemedStyle<ViewStyle> = (theme) => ({
+const $tabBar: ThemedStyle<ViewStyle> = theme => ({
   flexDirection: 'row',
   paddingHorizontal: theme.spacing.lg,
   marginBottom: theme.spacing.md,
@@ -83,7 +95,7 @@ const $tabBar: ThemedStyle<ViewStyle> = (theme) => ({
   borderColor: theme.colors.border,
 });
 
-const $tab: ThemedStyle<ViewStyle> = (theme) => ({
+const $tab: ThemedStyle<ViewStyle> = theme => ({
   flex: 1,
   flexDirection: 'row',
   alignItems: 'center',
@@ -94,11 +106,11 @@ const $tab: ThemedStyle<ViewStyle> = (theme) => ({
   gap: theme.spacing.xs,
 });
 
-const $activeTab: ThemedStyle<ViewStyle> = (theme) => ({
+const $activeTab: ThemedStyle<ViewStyle> = theme => ({
   backgroundColor: theme.colors.tint,
 });
 
-const $tabText: ThemedStyle<TextStyle> = (theme) => ({
+const $tabText: ThemedStyle<TextStyle> = theme => ({
   fontSize: 14,
   color: theme.colors.textMuted,
   letterSpacing: -0.1,
@@ -108,7 +120,7 @@ const $activeTabText: ThemedStyle<TextStyle> = () => ({
   color: '#FFFFFF',
 });
 
-const $badge: ThemedStyle<ViewStyle> = (theme) => ({
+const $badge: ThemedStyle<ViewStyle> = theme => ({
   backgroundColor: theme.colors.backgroundMuted,
   paddingHorizontal: theme.spacing.xs,
   paddingVertical: 2,
@@ -122,7 +134,7 @@ const $activeBadge: ThemedStyle<ViewStyle> = () => ({
   backgroundColor: 'rgba(255, 255, 255, 0.25)',
 });
 
-const $badgeText: ThemedStyle<TextStyle> = (theme) => ({
+const $badgeText: ThemedStyle<TextStyle> = theme => ({
   fontSize: 11,
   fontWeight: '700',
   color: theme.colors.text,

@@ -1,15 +1,32 @@
 import React, { useRef, useState } from 'react';
-import { TouchableOpacity, View, Platform, StyleProp, ViewStyle, Animated } from 'react-native';
+
+import {
+  TouchableOpacity,
+  View,
+  Platform,
+  StyleProp,
+  ViewStyle,
+  Animated,
+} from 'react-native';
 import type { TextStyle } from 'react-native';
 
-import { Text } from '@/components/Text';
 import { Icon, IconTypes } from '@/components/Icon';
 import { IconContainer } from '@/components/IconContainer';
+import { Text } from '@/components/Text';
 import { useAppTheme } from '@/theme/context';
+import {
+  $primaryButtonShadow,
+  $dangerButtonShadow,
+  $mediumShadow,
+} from '@/theme/styles';
 import type { ThemedStyle, ThemedStyleArray } from '@/theme/types';
-import { $primaryButtonShadow, $dangerButtonShadow, $mediumShadow } from '@/theme/styles';
 
-type ActionButtonVariants = 'primary' | 'secondary' | 'danger' | 'simple' | 'icon';
+type ActionButtonVariants =
+  | 'primary'
+  | 'secondary'
+  | 'danger'
+  | 'simple'
+  | 'icon';
 type ActionButtonSizes = 'small' | 'medium' | 'large';
 
 export interface ActionButtonProps {
@@ -84,24 +101,24 @@ export interface ActionButtonProps {
 }
 
 export const ActionButton: React.FC<ActionButtonProps> = ({
-                                                            text,
-                                                            variant = 'primary',
-                                                            size = 'medium',
-                                                            icon,
-                                                            iconColor,
-                                                            iconSize,
-                                                            subtitle,
-                                                            style: styleOverride,
-                                                            textStyle: textStyleOverride,
-                                                            onPress,
-                                                            disabled = false,
-                                                            activeOpacity = 0.7,
-                                                            children,
-                                                            holdEnabled = false,
-                                                            pressHoldDurationMs = 3000,
-                                                            holdProgressColors = ['#FFFFFF', '#ff6b6b'],
-                                                            onHoldComplete,
-                                                          }) => {
+  text,
+  variant = 'primary',
+  size = 'medium',
+  icon,
+  iconColor,
+  iconSize,
+  subtitle,
+  style: styleOverride,
+  textStyle: textStyleOverride,
+  onPress,
+  disabled = false,
+  activeOpacity = 0.7,
+  children,
+  holdEnabled = false,
+  pressHoldDurationMs = 3000,
+  holdProgressColors = ['#FFFFFF', '#ff6b6b'],
+  onHoldComplete,
+}) => {
   const { themed } = useAppTheme();
   const [isHolding, setIsHolding] = useState(false);
   const holdProgress = useRef(new Animated.Value(0)).current;
@@ -181,27 +198,30 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
 
     if (variant === 'icon' && icon) {
       return (
-          <Icon
-              icon={icon}
-              color={iconColor}
-              size={iconSize || getSizeIconSize(size)}
-          />
+        <Icon
+          icon={icon}
+          color={iconColor}
+          size={iconSize || getSizeIconSize(size)}
+        />
       );
     }
 
-    if (icon && (variant === 'primary' || variant === 'secondary' || variant === 'danger')) {
+    if (
+      icon &&
+      (variant === 'primary' || variant === 'secondary' || variant === 'danger')
+    ) {
       return (
-          <View style={themed($quickActionContent)}>
-            <IconContainer
-                icon={icon}
-                size={getSizeIconContainerSize(size)}
-                variant="transparent"
-                iconColor={iconColor || '#FFFFFF'}
-                iconSize={iconSize || getSizeIconSize(size)}
-            />
-            {text && <Text style={textStyles}>{text}</Text>}
-            {subtitle && <Text style={subtitleStyles}>{subtitle}</Text>}
-          </View>
+        <View style={themed($quickActionContent)}>
+          <IconContainer
+            icon={icon}
+            size={getSizeIconContainerSize(size)}
+            variant="transparent"
+            iconColor={iconColor || '#FFFFFF'}
+            iconSize={iconSize || getSizeIconSize(size)}
+          />
+          {text && <Text style={textStyles}>{text}</Text>}
+          {subtitle && <Text style={subtitleStyles}>{subtitle}</Text>}
+        </View>
       );
     }
 
@@ -219,46 +239,56 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
   });
 
   return (
-      <TouchableOpacity
-          style={buttonStyles}
-          onPress={handlePress}
-          onPressIn={handlePressIn}
-          onPressOut={handlePressOut}
-          disabled={disabled}
-          activeOpacity={activeOpacity}
-      >
-        {holdEnabled && isHolding && (
-            <Animated.View
-                style={[
-                  themed($holdProgressBar),
-                  {
-                    width: progressWidth,
-                    backgroundColor: progressColor,
-                  },
-                ]}
-            />
-        )}
-        {renderContent()}
-      </TouchableOpacity>
+    <TouchableOpacity
+      style={buttonStyles}
+      onPress={handlePress}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      disabled={disabled}
+      activeOpacity={activeOpacity}
+    >
+      {holdEnabled && isHolding && (
+        <Animated.View
+          style={[
+            themed($holdProgressBar),
+            {
+              width: progressWidth,
+              backgroundColor: progressColor,
+            },
+          ]}
+        />
+      )}
+      {renderContent()}
+    </TouchableOpacity>
   );
 };
 
 // Helper functions
 const getSizeIconSize = (size: ActionButtonSizes): number => {
   switch (size) {
-    case 'small': return 18;
-    case 'medium': return 24;
-    case 'large': return 26;
-    default: return 24;
+    case 'small':
+      return 18;
+    case 'medium':
+      return 24;
+    case 'large':
+      return 26;
+    default:
+      return 24;
   }
 };
 
-const getSizeIconContainerSize = (size: ActionButtonSizes): 'small' | 'medium' | 'large' => {
+const getSizeIconContainerSize = (
+  size: ActionButtonSizes
+): 'small' | 'medium' | 'large' => {
   switch (size) {
-    case 'small': return 'small';
-    case 'medium': return 'medium';
-    case 'large': return 'large';
-    default: return 'medium';
+    case 'small':
+      return 'small';
+    case 'medium':
+      return 'medium';
+    case 'large':
+      return 'large';
+    default:
+      return 'medium';
   }
 };
 
@@ -329,7 +359,10 @@ const $sizeStyles: Record<ActionButtonSizes, ThemedStyleArray<ViewStyle>> = {
   ],
 };
 
-const $sizeTextStyles: Record<ActionButtonSizes, ThemedStyleArray<TextStyle>> = {
+const $sizeTextStyles: Record<
+  ActionButtonSizes,
+  ThemedStyleArray<TextStyle>
+> = {
   small: [
     () => ({
       fontSize: 14,
@@ -351,7 +384,10 @@ const $sizeTextStyles: Record<ActionButtonSizes, ThemedStyleArray<TextStyle>> = 
 };
 
 // Variant styles
-const $variantStyles: Record<ActionButtonVariants, ThemedStyleArray<ViewStyle>> = {
+const $variantStyles: Record<
+  ActionButtonVariants,
+  ThemedStyleArray<ViewStyle>
+> = {
   primary: [
     theme => ({
       backgroundColor: theme.colors.tint,
@@ -389,7 +425,10 @@ const $variantStyles: Record<ActionButtonVariants, ThemedStyleArray<ViewStyle>> 
   ],
 };
 
-const $variantTextStyles: Record<ActionButtonVariants, ThemedStyleArray<TextStyle>> = {
+const $variantTextStyles: Record<
+  ActionButtonVariants,
+  ThemedStyleArray<TextStyle>
+> = {
   primary: [
     () => ({
       color: '#FFFFFF',
@@ -417,7 +456,10 @@ const $variantTextStyles: Record<ActionButtonVariants, ThemedStyleArray<TextStyl
   ],
 };
 
-const $variantSubtitleStyles: Record<ActionButtonVariants, ThemedStyleArray<TextStyle>> = {
+const $variantSubtitleStyles: Record<
+  ActionButtonVariants,
+  ThemedStyleArray<TextStyle>
+> = {
   primary: [
     () => ({
       color: 'rgba(255, 255, 255, 0.8)',

@@ -1,10 +1,13 @@
 import React from 'react';
+
 import { View } from 'react-native';
-import { Text } from '@/components/Text';
+
 import { Icon } from '@/components/Icon';
-import { useAppTheme } from '@/theme/context';
+import { Text } from '@/components/Text';
 import { PoliceAlert } from '@/features/safetyAlerts/schemas/safetyAlerts.schema';
-import { 
+import { useAppTheme } from '@/theme/context';
+
+import {
   $alertCard,
   $alertHeader,
   $alertIcon,
@@ -37,8 +40,17 @@ export function PoliceAlertCard({ alert }: PoliceAlertCardProps) {
             {alert.i18nTitleDe}
           </Text>
           <View style={themed($alertMeta)}>
-            <View style={[themed($severityBadge), { backgroundColor: color + '15' }]}>
-              <Text preset="formHelper" weight="semiBold" style={[themed($severityText), { color }] }>
+            <View
+              style={[
+                themed($severityBadge),
+                { backgroundColor: color + '15' },
+              ]}
+            >
+              <Text
+                preset="formHelper"
+                weight="semiBold"
+                style={[themed($severityText), { color }]}
+              >
                 {alert.severity?.toUpperCase()}
               </Text>
             </View>

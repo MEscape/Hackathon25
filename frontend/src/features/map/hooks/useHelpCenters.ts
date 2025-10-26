@@ -1,6 +1,10 @@
 import { useMemo } from 'react';
+
 import { useGetMultipleHelpCentersQuery } from '@/store/api/helpCentersApi';
-import type { HelpCenterType, HelpCenterResponse } from '@/store/api/helpCentersApi';
+import type {
+  HelpCenterType,
+  HelpCenterResponse,
+} from '@/store/api/helpCentersApi';
 
 interface UseHelpCentersParams {
   center: { lat: number; lon: number };
@@ -17,7 +21,11 @@ interface UseHelpCentersReturn {
   refetch: () => void;
 }
 
-export const useHelpCenters = ({ center, zoom, userLocation }: UseHelpCentersParams): UseHelpCentersReturn => {
+export const useHelpCenters = ({
+  center,
+  zoom,
+  userLocation,
+}: UseHelpCentersParams): UseHelpCentersReturn => {
   // Calculate search radius based on zoom level
   const radius = useMemo((): number => {
     // Higher zoom = smaller radius, lower zoom = larger radius
@@ -59,7 +67,8 @@ export const useHelpCenters = ({ center, zoom, userLocation }: UseHelpCentersPar
   });
 
   return {
-    helpCenters: helpCenters || ({} as Record<HelpCenterType, HelpCenterResponse>),
+    helpCenters:
+      helpCenters || ({} as Record<HelpCenterType, HelpCenterResponse>),
     enabledTypes,
     radius,
     isLoading,

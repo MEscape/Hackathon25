@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 @Schema(description = "Request to update user medication")
 public class MedicationRequestDto {
 
-    @JsonProperty("medication")
-    @NotNull
-    @Schema(description = "Current medication of the user", example = "Aspirin, Metformin")
-    private String medication;
+  @JsonProperty("medication")
+  @NotNull
+  @Schema(description = "Current medication of the user", example = "Aspirin, Metformin")
+  private String medication;
 }

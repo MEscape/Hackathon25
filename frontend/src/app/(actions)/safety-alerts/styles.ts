@@ -1,6 +1,7 @@
 import { ViewStyle, TextStyle } from 'react-native';
-import { ThemedStyle } from '@/theme/types';
+
 import { $mediumShadow, $lightShadow } from '@/theme/styles';
+import { ThemedStyle } from '@/theme/types';
 
 // Container and Layout Styles
 export const $container: ThemedStyle<ViewStyle> = theme => ({

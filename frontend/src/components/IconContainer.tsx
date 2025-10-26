@@ -1,50 +1,59 @@
 import React from 'react';
+
 import { View, ViewStyle } from 'react-native';
-import { Icon, IconTypes } from './Icon';
+
 import { useAppTheme } from '@/theme/context';
 import { ThemedStyle } from '@/theme/types';
+
+import { Icon, IconTypes } from './Icon';
 
 export interface IconContainerProps {
   /**
    * The icon to display
    */
   icon?: IconTypes;
-  
+
   /**
    * Size variant of the container
    */
   size?: 'small' | 'medium' | 'large' | 'xlarge';
-  
+
   /**
    * Style variant of the container
    */
-  variant?: 'default' | 'tinted' | 'success' | 'error' | 'warning' | 'transparent';
-  
+  variant?:
+    | 'default'
+    | 'tinted'
+    | 'success'
+    | 'error'
+    | 'warning'
+    | 'transparent';
+
   /**
    * Custom background color (overrides variant)
    */
   backgroundColor?: string;
-  
+
   /**
    * Icon color
    */
   iconColor?: string;
-  
+
   /**
    * Icon size (overrides default size for variant)
    */
   iconSize?: number;
-  
+
   /**
    * Custom border radius
    */
   borderRadius?: number;
-  
+
   /**
    * Additional style overrides
    */
   style?: ViewStyle;
-  
+
   /**
    * Children to render instead of icon
    */
@@ -78,15 +87,10 @@ export const IconContainer: React.FC<IconContainerProps> = ({
 
   return (
     <View style={containerStyle}>
-      {children || (
-        icon && (
-          <Icon 
-            icon={icon} 
-            size={defaultIconSize} 
-            color={defaultIconColor} 
-          />
-        )
-      )}
+      {children ||
+        (icon && (
+          <Icon icon={icon} size={defaultIconSize} color={defaultIconColor} />
+        ))}
     </View>
   );
 };
@@ -102,7 +106,10 @@ const getSizeConfig = (size: IconContainerProps['size']) => {
   return configs[size || 'medium'];
 };
 
-const getVariantIconColor = (variant: IconContainerProps['variant'], theme: any) => {
+const getVariantIconColor = (
+  variant: IconContainerProps['variant'],
+  theme: any
+) => {
   const colors = {
     default: theme.colors.text,
     tinted: theme.colors.tint,
@@ -161,7 +168,7 @@ const $variantStyles = {
     borderWidth: 1,
     borderColor: theme.colors.border,
   })) as ThemedStyle<ViewStyle>,
-  
+
   tinted: ((theme: any) => ({
     backgroundColor: theme.isDark
       ? 'rgba(61, 148, 255, 0.12)'
@@ -171,7 +178,7 @@ const $variantStyles = {
       ? 'rgba(61, 148, 255, 0.2)'
       : 'rgba(0, 122, 255, 0.12)',
   })) as ThemedStyle<ViewStyle>,
-  
+
   success: ((theme: any) => ({
     backgroundColor: theme.isDark
       ? 'rgba(52, 199, 89, 0.12)'
@@ -181,7 +188,7 @@ const $variantStyles = {
       ? 'rgba(52, 199, 89, 0.2)'
       : 'rgba(52, 199, 89, 0.12)',
   })) as ThemedStyle<ViewStyle>,
-  
+
   error: ((theme: any) => ({
     backgroundColor: theme.isDark
       ? 'rgba(255, 69, 58, 0.12)'
@@ -191,7 +198,7 @@ const $variantStyles = {
       ? 'rgba(255, 69, 58, 0.2)'
       : 'rgba(255, 69, 58, 0.12)',
   })) as ThemedStyle<ViewStyle>,
-  
+
   warning: ((theme: any) => ({
     backgroundColor: theme.isDark
       ? 'rgba(255, 214, 10, 0.12)'
@@ -201,7 +208,7 @@ const $variantStyles = {
       ? 'rgba(255, 214, 10, 0.2)'
       : 'rgba(255, 214, 10, 0.12)',
   })) as ThemedStyle<ViewStyle>,
-  
+
   transparent: ((theme: any) => ({
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
   })) as ThemedStyle<ViewStyle>,

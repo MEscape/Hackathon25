@@ -1,9 +1,13 @@
 import { Platform } from 'react-native';
-import Constants from 'expo-constants';
+
 import { Asset } from 'expo-asset';
+import Constants from 'expo-constants';
+
 import * as FileSystemLegacy from 'expo-file-system/legacy';
 import { documentDirectory } from 'expo-file-system/legacy';
+
 import { EmbeddingModel } from '@/services/embeddingModel';
+
 import type { FlattenedTip } from '../types';
 
 let InferenceSession: any = null;
@@ -40,7 +44,8 @@ export class ModelService {
     const bytesLen = (len * 3) / 4 - placeholders;
     const bytes = new Uint8Array(bytesLen);
 
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+    const chars =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
     const lookup = new Uint8Array(256);
     for (let i = 0; i < chars.length; i++) {
       lookup[chars.charCodeAt(i)] = i;
@@ -77,22 +82,31 @@ export class ModelService {
           if (!documentDirectory) {
             throw new Error('Document directory not available');
           }
-          
+
           const localPath = `${documentDirectory}model.onnx`;
-          
+
           // Check if file already exists
           const fileInfo = await FileSystemLegacy.getInfoAsync(localPath);
           if (fileInfo.exists) {
-            console.log('Model already exists locally, using cached version:', localPath);
+            console.log(
+              'Model already exists locally, using cached version:',
+              localPath
+            );
             return localPath;
           }
-          
+
           // Download the file
-          const downloadResult = await FileSystemLegacy.downloadAsync(uri, localPath);
+          const downloadResult = await FileSystemLegacy.downloadAsync(
+            uri,
+            localPath
+          );
           console.log('Model downloaded to local storage:', downloadResult.uri);
           return downloadResult.uri;
         } catch (downloadError) {
-          console.error('Failed to download model to local storage:', downloadError);
+          console.error(
+            'Failed to download model to local storage:',
+            downloadError
+          );
           return null;
         }
       } else {
@@ -106,7 +120,7 @@ export class ModelService {
   }
 
   async loadModel(
-      onProgress?: (progress: ModelLoadProgress) => void
+    onProgress?: (progress: ModelLoadProgress) => void
   ): Promise<any> {
     try {
       console.log('Starting Model Service...');
@@ -176,17 +190,25 @@ export class ModelService {
         this.session = await InferenceSession.create(modelPath);
         console.log('ONNX session created successfully with path');
       } catch (pathError) {
-        console.warn('Failed to create session with path, trying buffer approach:', pathError);
-        
+        console.warn(
+          'Failed to create session with path, trying buffer approach:',
+          pathError
+        );
+
         try {
           // Fallback: Try to load as buffer
           console.log('Attempting to load model as buffer...');
 
           // Read file as base64 using the correct URI
-          const sourceUri = modelUri.startsWith('file://') ? modelUri : `file://${modelPath}`;
-          const modelBase64 = await FileSystemLegacy.readAsStringAsync(sourceUri, {
-            encoding: 'base64',
-          });
+          const sourceUri = modelUri.startsWith('file://')
+            ? modelUri
+            : `file://${modelPath}`;
+          const modelBase64 = await FileSystemLegacy.readAsStringAsync(
+            sourceUri,
+            {
+              encoding: 'base64',
+            }
+          );
 
           // Convert base64 to Uint8Array
           const bytes = this.base64ToUint8Array(modelBase64);
@@ -197,9 +219,15 @@ export class ModelService {
           console.log('ONNX session created successfully with buffer');
         } catch (bufferError) {
           console.error('Failed to create session with buffer:', bufferError);
-          const pathMsg = pathError instanceof Error ? pathError.message : String(pathError);
-          const bufferMsg = bufferError instanceof Error ? bufferError.message : String(bufferError);
-          throw new Error(`Both path and buffer approaches failed. Path error: ${pathMsg}, Buffer error: ${bufferMsg}`);
+          const pathMsg =
+            pathError instanceof Error ? pathError.message : String(pathError);
+          const bufferMsg =
+            bufferError instanceof Error
+              ? bufferError.message
+              : String(bufferError);
+          throw new Error(
+            `Both path and buffer approaches failed. Path error: ${pathMsg}, Buffer error: ${bufferMsg}`
+          );
         }
       }
 
@@ -229,15 +257,22 @@ export class ModelService {
    * @param tips Array of tips to search
    * @param topK Number of top results to return
    */
-  async runInference(query: string, tips: FlattenedTip[], topK: number = 3): Promise<FlattenedTip[]> {
+  async runInference(
+    query: string,
+    tips: FlattenedTip[],
+    topK: number = 3
+  ): Promise<FlattenedTip[]> {
     if (!this.embeddingModel || !this.session) {
       console.log('ℹRunning in text-based mode (no ONNX)');
       // Fallback: simple text search
       const lowerQuery = query.toLowerCase();
-      return tips.filter((tip: FlattenedTip) =>
-        tip.tipTitle.toLowerCase().includes(lowerQuery) ||
-        tip.articleTitle.toLowerCase().includes(lowerQuery)
-      ).slice(0, topK);
+      return tips
+        .filter(
+          (tip: FlattenedTip) =>
+            tip.tipTitle.toLowerCase().includes(lowerQuery) ||
+            tip.articleTitle.toLowerCase().includes(lowerQuery)
+        )
+        .slice(0, topK);
     }
 
     try {
@@ -251,7 +286,10 @@ export class ModelService {
           const text = `${tip.tipTitle}: ${tip.articleTitle}`;
           const tipEmbedding = await this.embeddingModel!.embed(text);
           if (!tipEmbedding) return { tip, score: 0 };
-          const similarity = this.embeddingModel!.cosineSimilarity(queryEmbedding, tipEmbedding);
+          const similarity = this.embeddingModel!.cosineSimilarity(
+            queryEmbedding,
+            tipEmbedding
+          );
           return { tip, score: similarity };
         })
       );

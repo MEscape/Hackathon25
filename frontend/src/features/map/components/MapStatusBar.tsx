@@ -1,7 +1,9 @@
 import React from 'react';
+
 import { View, ViewStyle, TextStyle, ActivityIndicator } from 'react-native';
-import { Text } from '@/components/Text';
+
 import { Icon } from '@/components/Icon';
+import { Text } from '@/components/Text';
 import { useAppTheme } from '@/theme/context';
 import { ThemedStyle } from '@/theme/types';
 
@@ -34,8 +36,10 @@ interface MapStatusBarProps {
   isVisible: boolean;
   friendsCount: number;
   helpCentersCount: number;
+  warningsCount: number;
   isLoadingFriends: boolean;
   isLoadingHelpCenters: boolean;
+  isLoadingWarnings: boolean;
 }
 
 export function MapStatusBar({
@@ -44,8 +48,10 @@ export function MapStatusBar({
   isVisible,
   friendsCount,
   helpCentersCount,
+  warningsCount,
   isLoadingFriends,
   isLoadingHelpCenters,
+  isLoadingWarnings,
 }: MapStatusBarProps) {
   const { themed, theme } = useAppTheme();
 
@@ -77,11 +83,23 @@ export function MapStatusBar({
           />
         </>
       )}
+
+      {warningsCount > 0 && (
+        <>
+          <View style={themed($divider)} />
+          <StatusItem
+            icon="alert"
+            label={`${warningsCount}`}
+            isLoading={isLoadingWarnings}
+            color={theme.colors.error}
+          />
+        </>
+      )}
     </View>
   );
 }
 
-const $container: ThemedStyle<ViewStyle> = (theme) => ({
+const $container: ThemedStyle<ViewStyle> = theme => ({
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'center',
@@ -100,19 +118,19 @@ const $container: ThemedStyle<ViewStyle> = (theme) => ({
   elevation: 3,
 });
 
-const $item: ThemedStyle<ViewStyle> = (theme) => ({
+const $item: ThemedStyle<ViewStyle> = theme => ({
   flexDirection: 'row',
   alignItems: 'center',
   gap: theme.spacing.xxs + 2,
 });
 
-const $itemText: ThemedStyle<TextStyle> = (theme) => ({
+const $itemText: ThemedStyle<TextStyle> = theme => ({
   fontSize: 13,
   color: theme.colors.textDim,
   fontWeight: '600',
 });
 
-const $divider: ThemedStyle<ViewStyle> = (theme) => ({
+const $divider: ThemedStyle<ViewStyle> = theme => ({
   width: 1,
   height: 16,
   backgroundColor: theme.colors.border,

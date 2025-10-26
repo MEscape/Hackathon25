@@ -1,10 +1,13 @@
 import React from 'react';
+
 import { View } from 'react-native';
-import { Text } from '@/components/Text';
+
 import { Icon } from '@/components/Icon';
-import { useAppTheme } from '@/theme/context';
+import { Text } from '@/components/Text';
 import { WeatherAlert } from '@/features/safetyAlerts/schemas/weatherAlerts.schema';
-import { 
+import { useAppTheme } from '@/theme/context';
+
+import {
   $alertCard,
   $alertHeader,
   $alertIcon,
@@ -37,8 +40,17 @@ export function WeatherAlertCard({ alert }: WeatherAlertCardProps) {
             {alert.region || alert.title}
           </Text>
           <View style={themed($alertMeta)}>
-            <View style={[themed($severityBadge), { backgroundColor: color + '15' }]}>
-              <Text preset="formHelper" weight="semiBold" style={[themed($severityText), { color }] }>
+            <View
+              style={[
+                themed($severityBadge),
+                { backgroundColor: color + '15' },
+              ]}
+            >
+              <Text
+                preset="formHelper"
+                weight="semiBold"
+                style={[themed($severityText), { color }]}
+              >
                 LEVEL {alert.awarenessLevel}
               </Text>
             </View>
@@ -47,7 +59,8 @@ export function WeatherAlertCard({ alert }: WeatherAlertCardProps) {
             {alert.description}
           </Text>
           <Text preset="formHelper" style={themed($alertDate)}>
-            {new Date(alert.validFrom).toLocaleString()} - {new Date(alert.validUntil).toLocaleString()}
+            {new Date(alert.validFrom).toLocaleString()} -{' '}
+            {new Date(alert.validUntil).toLocaleString()}
           </Text>
         </View>
       </View>

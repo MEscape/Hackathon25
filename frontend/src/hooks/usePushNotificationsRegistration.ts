@@ -1,11 +1,13 @@
 import { useEffect, useRef } from 'react';
-import { Platform } from 'react-native';
-import * as Notifications from 'expo-notifications';
-import Constants from 'expo-constants';
 
+import { Platform } from 'react-native';
+
+import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
+
+import { useRegisterExpoPushTokenMutation } from '@/store/api/userMetadataApi';
 import { useAppSelector } from '@/store/hooks';
 import { selectUser } from '@/store/slices/authSlice';
-import { useRegisterExpoPushTokenMutation } from '@/store/api/userMetadataApi';
 
 export const usePushNotificationsRegistration = () => {
   const user = useAppSelector(selectUser);
@@ -43,13 +45,20 @@ export const usePushNotificationsRegistration = () => {
         }
         if (status !== 'granted') return;
 
-        const projectId = Constants.expoConfig?.extra?.eas?.projectId as string | undefined;
-        const tokenData = await Notifications.getExpoPushTokenAsync(projectId ? { projectId } : undefined);
+        const projectId = Constants.expoConfig?.extra?.eas?.projectId as
+          | string
+          | undefined;
+        const tokenData = await Notifications.getExpoPushTokenAsync(
+          projectId ? { projectId } : undefined
+        );
         const expoPushToken = (tokenData as any)?.data ?? (tokenData as any);
 
         if (!expoPushToken || registeredRef.current === expoPushToken) return;
 
-        await registerExpoPushToken({ userId: user.sub, token: expoPushToken }).unwrap();
+        await registerExpoPushToken({
+          userId: user.sub,
+          token: expoPushToken,
+        }).unwrap();
         registeredRef.current = expoPushToken;
       } catch (e) {
         console.log('Failed to register Expo push token', e);

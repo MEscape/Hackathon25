@@ -44,8 +44,8 @@ const en = {
       },
       emergencyTips: {
         title: 'Emergency Tips',
-        subtitle: 'Safety advice'
-      }
+        subtitle: 'Safety advice',
+      },
     },
     features: {
       title: 'Features',
@@ -64,7 +64,7 @@ const en = {
       profile: {
         title: 'Profile',
         subtitle: 'View and edit your personal details.',
-      }
+      },
     },
     info: {
       title: 'Did you know?',
@@ -122,8 +122,8 @@ const en = {
       subtitle: 'Share your location with trusted contacts.',
     },
     settings: {
-      title: 'Settings'
-    }
+      title: 'Settings',
+    },
   },
 
   profile: {
@@ -187,7 +187,7 @@ const en = {
       conditionsUpdated: 'Pre-existing conditions updated',
       medicationUpdated: 'Medication information updated',
       vaccinationUpdated: 'Vaccination status updated',
-    }
+    },
   },
 
   welcome: {
@@ -227,7 +227,8 @@ const en = {
     },
     empty: {
       contactsMessage: 'No emergency contacts yet',
-      contactsDescription: 'Add trusted contacts to quickly reach them in emergencies.',
+      contactsDescription:
+        'Add trusted contacts to quickly reach them in emergencies.',
       discoverMessage: 'No users found',
       discoverDescription: 'Try adjusting your search or check back later.',
       requestsMessage: 'No pending requests',
@@ -273,7 +274,8 @@ const en = {
   location: {
     permission: {
       title: 'Location Access',
-      description: 'SafeNet needs location access to provide safety features and help you in emergencies.',
+      description:
+        'SafeNet needs location access to provide safety features and help you in emergencies.',
       features: {
         emergencyResponse: 'Emergency response',
         friendsLocation: 'Share location with friends',
@@ -283,7 +285,8 @@ const en = {
         allow: 'Allow Location Access',
         skip: 'Skip for Now',
       },
-      privacy: 'Your location data is encrypted and only shared with your trusted contacts.',
+      privacy:
+        'Your location data is encrypted and only shared with your trusted contacts.',
     },
     tracking: {
       started: 'Location tracking started',
@@ -301,9 +304,11 @@ const en = {
     permissionDenied: 'Location permission denied',
     backgroundPermissionDenied: 'Background location permission denied',
     backgroundPermissionTitle: 'Background Location Access',
-    backgroundPermissionMessage: 'SafeNet needs background location access to track your location even when the app is closed.',
+    backgroundPermissionMessage:
+      'SafeNet needs background location access to track your location even when the app is closed.',
     permissionError: 'Failed to request location permission',
-    trackingStartedMessage: 'Your location is now being tracked for safety purposes',
+    trackingStartedMessage:
+      'Your location is now being tracked for safety purposes',
     trackingStartError: 'Failed to start location tracking',
     trackingStopError: 'Failed to stop location tracking',
     getCurrentLocationError: 'Failed to get current location',
@@ -359,42 +364,56 @@ const en = {
       readLess: 'Show less',
     },
     modelLoading: 'AI model loading',
-    modelReady: 'Welcome to the Emergency Assistant!\n Please type your emergency question, describe your situation, or enter one word like "flood" or "storm" to get quick, helpful tips.',
-    systemReady: 'Welcome to the Emergency Assistant!\n Please type your emergency question, describe your situation, or enter one word like "flood" or "storm" to get quick, helpful tips.',
+    modelReady:
+      'Welcome to the Emergency Assistant!\n Please type your emergency question, describe your situation, or enter one word like "flood" or "storm" to get quick, helpful tips.',
+    systemReady:
+      'Welcome to the Emergency Assistant!\n Please type your emergency question, describe your situation, or enter one word like "flood" or "storm" to get quick, helpful tips.',
     generating: 'Generating response...',
     inputPlaceholder: 'Ask about emergency tips...',
     responses: {
-      emergency: '🚨 EMERGENCY: If you are in an acute emergency, call 112 immediately!',
+      emergency:
+        '🚨 EMERGENCY: If you are in an acute emergency, call 112 immediately!',
       firstAid: 'Here is important first aid information:',
       fire: 'Important fire safety information:',
       weather: 'Weather emergency guidelines:',
       general: 'Based on your query, I found the following information:',
       moreInfo: 'For more information or in acute emergencies, call 112.',
-      noResults: 'Unfortunately, I could not find specific information for your query.',
-      emergencyNumbers: '**General Emergency Numbers:**\n🚨 Fire/Rescue: 112\n🚔 Police: 110\n☠️ Poison Control: 030 19240',
-      reformulate: 'Please rephrase your question or use terms like "first aid", "fire", "weather emergency" or "accident".',
+      noResults:
+        'Unfortunately, I could not find specific information for your query.',
+      emergencyNumbers:
+        '**General Emergency Numbers:**\n🚨 Fire/Rescue: 112\n🚔 Police: 110\n☠️ Poison Control: 030 19240',
+      reformulate:
+        'Please rephrase your question or use terms like "first aid", "fire", "weather emergency" or "accident".',
       fallback112: 'If in doubt or in acute emergencies, call 112 immediately.',
-      fallbackPolice: 'For crimes or urgent safety issues, call the police at 110.',
-      fallbackPoison: 'In suspected poisoning, contact poison control immediately: 030 19240.',
-      fallbackGeneral: 'If you cannot find information, rephrase your question or call 112.',
+      fallbackPolice:
+        'For crimes or urgent safety issues, call the police at 110.',
+      fallbackPoison:
+        'In suspected poisoning, contact poison control immediately: 030 19240.',
+      fallbackGeneral:
+        'If you cannot find information, rephrase your question or call 112.',
       call112: {
         title: '🚨 **Emergency Call 112**',
-        description: '112 is the European emergency number for fire department and rescue services. It is free and available 24/7.',
-        whatToSay: '**What to say on the phone:**\n- Where did something happen?\n- What happened?\n- How many people are affected?\n- What kind of injuries?\n- Wait for follow-up questions!',
+        description:
+          '112 is the European emergency number for fire department and rescue services. It is free and available 24/7.',
+        whatToSay:
+          '**What to say on the phone:**\n- Where did something happen?\n- What happened?\n- How many people are affected?\n- What kind of injuries?\n- Wait for follow-up questions!',
       },
       police: {
         title: '🚔 **Police Emergency 110**',
-        description: 'Call 110 for:\n- Crimes\n- Traffic accidents with injuries\n- When you need help\n\nFor general inquiries, use your local police station.',
+        description:
+          'Call 110 for:\n- Crimes\n- Traffic accidents with injuries\n- When you need help\n\nFor general inquiries, use your local police station.',
       },
       poison: {
         title: '☠️ **Poison Control**',
-        description: 'In case of poisoning:\n- Contact poison control immediately\n- Stay calm\n- Keep vomit\n- If unconscious: 112',
-        numbers: '**Poison Control Centers:**\nBerlin: 030 19240\nBonn: 0228 19240',
+        description:
+          'In case of poisoning:\n- Contact poison control immediately\n- Stay calm\n- Keep vomit\n- If unconscious: 112',
+        numbers:
+          '**Poison Control Centers:**\nBerlin: 030 19240\nBonn: 0228 19240',
       },
     },
     noData: 'No data',
   },
-}
+};
 
 export default en;
 export type Translations = typeof en;

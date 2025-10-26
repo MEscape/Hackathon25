@@ -18,8 +18,10 @@ const de: Translations = {
     or: 'oder',
     send: 'Senden',
     errors: {
-      general: 'Entschuldigung, es gab einen Fehler. Bitte versuchen Sie es erneut.',
-      loading: 'Entschuldigung, es gab einen Fehler beim Laden. Bitte versuchen Sie es später erneut.',
+      general:
+        'Entschuldigung, es gab einen Fehler. Bitte versuchen Sie es erneut.',
+      loading:
+        'Entschuldigung, es gab einen Fehler beim Laden. Bitte versuchen Sie es später erneut.',
     },
   },
 
@@ -47,8 +49,8 @@ const de: Translations = {
       },
       emergencyTips: {
         title: 'Notfalltipps',
-        subtitle: 'Sicherheitshinweise'
-      }
+        subtitle: 'Sicherheitshinweise',
+      },
     },
     features: {
       title: 'Funktionen',
@@ -125,8 +127,8 @@ const de: Translations = {
       subtitle: 'Teile deinen Standort mit vertrauenswürdigen Kontakten.',
     },
     settings: {
-      title: 'Einstellungen'
-    }
+      title: 'Einstellungen',
+    },
   },
 
   profile: {
@@ -230,9 +232,11 @@ const de: Translations = {
     },
     empty: {
       contactsMessage: 'Noch keine Notfallkontakte',
-      contactsDescription: 'Füge vertrauenswürdige Kontakte hinzu, um sie im Notfall schnell zu erreichen.',
+      contactsDescription:
+        'Füge vertrauenswürdige Kontakte hinzu, um sie im Notfall schnell zu erreichen.',
       discoverMessage: 'Keine Nutzer gefunden',
-      discoverDescription: 'Passe deine Suche an oder versuche es später erneut.',
+      discoverDescription:
+        'Passe deine Suche an oder versuche es später erneut.',
       requestsMessage: 'Keine ausstehenden Anfragen',
       requestsDescription: 'Eingehende Kontaktanfragen erscheinen hier.',
     },
@@ -266,7 +270,8 @@ const de: Translations = {
 
   errorFallback: {
     title: 'Ups, etwas ist schiefgelaufen',
-    description: 'Ein unerwarteter Fehler ist aufgetreten. Bitte versuche es erneut.',
+    description:
+      'Ein unerwarteter Fehler ist aufgetreten. Bitte versuche es erneut.',
     technicalDetails: 'Technische Details',
     tryAgain: 'Erneut versuchen',
     reportIssue: 'Problem melden',
@@ -276,7 +281,8 @@ const de: Translations = {
   location: {
     permission: {
       title: 'Standortzugriff',
-      description: 'SafeNet benötigt Standortzugriff, um Sicherheitsfunktionen bereitzustellen und Ihnen in Notfällen zu helfen.',
+      description:
+        'SafeNet benötigt Standortzugriff, um Sicherheitsfunktionen bereitzustellen und Ihnen in Notfällen zu helfen.',
       features: {
         emergencyResponse: 'Notfallreaktion',
         friendsLocation: 'Standort mit Freunden teilen',
@@ -286,7 +292,8 @@ const de: Translations = {
         allow: 'Standortzugriff erlauben',
         skip: 'Vorerst überspringen',
       },
-      privacy: 'Ihre Standortdaten sind verschlüsselt und werden nur mit Ihren vertrauenswürdigen Kontakten geteilt.',
+      privacy:
+        'Ihre Standortdaten sind verschlüsselt und werden nur mit Ihren vertrauenswürdigen Kontakten geteilt.',
     },
     tracking: {
       started: 'Standortverfolgung gestartet',
@@ -304,9 +311,11 @@ const de: Translations = {
     permissionDenied: 'Standortberechtigung verweigert',
     backgroundPermissionDenied: 'Hintergrund-Standortberechtigung verweigert',
     backgroundPermissionTitle: 'Hintergrund-Standortzugriff',
-    backgroundPermissionMessage: 'SafeNet benötigt Hintergrund-Standortzugriff, um Ihren Standort auch bei geschlossener App zu verfolgen.',
+    backgroundPermissionMessage:
+      'SafeNet benötigt Hintergrund-Standortzugriff, um Ihren Standort auch bei geschlossener App zu verfolgen.',
     permissionError: 'Standortberechtigung konnte nicht angefordert werden',
-    trackingStartedMessage: 'Ihr Standort wird jetzt zu Sicherheitszwecken verfolgt',
+    trackingStartedMessage:
+      'Ihr Standort wird jetzt zu Sicherheitszwecken verfolgt',
     trackingStartError: 'Standortverfolgung konnte nicht gestartet werden',
     trackingStopError: 'Standortverfolgung konnte nicht gestoppt werden',
     getCurrentLocationError: 'Aktueller Standort konnte nicht abgerufen werden',
@@ -322,7 +331,8 @@ const de: Translations = {
     serverError: 'Serverfehler',
     networkError: 'Netzwerkfehler',
     sessionExpired: 'Sitzung abgelaufen. Bitte melde dich erneut an.',
-    tokenRefreshFailed: 'Sitzungsaktualisierung fehlgeschlagen. Bitte melde dich erneut an.',
+    tokenRefreshFailed:
+      'Sitzungsaktualisierung fehlgeschlagen. Bitte melde dich erneut an.',
   },
   emergencyAssistant: {
     title: 'Notfall-Assistent',
@@ -361,37 +371,53 @@ const de: Translations = {
       readLess: 'Weniger anzeigen',
     },
     modelLoading: 'KI-Modell lädt',
-    modelReady: 'Hallo! Bitte geben Sie Ihre Notfallfrage ein, beschreiben Sie Ihre Situation oder geben Sie ein einzelnes Wort wie "Flut" oder "Sturm" ein, um schnelle und hilfreiche Tipps zu erhalten.',
-    systemReady: 'Willkommen beim Notfall-Assistenten! Ich kann Ihnen mit Notfalltipps und Informationen helfen.',
+    modelReady:
+      'Hallo! Bitte geben Sie Ihre Notfallfrage ein, beschreiben Sie Ihre Situation oder geben Sie ein einzelnes Wort wie "Flut" oder "Sturm" ein, um schnelle und hilfreiche Tipps zu erhalten.',
+    systemReady:
+      'Willkommen beim Notfall-Assistenten! Ich kann Ihnen mit Notfalltipps und Informationen helfen.',
     generating: 'Antwort wird generiert...',
     inputPlaceholder: 'Fragen Sie nach Notfalltipps...',
     responses: {
-      emergency: '🚨 NOTFALL: Wenn Sie sich in einer akuten Notlage befinden, wählen Sie sofort 112!',
+      emergency:
+        '🚨 NOTFALL: Wenn Sie sich in einer akuten Notlage befinden, wählen Sie sofort 112!',
       firstAid: 'Hier sind wichtige Erste-Hilfe-Informationen:',
       fire: 'Wichtige Informationen zum Brandschutz:',
       weather: 'Verhaltensregeln bei Unwetter:',
-      general: 'Basierend auf Ihrer Anfrage habe ich folgende Informationen gefunden:',
-      moreInfo: 'Für weitere Informationen oder in akuten Notfällen wählen Sie 112.',
-      noResults: 'Leider konnte ich keine spezifischen Informationen zu Ihrer Anfrage finden.',
-      emergencyNumbers: '**Allgemeine Notfallnummern:**\n🚨 Feuerwehr/Rettung: 112\n🚔 Polizei: 110\n☠️ Giftnotruf: 030 19240',
-      reformulate: 'Bitte formulieren Sie Ihre Frage anders oder verwenden Sie Begriffe wie "Erste Hilfe", "Feuer", "Unwetter" oder "Unfall".',
+      general:
+        'Basierend auf Ihrer Anfrage habe ich folgende Informationen gefunden:',
+      moreInfo:
+        'Für weitere Informationen oder in akuten Notfällen wählen Sie 112.',
+      noResults:
+        'Leider konnte ich keine spezifischen Informationen zu Ihrer Anfrage finden.',
+      emergencyNumbers:
+        '**Allgemeine Notfallnummern:**\n🚨 Feuerwehr/Rettung: 112\n🚔 Polizei: 110\n☠️ Giftnotruf: 030 19240',
+      reformulate:
+        'Bitte formulieren Sie Ihre Frage anders oder verwenden Sie Begriffe wie "Erste Hilfe", "Feuer", "Unwetter" oder "Unfall".',
       fallback112: 'Im Zweifel oder bei akuten Notfällen sofort 112 wählen.',
-      fallbackPolice: 'Bei Straftaten oder dringenden Sicherheitsproblemen die Polizei unter 110 anrufen.',
-      fallbackPoison: 'Bei Verdacht auf Vergiftung sofort die Giftnotrufzentrale kontaktieren: 030 19240.',
-      fallbackGeneral: 'Wenn Sie keine Informationen finden, formulieren Sie Ihre Frage neu oder rufen Sie 112.',
+      fallbackPolice:
+        'Bei Straftaten oder dringenden Sicherheitsproblemen die Polizei unter 110 anrufen.',
+      fallbackPoison:
+        'Bei Verdacht auf Vergiftung sofort die Giftnotrufzentrale kontaktieren: 030 19240.',
+      fallbackGeneral:
+        'Wenn Sie keine Informationen finden, formulieren Sie Ihre Frage neu oder rufen Sie 112.',
       call112: {
         title: '🚨 **Notruf 112**',
-        description: 'Die 112 ist die europäische Notrufnummer für Feuerwehr und Rettungsdienst. Sie ist kostenlos und rund um die Uhr erreichbar.',
-        whatToSay: '**Was Sie am Telefon sagen sollten:**\n- Wo ist etwas passiert?\n- Was ist passiert?\n- Wie viele Personen sind betroffen?\n- Welche Art von Verletzungen?\n- Warten Sie auf Rückfragen!',
+        description:
+          'Die 112 ist die europäische Notrufnummer für Feuerwehr und Rettungsdienst. Sie ist kostenlos und rund um die Uhr erreichbar.',
+        whatToSay:
+          '**Was Sie am Telefon sagen sollten:**\n- Wo ist etwas passiert?\n- Was ist passiert?\n- Wie viele Personen sind betroffen?\n- Welche Art von Verletzungen?\n- Warten Sie auf Rückfragen!',
       },
       police: {
         title: '🚔 **Polizei-Notruf 110**',
-        description: 'Rufen Sie die 110 bei:\n- Straftaten\n- Verkehrsunfällen mit Verletzten\n- Wenn Sie Hilfe benötigen\n\nFür allgemeine Anfragen nutzen Sie die örtliche Polizeidienststelle.',
+        description:
+          'Rufen Sie die 110 bei:\n- Straftaten\n- Verkehrsunfällen mit Verletzten\n- Wenn Sie Hilfe benötigen\n\nFür allgemeine Anfragen nutzen Sie die örtliche Polizeidienststelle.',
       },
       poison: {
         title: '☠️ **Giftnotruf**',
-        description: 'Bei Vergiftungen:\n- Sofort Giftnotruf kontaktieren\n- Ruhe bewahren\n- Erbrochenes aufbewahren\n- Bei Bewusstlosigkeit: 112',
-        numbers: '**Giftnotruf-Zentrale:**\nBerlin: 030 19240\nBonn: 0228 19240',
+        description:
+          'Bei Vergiftungen:\n- Sofort Giftnotruf kontaktieren\n- Ruhe bewahren\n- Erbrochenes aufbewahren\n- Bei Bewusstlosigkeit: 112',
+        numbers:
+          '**Giftnotruf-Zentrale:**\nBerlin: 030 19240\nBonn: 0228 19240',
       },
     },
     noData: 'Keine Infos',

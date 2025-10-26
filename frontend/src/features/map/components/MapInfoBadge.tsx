@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { View, ViewStyle, TextStyle } from 'react-native';
+
 import { Text } from '@/components/Text';
 import { useAppTheme } from '@/theme/context';
 import { ThemedStyle } from '@/theme/types';
@@ -22,7 +24,7 @@ export function MapInfoBadge({ lat, lon, zoom }: MapInfoBadgeProps) {
   );
 }
 
-const $container: ThemedStyle<ViewStyle> = (theme) => ({
+const $container: ThemedStyle<ViewStyle> = theme => ({
   position: 'absolute',
   top: theme.spacing.md,
   left: theme.spacing.md,
@@ -40,7 +42,7 @@ const $container: ThemedStyle<ViewStyle> = (theme) => ({
   zIndex: 10,
 });
 
-const $text: ThemedStyle<TextStyle> = (theme) => ({
+const $text: ThemedStyle<TextStyle> = theme => ({
   fontSize: 11,
   fontWeight: '600',
   color: theme.colors.textDim,

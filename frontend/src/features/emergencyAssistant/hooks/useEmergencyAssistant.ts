@@ -1,5 +1,7 @@
-import { useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
+
 import { translate } from '@/i18n';
+
 import { useEmergencyTips } from './useEmergencyTips';
 import { useMessageHandler } from './useMessageHandler';
 import { useModelLoader } from './useModelLoader';
@@ -15,10 +17,11 @@ export const useEmergencyAssistant = () => {
     isReady: isModelReady,
     progress: modelLoadProgress,
     stage: modelLoadStage,
-    error: modelError
+    error: modelError,
   } = useModelLoader();
 
-  const { messages, isProcessing, addMessage, handleSendMessage } = useMessageHandler(tips, onnxSession);
+  const { messages, isProcessing, addMessage, handleSendMessage } =
+    useMessageHandler(tips, onnxSession);
 
   // Add welcome message immediately when component mounts
   useEffect(() => {
@@ -34,15 +37,27 @@ export const useEmergencyAssistant = () => {
       setInitComplete(true);
 
       if (modelError) {
-        console.log('Emergency Assistant: Model error detected, adding error message');
+        console.log(
+          'Emergency Assistant: Model error detected, adding error message'
+        );
         addMessage('assistant', translate('emergencyAssistant:aiError'));
       } else if (!isModelReady) {
         // Fallback to text processing
-        console.log('Emergency Assistant: Model not ready, adding fallback message');
+        console.log(
+          'Emergency Assistant: Model not ready, adding fallback message'
+        );
         addMessage('assistant', translate('emergencyAssistant:modelReady'));
       }
     }
-  }, [tipsLoading, modelLoading, initComplete, modelError, isModelReady, addMessage, welcomeMessageAdded]);
+  }, [
+    tipsLoading,
+    modelLoading,
+    initComplete,
+    modelError,
+    isModelReady,
+    addMessage,
+    welcomeMessageAdded,
+  ]);
 
   return {
     messages,

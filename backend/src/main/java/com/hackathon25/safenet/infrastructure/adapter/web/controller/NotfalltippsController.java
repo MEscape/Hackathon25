@@ -16,37 +16,42 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/nina/notfalltipps")
+@RequestMapping("/api/v1/nina/notfalltipps")
 @RequiredArgsConstructor
-@Tag(name = "Nina Notfalltipps", description = "Emergency tips and preparedness information from the German Federal Office of Civil Protection and Disaster Assistance (BBK) through the NINA API")
+@Tag(
+    name = "Nina Notfalltipps",
+    description =
+        "Emergency tips and preparedness information from the German Federal Office of Civil Protection and Disaster Assistance (BBK) through the NINA API")
 public class NotfalltippsController {
-    private final NotfalltippsLocalizationService notfalltippsLocalizationService;
-    private final LanguageResolver languageResolver;
+  private final NotfalltippsLocalizationService notfalltippsLocalizationService;
+  private final LanguageResolver languageResolver;
 
-    @GetMapping("/tips")
-    public ResponseEntity<NotfalltippsRootDto> getNotfalltippsDefault() {
-        log.info("Fetching NINA Notfalltipps (default language: de)");
-        try {
-            NotfalltippsRoot localizedRoot = notfalltippsLocalizationService.getLocalizedTips(Language.DE);
-            NotfalltippsRootDto dto = NotfalltippsRootDto.from(localizedRoot);
-            return ResponseEntity.ok(dto);
-        } catch (Exception e) {
-            log.error("Error fetching NINA Notfalltipps", e);
-            return ResponseEntity.internalServerError().build();
-        }
+  @GetMapping("/tips")
+  public ResponseEntity<NotfalltippsRootDto> getNotfalltippsDefault() {
+    log.info("Fetching NINA Notfalltipps (default language: de)");
+    try {
+      NotfalltippsRoot localizedRoot =
+          notfalltippsLocalizationService.getLocalizedTips(Language.DE);
+      NotfalltippsRootDto dto = NotfalltippsRootDto.from(localizedRoot);
+      return ResponseEntity.ok(dto);
+    } catch (Exception e) {
+      log.error("Error fetching NINA Notfalltipps", e);
+      return ResponseEntity.internalServerError().build();
     }
+  }
 
-    @GetMapping("/tips/{lang}")
-    public ResponseEntity<NotfalltippsRootDto> getNotfalltippsByLang(@PathVariable("lang") String lang) {
-        log.info("Fetching NINA Notfalltipps with lang={}", lang);
-        try {
-            Language target = languageResolver.resolve(lang);
-            NotfalltippsRoot localizedRoot = notfalltippsLocalizationService.getLocalizedTips(target);
-            NotfalltippsRootDto dto = NotfalltippsRootDto.from(localizedRoot);
-            return ResponseEntity.ok(dto);
-        } catch (Exception e) {
-            log.error("Error fetching NINA Notfalltipps for lang={}", lang, e);
-            return ResponseEntity.internalServerError().build();
-        }
+  @GetMapping("/tips/{lang}")
+  public ResponseEntity<NotfalltippsRootDto> getNotfalltippsByLang(
+      @PathVariable("lang") String lang) {
+    log.info("Fetching NINA Notfalltipps with lang={}", lang);
+    try {
+      Language target = languageResolver.resolve(lang);
+      NotfalltippsRoot localizedRoot = notfalltippsLocalizationService.getLocalizedTips(target);
+      NotfalltippsRootDto dto = NotfalltippsRootDto.from(localizedRoot);
+      return ResponseEntity.ok(dto);
+    } catch (Exception e) {
+      log.error("Error fetching NINA Notfalltipps for lang={}", lang, e);
+      return ResponseEntity.internalServerError().build();
     }
+  }
 }

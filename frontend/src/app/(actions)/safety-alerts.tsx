@@ -1,15 +1,18 @@
 import React from 'react';
+
 import { View } from 'react-native';
+
+import { Icon } from '@/components/Icon';
 import { Screen } from '@/components/Screen';
 import { Text } from '@/components/Text';
-import { Icon } from '@/components/Icon';
 import { useAppTheme } from '@/theme/context';
-import { useSafetyAlerts } from './safety-alerts/hooks/useSafetyAlerts';
-import { SearchInput } from './safety-alerts/components/SearchInput';
-import { PoliceAlertCard } from './safety-alerts/components/PoliceAlertCard';
-import { WeatherAlertCard } from './safety-alerts/components/WeatherAlertCard';
-import { LoadingCard } from './safety-alerts/components/LoadingCard';
+
 import { EmptyState } from './safety-alerts/components/EmptyState';
+import { LoadingCard } from './safety-alerts/components/LoadingCard';
+import { PoliceAlertCard } from './safety-alerts/components/PoliceAlertCard';
+import { SearchInput } from './safety-alerts/components/SearchInput';
+import { WeatherAlertCard } from './safety-alerts/components/WeatherAlertCard';
+import { useSafetyAlerts } from './safety-alerts/hooks/useSafetyAlerts';
 import {
   $container,
   $header,
@@ -26,10 +29,15 @@ import {
 export default function SafetyAlertsScreen() {
   const { themed, theme } = useAppTheme();
   const {
-    query, setQuery, clearQuery,
+    query,
+    setQuery,
+    clearQuery,
     filteredWeather,
-    policeData, policeLoading, policeError,
-    weatherLoading, weatherError,
+    policeData,
+    policeLoading,
+    policeError,
+    weatherLoading,
+    weatherError,
   } = useSafetyAlerts();
 
   return (
@@ -37,7 +45,11 @@ export default function SafetyAlertsScreen() {
       {/* Header Section */}
       <View style={themed($header)}>
         <Text preset="heading" weight="bold" tx="actions:safetyAlerts.title" />
-        <Text preset="formHelper" tx="actions:safetyAlerts.subtitle" style={themed($subtitle)} />
+        <Text
+          preset="formHelper"
+          tx="actions:safetyAlerts.subtitle"
+          style={themed($subtitle)}
+        />
       </View>
 
       {/* Search */}
@@ -54,17 +66,34 @@ export default function SafetyAlertsScreen() {
           <View style={themed($sectionIconContainer)}>
             <Icon icon="shield" size={18} color={theme.colors.tint} />
           </View>
-          <Text preset="default" weight="semiBold" tx="actions:safetyAlerts.sections.police" style={themed($sectionTitle)} />
+          <Text
+            preset="default"
+            weight="semiBold"
+            tx="actions:safetyAlerts.sections.police"
+            style={themed($sectionTitle)}
+          />
         </View>
         <View style={themed($alertsList)}>
           {policeLoading && <LoadingCard />}
-          {policeError && <EmptyState icon="alert-circle" message="Failed to load police alerts" />}
-          {!policeLoading && !policeError && (!policeData || policeData.length === 0) && (
-            <EmptyState icon="shield-checkmark" message="No police alerts at this time" />
+          {policeError && (
+            <EmptyState
+              icon="alert-circle"
+              message="Failed to load police alerts"
+            />
           )}
-          {!policeLoading && !policeError && policeData?.map(alert => (
-            <PoliceAlertCard key={alert.id} alert={alert} />
-          ))}
+          {!policeLoading &&
+            !policeError &&
+            (!policeData || policeData.length === 0) && (
+              <EmptyState
+                icon="shield-checkmark"
+                message="No police alerts at this time"
+              />
+            )}
+          {!policeLoading &&
+            !policeError &&
+            policeData?.map(alert => (
+              <PoliceAlertCard key={alert.id} alert={alert} />
+            ))}
         </View>
       </View>
 
@@ -74,7 +103,12 @@ export default function SafetyAlertsScreen() {
           <View style={themed($sectionIconContainer)}>
             <Icon icon="cloud" size={18} color={theme.colors.tint} />
           </View>
-          <Text preset="default" weight="semiBold" tx="actions:safetyAlerts.sections.weather" style={themed($sectionTitle)} />
+          <Text
+            preset="default"
+            weight="semiBold"
+            tx="actions:safetyAlerts.sections.weather"
+            style={themed($sectionTitle)}
+          />
           {query && (
             <View style={themed($searchResultsBadge)}>
               <Text preset="formHelper" style={themed($searchResultsText)}>
@@ -85,13 +119,27 @@ export default function SafetyAlertsScreen() {
         </View>
         <View style={themed($alertsList)}>
           {weatherLoading && <LoadingCard />}
-          {weatherError && <EmptyState icon="alert-circle" message="Failed to load weather alerts" />}
-          {!weatherLoading && !weatherError && filteredWeather.length === 0 && (
-            <EmptyState icon="partly-sunny" message={query ? 'No weather alerts match your search' : 'No weather alerts found'} />
+          {weatherError && (
+            <EmptyState
+              icon="alert-circle"
+              message="Failed to load weather alerts"
+            />
           )}
-          {!weatherLoading && !weatherError && filteredWeather.map(item => (
-            <WeatherAlertCard key={item.guid} alert={item} />
-          ))}
+          {!weatherLoading && !weatherError && filteredWeather.length === 0 && (
+            <EmptyState
+              icon="partly-sunny"
+              message={
+                query
+                  ? 'No weather alerts match your search'
+                  : 'No weather alerts found'
+              }
+            />
+          )}
+          {!weatherLoading &&
+            !weatherError &&
+            filteredWeather.map(item => (
+              <WeatherAlertCard key={item.guid} alert={item} />
+            ))}
         </View>
       </View>
     </Screen>

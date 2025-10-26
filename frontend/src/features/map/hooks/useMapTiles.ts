@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
-import { latLonToTile, wrapTileX, isValidTileY } from '../utils/map';
+
 import { MAP_CONFIG } from '@/config/config.map';
+
+import { latLonToTile, wrapTileX, isValidTileY } from '../utils/map';
 
 export interface TileData {
   x: number;
@@ -20,7 +22,7 @@ export function useMapTiles(
     const centerTile = latLonToTile(center.lat, center.lon, zoom);
     const baseTileX = Math.floor(centerTile.xTile);
     const baseTileY = Math.floor(centerTile.yTile);
-    
+
     const items: TileData[] = [];
 
     // Generate grid of tiles
@@ -36,9 +38,10 @@ export function useMapTiles(
         if (!isValidTileY(y, zoom)) continue;
 
         // Select subdomain for load balancing
-        const subdomainIndex = (wrappedX + y) % MAP_CONFIG.OSM_SUBDOMAINS.length;
+        const subdomainIndex =
+          (wrappedX + y) % MAP_CONFIG.OSM_SUBDOMAINS.length;
         const subdomain = MAP_CONFIG.OSM_SUBDOMAINS[subdomainIndex];
-        
+
         const url = `https://${subdomain}.tile.openstreetmap.org/${zoom}/${wrappedX}/${y}.png`;
 
         items.push({

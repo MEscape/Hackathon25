@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { View, ViewStyle } from 'react-native';
+
 import { PressableIcon } from '@/components/Icon';
 import { useAppTheme } from '@/theme/context';
 import { ThemedStyle } from '@/theme/types';
@@ -46,7 +48,7 @@ export function MapControls({
   );
 }
 
-const $container: ThemedStyle<ViewStyle> = (theme) => ({
+const $container: ThemedStyle<ViewStyle> = theme => ({
   position: 'absolute',
   top: theme.spacing.md,
   right: theme.spacing.md,
@@ -71,7 +73,7 @@ const $button: ThemedStyle<ViewStyle> = () => ({
   backgroundColor: 'transparent',
 });
 
-const $divider: ThemedStyle<ViewStyle> = (theme) => ({
+const $divider: ThemedStyle<ViewStyle> = theme => ({
   height: 1,
   backgroundColor: theme.colors.border,
 });

@@ -1,10 +1,12 @@
 import React from 'react';
+
 import { View } from 'react-native';
-import { Text } from '@/components/Text';
+import type { ViewStyle, TextStyle } from 'react-native';
+
 import { Icon } from '@/components/Icon';
+import { Text } from '@/components/Text';
 import { useAppTheme } from '@/theme/context';
 import type { ThemedStyle } from '@/theme/types';
-import type { ViewStyle, TextStyle } from 'react-native';
 
 interface EmptyStateProps {
   icon: string;
@@ -13,13 +15,23 @@ interface EmptyStateProps {
   style?: ViewStyle;
 }
 
-export function EmptyState({ icon, message, description, style }: EmptyStateProps) {
+export function EmptyState({
+  icon,
+  message,
+  description,
+  style,
+}: EmptyStateProps) {
   const { theme, themed } = useAppTheme();
 
   return (
     <View style={[themed($emptyState), style]}>
       <View style={themed($emptyIconContainer)}>
-        <Icon icon={icon as any} size={48} color={theme.colors.textMuted} style={{ opacity: 0.4 }} />
+        <Icon
+          icon={icon as any}
+          size={48}
+          color={theme.colors.textMuted}
+          style={{ opacity: 0.4 }}
+        />
       </View>
       <Text preset="default" style={themed($emptyText)}>
         {message}
@@ -33,7 +45,7 @@ export function EmptyState({ icon, message, description, style }: EmptyStateProp
   );
 }
 
-const $emptyState: ThemedStyle<ViewStyle> = (theme) => ({
+const $emptyState: ThemedStyle<ViewStyle> = theme => ({
   flex: 1,
   alignItems: 'center',
   justifyContent: 'center',
@@ -42,7 +54,7 @@ const $emptyState: ThemedStyle<ViewStyle> = (theme) => ({
   gap: theme.spacing.sm,
 });
 
-const $emptyIconContainer: ThemedStyle<ViewStyle> = (theme) => ({
+const $emptyIconContainer: ThemedStyle<ViewStyle> = theme => ({
   width: 80,
   height: 80,
   borderRadius: 40,
@@ -53,7 +65,7 @@ const $emptyIconContainer: ThemedStyle<ViewStyle> = (theme) => ({
   opacity: 0.6,
 });
 
-const $emptyText: ThemedStyle<TextStyle> = (theme) => ({
+const $emptyText: ThemedStyle<TextStyle> = theme => ({
   fontSize: 16,
   color: theme.colors.text,
   textAlign: 'center',
@@ -62,7 +74,7 @@ const $emptyText: ThemedStyle<TextStyle> = (theme) => ({
   maxWidth: 280,
 });
 
-const $emptyDescription: ThemedStyle<TextStyle> = (theme) => ({
+const $emptyDescription: ThemedStyle<TextStyle> = theme => ({
   fontSize: 14,
   color: theme.colors.textMuted,
   textAlign: 'center',

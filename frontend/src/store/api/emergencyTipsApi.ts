@@ -1,11 +1,12 @@
-import { apiSlice } from './baseApi';
-import type { 
+import type {
   EmergencyTipsResponse,
   EmergencyTipCategory,
   EmergencyTip,
   EmergencyTipArticle,
-  EmergencyTipImage 
+  EmergencyTipImage,
 } from '@/services/emergencyTipsService';
+
+import { apiSlice } from './baseApi';
 
 // Export the types for use in other files
 export type {
@@ -13,15 +14,15 @@ export type {
   EmergencyTipCategory,
   EmergencyTip,
   EmergencyTipArticle,
-  EmergencyTipImage
+  EmergencyTipImage,
 };
 
 export const emergencyTipsApi = apiSlice.injectEndpoints({
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     // Accept language parameter: 'en' or 'de'
     getEmergencyTips: builder.query<EmergencyTipsResponse, string>({
-      query: (lang) => ({
-        url: `/nina/notfalltipps/tips/${lang}`,
+      query: lang => ({
+        url: `/api/v1/nina/notfalltipps/tips/${lang}`,
         method: 'GET',
       }),
       // Cache for 24 hours (same as the service cache duration)
@@ -34,7 +35,8 @@ export const emergencyTipsApi = apiSlice.injectEndpoints({
 });
 
 // Export hooks for use in components
-export const { useGetEmergencyTipsQuery, useLazyGetEmergencyTipsQuery } = emergencyTipsApi;
+export const { useGetEmergencyTipsQuery, useLazyGetEmergencyTipsQuery } =
+  emergencyTipsApi;
 
 // Export the endpoint matcher for use in middleware
 export const { getEmergencyTips } = emergencyTipsApi.endpoints;

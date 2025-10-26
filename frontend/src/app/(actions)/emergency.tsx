@@ -1,10 +1,12 @@
 import React, { useCallback } from 'react';
+
 import { View } from 'react-native';
+
 import Toast from 'react-native-toast-message';
 
+import { ActionButton } from '@/components/ActionButton';
 import { Screen } from '@/components/Screen';
 import { Text } from '@/components/Text';
-import { ActionButton } from '@/components/ActionButton';
 import { useAuth } from '@/hooks/useAuth';
 import { useTriggerEmergencyMutation } from '@/store/api/userMetadataApi';
 import { useAppTheme } from '@/theme/context';
@@ -31,8 +33,16 @@ export default function EmergencyScreen() {
   return (
     <Screen preset="fixed">
       <View style={{ padding: 16, gap: 16 }}>
-        <Text preset="subheading" weight="semiBold" style={themed($sectionTitle)} text="Emergency" />
-        <Text preset="formHelper" text="Notify your trusted contacts that you need help." />
+        <Text
+          preset="subheading"
+          weight="semiBold"
+          style={themed($sectionTitle)}
+          text="Emergency"
+        />
+        <Text
+          preset="formHelper"
+          text="Notify your trusted contacts that you need help."
+        />
         <ActionButton
           variant="danger"
           size="large"

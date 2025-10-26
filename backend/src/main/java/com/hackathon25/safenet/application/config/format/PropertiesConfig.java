@@ -5,10 +5,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableConfigurationProperties({
-    ApplicationProperties.class
-})
+@EnableConfigurationProperties({ApplicationProperties.class})
 public class PropertiesConfig {
-    // Configuration properties are automatically registered as beans
-    // and can be injected using constructor injection
+  // Configuration properties are automatically registered as beans
+  // and can be injected using constructor injection
 }

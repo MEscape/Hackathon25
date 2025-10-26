@@ -1,17 +1,13 @@
 package com.hackathon25.safenet.infrastructure.adapter.rss.mapper;
 
-
-import com.hackathon25.safenet.domain.model.ninapolice.NinaPoliceItem;
 import com.hackathon25.safenet.application.service.ninapolice.NinaPoliceParser;
-
+import com.hackathon25.safenet.domain.model.ninapolice.NinaPoliceItem;
 import java.util.List;
 
-/**
- * Mapper for converting raw police feed JSON to List<NinaPoliceItem> domain model
- */
+/** Mapper for converting raw police feed JSON to List<NinaPoliceItem> domain model */
 public class NinaPoliceApiMapper implements ApiMapper<List<NinaPoliceItem>, String> {
-    @Override
-    public List<NinaPoliceItem> toDomain(String raw) {
-        return NinaPoliceParser.parsePoliceData(raw);
-    }
+  @Override
+  public List<NinaPoliceItem> toDomain(String raw) {
+    return NinaPoliceParser.parsePoliceData(raw);
+  }
 }

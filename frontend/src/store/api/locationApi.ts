@@ -24,25 +24,28 @@ export interface UserLocationDto {
 }
 
 export const locationApi = apiSlice.injectEndpoints({
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     updateLocation: builder.mutation<UserLocationDto, LocationData>({
-      query: (locationData) => ({
+      query: locationData => ({
         url: '/api/v1/locations/update',
         method: 'PUT',
         body: locationData,
       }),
       invalidatesTags: ['UserLocation'],
     }),
-    
-    updateLocationVisibility: builder.mutation<UserLocationDto, { visible: boolean }>({
-      query: (visibilityData) => ({
+
+    updateLocationVisibility: builder.mutation<
+      UserLocationDto,
+      { visible: boolean }
+    >({
+      query: visibilityData => ({
         url: '/api/v1/locations/visibility',
         method: 'PATCH',
         body: visibilityData,
       }),
       invalidatesTags: ['UserLocation'],
     }),
-    
+
     getFriendsLocations: builder.query<UserLocationDto[], void>({
       query: () => '/api/v1/locations/friends',
       providesTags: ['UserLocation'],

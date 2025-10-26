@@ -1,8 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 import i18next from 'i18next';
-import { emergencyTipsApi } from '@/store/api/emergencyTipsApi';
+
 import { store } from '@/store';
+import { emergencyTipsApi } from '@/store/api/emergencyTipsApi';
 
 // Types based on the API response format
 export interface EmergencyTipImage {
@@ -87,11 +88,13 @@ class EmergencyTipsService {
    */
   private async isCacheValid(lang: string): Promise<boolean> {
     try {
-      const lastFetchStr = await AsyncStorage.getItem(this.getLastFetchKey(lang));
+      const lastFetchStr = await AsyncStorage.getItem(
+        this.getLastFetchKey(lang)
+      );
       if (!lastFetchStr) return false;
       const lastFetch = parseInt(lastFetchStr, 10);
       const now = Date.now();
-      return (now - lastFetch) < CACHE_DURATION;
+      return now - lastFetch < CACHE_DURATION;
     } catch (error) {
       console.warn('Error checking cache validity:', error);
       return false;
@@ -118,7 +121,7 @@ class EmergencyTipsService {
       throw error as Error;
     }
   }
-  
+
   /**
    * Flatten the nested API response structure for easier searching
    */
@@ -127,16 +130,18 @@ class EmergencyTipsService {
     let idCounter = 0;
 
     // Handle the new structure where categories are in an array
-    response.category.forEach((category) => {
-      category.tips.forEach((tip) => {
-        tip.articles.forEach((article) => {
+    response.category.forEach(category => {
+      category.tips.forEach(tip => {
+        tip.articles.forEach(article => {
           // Create searchable text by combining all relevant text fields
           const searchableText = [
             category.title,
             tip.title,
             article.title,
             article.bodyText.replace(/<[^>]*>/g, ''), // Remove HTML tags
-          ].join(' ').toLowerCase();
+          ]
+            .join(' ')
+            .toLowerCase();
 
           flattened.push({
             id: `tip_${idCounter++}`,
@@ -158,10 +163,19 @@ class EmergencyTipsService {
   /**
    * Save tips to local storage
    */
-  private async saveTipsToCache(tips: FlattenedTip[], lang: string): Promise<void> {
+  private async saveTipsToCache(
+    tips: FlattenedTip[],
+    lang: string
+  ): Promise<void> {
     try {
-      await AsyncStorage.setItem(this.getStorageKey(lang), JSON.stringify(tips));
-      await AsyncStorage.setItem(this.getLastFetchKey(lang), Date.now().toString());
+      await AsyncStorage.setItem(
+        this.getStorageKey(lang),
+        JSON.stringify(tips)
+      );
+      await AsyncStorage.setItem(
+        this.getLastFetchKey(lang),
+        Date.now().toString()
+      );
       this.cachedTips = tips;
     } catch (error) {
       console.error('Error saving tips to cache:', error);
@@ -178,7 +192,7 @@ class EmergencyTipsService {
       if (!cachedData) {
         return [];
       }
-      
+
       const tips: FlattenedTip[] = JSON.parse(cachedData);
       this.cachedTips = tips;
       return tips;
@@ -259,7 +273,9 @@ class EmergencyTipsService {
   }> {
     try {
       const lang = i18next.language?.startsWith('de') ? 'de' : 'en';
-      const lastFetchStr = await AsyncStorage.getItem(this.getLastFetchKey(lang));
+      const lastFetchStr = await AsyncStorage.getItem(
+        this.getLastFetchKey(lang)
+      );
       const cachedData = await AsyncStorage.getItem(this.getStorageKey(lang));
       const isValid = await this.isCacheValid(lang);
 

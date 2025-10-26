@@ -1,11 +1,12 @@
+import { Platform } from 'react-native';
+
 import * as AuthSession from 'expo-auth-session';
 import { makeRedirectUri } from 'expo-auth-session';
 import * as SecureStore from 'expo-secure-store';
 import * as WebBrowser from 'expo-web-browser';
 
+import Config from '@/config';
 import { AuthTokens, User } from '@/schemas/auth.schema';
-import Config from "@/config";
-import {Platform} from "react-native";
 
 // Enable browser dismissal on iOS
 WebBrowser.maybeCompleteAuthSession();
@@ -65,7 +66,8 @@ class OAuth2AuthService {
       // Disable SSL pinning in development
       if (__DEV__) {
         // @ts-ignore
-        global.XMLHttpRequest = global.originalXMLHttpRequest || global.XMLHttpRequest;
+        global.XMLHttpRequest =
+          global.originalXMLHttpRequest || global.XMLHttpRequest;
       }
 
       this.discovery = await AuthSession.fetchDiscoveryAsync(
@@ -76,19 +78,34 @@ class OAuth2AuthService {
         this.discovery = {
           ...this.discovery,
           ...(this.discovery.authorizationEndpoint && {
-            authorizationEndpoint: this.discovery.authorizationEndpoint.replace('localhost', '10.0.2.2'),
+            authorizationEndpoint: this.discovery.authorizationEndpoint.replace(
+              'localhost',
+              '10.0.2.2'
+            ),
           }),
           ...(this.discovery.tokenEndpoint && {
-            tokenEndpoint: this.discovery.tokenEndpoint.replace('localhost', '10.0.2.2'),
+            tokenEndpoint: this.discovery.tokenEndpoint.replace(
+              'localhost',
+              '10.0.2.2'
+            ),
           }),
           ...(this.discovery.userInfoEndpoint && {
-            userInfoEndpoint: this.discovery.userInfoEndpoint.replace('localhost', '10.0.2.2'),
+            userInfoEndpoint: this.discovery.userInfoEndpoint.replace(
+              'localhost',
+              '10.0.2.2'
+            ),
           }),
           ...(this.discovery.revocationEndpoint && {
-            revocationEndpoint: this.discovery.revocationEndpoint.replace('localhost', '10.0.2.2'),
+            revocationEndpoint: this.discovery.revocationEndpoint.replace(
+              'localhost',
+              '10.0.2.2'
+            ),
           }),
           ...(this.discovery.endSessionEndpoint && {
-            endSessionEndpoint: this.discovery.endSessionEndpoint.replace('localhost', '10.0.2.2'),
+            endSessionEndpoint: this.discovery.endSessionEndpoint.replace(
+              'localhost',
+              '10.0.2.2'
+            ),
           }),
         };
       }
@@ -215,12 +232,15 @@ class OAuth2AuthService {
     // Store tokens separately to avoid SecureStore size limit
     await this.saveSecureItem(ACCESS_TOKEN_KEY, tokens.accessToken);
     await this.saveSecureItem(REFRESH_TOKEN_KEY, tokens.refreshToken);
-    await this.saveSecureItem(TOKEN_METADATA_KEY, JSON.stringify({
-      expiresIn: tokens.expiresIn,
-      tokenType: tokens.tokenType,
-      timestamp: Date.now()
-    }));
-    
+    await this.saveSecureItem(
+      TOKEN_METADATA_KEY,
+      JSON.stringify({
+        expiresIn: tokens.expiresIn,
+        tokenType: tokens.tokenType,
+        timestamp: Date.now(),
+      })
+    );
+
     return tokens;
   }
 
@@ -232,7 +252,11 @@ class OAuth2AuthService {
     if (!stored?.refreshToken) throw new Error('No refresh token available');
 
     const tokenResponse = await AuthSession.refreshAsync(
-      { clientId: this.config.clientId, clientSecret: this.config.clientSecret, refreshToken: stored.refreshToken },
+      {
+        clientId: this.config.clientId,
+        clientSecret: this.config.clientSecret,
+        refreshToken: stored.refreshToken,
+      },
       discovery
     );
 
@@ -246,12 +270,15 @@ class OAuth2AuthService {
     // Store tokens separately to avoid SecureStore size limit
     await this.saveSecureItem(ACCESS_TOKEN_KEY, tokens.accessToken);
     await this.saveSecureItem(REFRESH_TOKEN_KEY, tokens.refreshToken);
-    await this.saveSecureItem(TOKEN_METADATA_KEY, JSON.stringify({
-      expiresIn: tokens.expiresIn,
-      tokenType: tokens.tokenType,
-      timestamp: Date.now()
-    }));
-    
+    await this.saveSecureItem(
+      TOKEN_METADATA_KEY,
+      JSON.stringify({
+        expiresIn: tokens.expiresIn,
+        tokenType: tokens.tokenType,
+        timestamp: Date.now(),
+      })
+    );
+
     return tokens;
   }
 
@@ -282,7 +309,7 @@ class OAuth2AuthService {
       const [accessToken, refreshToken, metadataStr] = await Promise.all([
         this.getSecureItem(ACCESS_TOKEN_KEY),
         this.getSecureItem(REFRESH_TOKEN_KEY),
-        this.getSecureItem(TOKEN_METADATA_KEY)
+        this.getSecureItem(TOKEN_METADATA_KEY),
       ]);
 
       if (!accessToken || !refreshToken || !metadataStr) {
@@ -294,7 +321,7 @@ class OAuth2AuthService {
         accessToken,
         refreshToken,
         expiresIn: metadata.expiresIn,
-        tokenType: metadata.tokenType
+        tokenType: metadata.tokenType,
       };
     } catch (error) {
       console.error('Error retrieving tokens:', error);
@@ -309,7 +336,7 @@ class OAuth2AuthService {
       this.removeSecureItem(TOKEN_METADATA_KEY),
       this.removeSecureItem(CODE_VERIFIER_KEY),
       this.removeSecureItem(STATE_KEY),
-      this.removeSecureItem(NONCE_KEY)
+      this.removeSecureItem(NONCE_KEY),
     ]);
   }
 

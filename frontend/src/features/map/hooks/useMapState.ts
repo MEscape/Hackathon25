@@ -2,7 +2,9 @@
 // Centralized state management for map interactions
 
 import { useState, useCallback, useRef, useEffect } from 'react';
+
 import * as Location from 'expo-location';
+
 import { MAP_CONFIG } from '@/config/config.map';
 
 export interface MapState {
@@ -27,8 +29,11 @@ export function useMapState(userLocation?: Location.LocationObject | null) {
     MAP_CONFIG.DEFAULT_CENTER
   );
   const [zoom, setZoom] = useState<number>(MAP_CONFIG.ZOOM.INITIAL);
-  const [offset, setOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
-  
+  const [offset, setOffset] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
+
   const hasAutoCentered = useRef(false);
 
   // Auto-center on user location (once)
@@ -45,14 +50,14 @@ export function useMapState(userLocation?: Location.LocationObject | null) {
   // Zoom controls
   const zoomIn = useCallback(() => {
     if (zoom < MAP_CONFIG.ZOOM.MAX) {
-      setZoom((z) => z + 1);
+      setZoom(z => z + 1);
       setOffset({ x: 0, y: 0 });
     }
   }, [zoom]);
 
   const zoomOut = useCallback(() => {
     if (zoom > MAP_CONFIG.ZOOM.MIN) {
-      setZoom((z) => z - 1);
+      setZoom(z => z - 1);
       setOffset({ x: 0, y: 0 });
     }
   }, [zoom]);
@@ -78,7 +83,7 @@ export function useMapState(userLocation?: Location.LocationObject | null) {
     center,
     zoom,
     offset,
-    
+
     // Actions
     setCenter,
     setZoom,

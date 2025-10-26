@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 @Schema(description = "Request to update user vaccination status")
 public class VaccinationStatusRequestDto {
 
-    @JsonProperty("vaccinationStatus")
-    @NotNull
-    @Schema(description = "Vaccination status of the user", example = "Fully vaccinated")
-    private String vaccinationStatus;
+  @JsonProperty("vaccinationStatus")
+  @NotNull
+  @Schema(description = "Vaccination status of the user", example = "Fully vaccinated")
+  private String vaccinationStatus;
 }

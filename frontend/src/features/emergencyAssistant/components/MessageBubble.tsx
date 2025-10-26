@@ -1,7 +1,9 @@
 import React from 'react';
+
 import { View, Text } from 'react-native';
-import type { Message } from '../types';
+
 import { styles } from '../styles/styles';
+import type { Message } from '../types';
 
 interface MessageBubbleProps {
   message: Message;
