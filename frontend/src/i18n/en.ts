@@ -1,14 +1,25 @@
 const en = {
   common: {
-    ok: 'OK',
+    ok: 'OK!',
     cancel: 'Cancel',
-    noData: 'No data available',
+    back: 'Back',
     loading: 'Loading...',
-    lastSeen: 'Last seen',
+    error: 'Error',
+    retry: 'Retry',
     save: 'Save',
-    error: 'Error'
+    delete: 'Delete',
+    edit: 'Edit',
+    close: 'Close',
+    confirm: 'Confirm',
+    yes: 'Yes',
+    no: 'No',
+    or: 'or',
+    send: 'Send',
+    errors: {
+      general: 'Sorry, there was an error. Please try again.',
+      loading: 'Sorry, there was an error loading. Please try again later.',
+    },
   },
-
   home: {
     title: 'Home',
     greeting: {
@@ -30,6 +41,10 @@ const en = {
         title: 'Share Location',
         subtitle: 'Share your current location instantly.',
       },
+      emergencyTips: {
+        title: 'Emergency Tips',
+        subtitle: 'Safety advice'
+      }
     },
     features: {
       title: 'Features',
@@ -304,6 +319,79 @@ const en = {
     networkError: 'Network error',
     sessionExpired: 'Session expired. Please sign in again.',
     tokenRefreshFailed: 'Session refresh failed. Please sign in again.',
+  },
+
+  emergencyAssistant: {
+    title: 'Emergency Assistant',
+    subtitle: 'Ask questions about emergency situations',
+    placeholder: 'What should I do during an earthquake?',
+    searchButton: 'Search',
+    searching: 'Searching...',
+    noResults: 'No matching emergency tips found.',
+    tryDifferentQuery: 'Try a different question.',
+    offlineMode: 'Offline Mode',
+    onlineMode: 'Online Mode',
+    lastUpdated: 'Last updated',
+    updateAvailable: 'Update available',
+    refresh: 'Refresh',
+    loading: 'Loading...',
+    error: 'Error loading emergency tips',
+    retry: 'Try again',
+    aiInitializing: 'Initializing AI model...',
+    aiError: 'AI service unavailable',
+    fallbackSearch: 'Using simple text search',
+    relevanceScore: 'Relevance',
+    category: 'Category',
+    exampleQuestions: {
+      title: 'Example questions:',
+      earthquake: 'What to do during an earthquake?',
+      fire: 'How to behave during a fire?',
+      flood: 'What to do during a flood?',
+      storm: 'How to prepare for a storm?',
+      firstAid: 'First aid basics?',
+      evacuation: 'How does evacuation work?',
+      powerOutage: 'What to do during a power outage?',
+    },
+    tips: {
+      noImage: 'No image available',
+      readMore: 'Read more',
+      readLess: 'Show less',
+    },
+    modelLoading: 'AI model loading',
+    modelReady: 'Welcome to the Emergency Assistant!\n Please type your emergency question, describe your situation, or enter one word like "flood" or "storm" to get quick, helpful tips.',
+    systemReady: 'Welcome to the Emergency Assistant!\n Please type your emergency question, describe your situation, or enter one word like "flood" or "storm" to get quick, helpful tips.',
+    generating: 'Generating response...',
+    inputPlaceholder: 'Ask about emergency tips...',
+    responses: {
+      emergency: '🚨 EMERGENCY: If you are in an acute emergency, call 112 immediately!',
+      firstAid: 'Here is important first aid information:',
+      fire: 'Important fire safety information:',
+      weather: 'Weather emergency guidelines:',
+      general: 'Based on your query, I found the following information:',
+      moreInfo: 'For more information or in acute emergencies, call 112.',
+      noResults: 'Unfortunately, I could not find specific information for your query.',
+      emergencyNumbers: '**General Emergency Numbers:**\n🚨 Fire/Rescue: 112\n🚔 Police: 110\n☠️ Poison Control: 030 19240',
+      reformulate: 'Please rephrase your question or use terms like "first aid", "fire", "weather emergency" or "accident".',
+      fallback112: 'If in doubt or in acute emergencies, call 112 immediately.',
+      fallbackPolice: 'For crimes or urgent safety issues, call the police at 110.',
+      fallbackPoison: 'In suspected poisoning, contact poison control immediately: 030 19240.',
+      fallbackGeneral: 'If you cannot find information, rephrase your question or call 112.',
+      call112: {
+        title: '🚨 **Emergency Call 112**',
+        description: '112 is the European emergency number for fire department and rescue services. It is free and available 24/7.',
+        whatToSay: '**What to say on the phone:**\n- Where did something happen?\n- What happened?\n- How many people are affected?\n- What kind of injuries?\n- Wait for follow-up questions!',
+      },
+      police: {
+        title: '🚔 **Police Emergency 110**',
+        description: 'Call 110 for:\n- Crimes\n- Traffic accidents with injuries\n- When you need help\n\nFor general inquiries, use your local police station.',
+      },
+      poison: {
+        title: '☠️ **Poison Control**',
+        description: 'In case of poisoning:\n- Contact poison control immediately\n- Stay calm\n- Keep vomit\n- If unconscious: 112',
+        numbers: '**Poison Control Centers:**\nBerlin: 030 19240\nBonn: 0228 19240',
+      },
+    },
+    noData: 'No data',
   },
 }
 

@@ -42,6 +42,7 @@ export default function ActionsLayout() {
       <Stack.Screen name="emergency-contacts" options={defaultHeader(translate('emergencyContacts:title'))} />
       <Stack.Screen name="safety-alerts" options={defaultHeader(translate('actions:safetyAlerts.title'))} />
       <Stack.Screen name="share-location" options={defaultHeader(translate('actions:shareLocation.title'))} />
+      <Stack.Screen name="emergency-assistant" options={defaultHeader(translate('emergencyAssistant:title'))}/>
       <Stack.Screen name="profile" options={profileHeader(translate('actions:profile.title'))} />
       <Stack.Screen name="settings" options={defaultHeader(translate('actions:settings.title'))} />
     </Stack>
