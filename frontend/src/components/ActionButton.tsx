@@ -1,5 +1,5 @@
-import React from 'react';
-import { TouchableOpacity, View, Platform, StyleProp, ViewStyle } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { TouchableOpacity, View, Platform, StyleProp, ViewStyle, Animated } from 'react-native';
 import type { TextStyle } from 'react-native';
 
 import { Text } from '@/components/Text';
@@ -65,24 +65,92 @@ export interface ActionButtonProps {
    * Children components (alternative to text prop)
    */
   children?: React.ReactNode;
+  /**
+   * Enable hold functionality
+   */
+  holdEnabled?: boolean;
+  /**
+   * Duration in milliseconds to hold before triggering
+   */
+  pressHoldDurationMs?: number;
+  /**
+   * Colors for hold progress indicator [start, end]
+   */
+  holdProgressColors?: [string, string];
+  /**
+   * Called when hold is completed
+   */
+  onHoldComplete?: () => void;
 }
 
 export const ActionButton: React.FC<ActionButtonProps> = ({
-  text,
-  variant = 'primary',
-  size = 'medium',
-  icon,
-  iconColor,
-  iconSize,
-  subtitle,
-  style: styleOverride,
-  textStyle: textStyleOverride,
-  onPress,
-  disabled = false,
-  activeOpacity = 0.7,
-  children,
-}) => {
+                                                            text,
+                                                            variant = 'primary',
+                                                            size = 'medium',
+                                                            icon,
+                                                            iconColor,
+                                                            iconSize,
+                                                            subtitle,
+                                                            style: styleOverride,
+                                                            textStyle: textStyleOverride,
+                                                            onPress,
+                                                            disabled = false,
+                                                            activeOpacity = 0.7,
+                                                            children,
+                                                            holdEnabled = false,
+                                                            pressHoldDurationMs = 3000,
+                                                            holdProgressColors = ['#FFFFFF', '#ff6b6b'],
+                                                            onHoldComplete,
+                                                          }) => {
   const { themed } = useAppTheme();
+  const [isHolding, setIsHolding] = useState(false);
+  const holdProgress = useRef(new Animated.Value(0)).current;
+  const holdTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const startHold = () => {
+    if (!holdEnabled || disabled) return;
+
+    setIsHolding(true);
+    holdProgress.setValue(0);
+
+    Animated.timing(holdProgress, {
+      toValue: 1,
+      duration: pressHoldDurationMs,
+      useNativeDriver: false,
+    }).start(({ finished }) => {
+      if (finished) {
+        onHoldComplete?.();
+        resetHold();
+      }
+    });
+  };
+
+  const resetHold = () => {
+    setIsHolding(false);
+    holdProgress.setValue(0);
+    if (holdTimerRef.current) {
+      clearTimeout(holdTimerRef.current);
+      holdTimerRef.current = null;
+    }
+  };
+
+  const handlePressIn = () => {
+    if (holdEnabled) {
+      startHold();
+    }
+  };
+
+  const handlePressOut = () => {
+    if (holdEnabled) {
+      resetHold();
+    }
+  };
+
+  const handlePress = () => {
+    if (!holdEnabled && onPress) {
+      onPress();
+    }
+  };
 
   const buttonStyles = [
     themed($baseButton),
@@ -113,42 +181,65 @@ export const ActionButton: React.FC<ActionButtonProps> = ({
 
     if (variant === 'icon' && icon) {
       return (
-        <Icon
-          icon={icon}
-          color={iconColor}
-          size={iconSize || getSizeIconSize(size)}
-        />
+          <Icon
+              icon={icon}
+              color={iconColor}
+              size={iconSize || getSizeIconSize(size)}
+          />
       );
     }
 
     if (icon && (variant === 'primary' || variant === 'secondary' || variant === 'danger')) {
       return (
-        <View style={themed($quickActionContent)}>
-          <IconContainer
-            icon={icon}
-            size={getSizeIconContainerSize(size)}
-            variant="transparent"
-            iconColor={iconColor || '#FFFFFF'}
-            iconSize={iconSize || getSizeIconSize(size)}
-          />
-          {text && <Text style={textStyles}>{text}</Text>}
-          {subtitle && <Text style={subtitleStyles}>{subtitle}</Text>}
-        </View>
+          <View style={themed($quickActionContent)}>
+            <IconContainer
+                icon={icon}
+                size={getSizeIconContainerSize(size)}
+                variant="transparent"
+                iconColor={iconColor || '#FFFFFF'}
+                iconSize={iconSize || getSizeIconSize(size)}
+            />
+            {text && <Text style={textStyles}>{text}</Text>}
+            {subtitle && <Text style={subtitleStyles}>{subtitle}</Text>}
+          </View>
       );
     }
 
     return text ? <Text style={textStyles}>{text}</Text> : null;
   };
 
+  const progressWidth = holdProgress.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0%', '100%'],
+  });
+
+  const progressColor = holdProgress.interpolate({
+    inputRange: [0, 1],
+    outputRange: holdProgressColors,
+  });
+
   return (
-    <TouchableOpacity
-      style={buttonStyles}
-      onPress={onPress}
-      disabled={disabled}
-      activeOpacity={activeOpacity}
-    >
-      {renderContent()}
-    </TouchableOpacity>
+      <TouchableOpacity
+          style={buttonStyles}
+          onPress={handlePress}
+          onPressIn={handlePressIn}
+          onPressOut={handlePressOut}
+          disabled={disabled}
+          activeOpacity={activeOpacity}
+      >
+        {holdEnabled && isHolding && (
+            <Animated.View
+                style={[
+                  themed($holdProgressBar),
+                  {
+                    width: progressWidth,
+                    backgroundColor: progressColor,
+                  },
+                ]}
+            />
+        )}
+        {renderContent()}
+      </TouchableOpacity>
   );
 };
 
@@ -176,6 +267,8 @@ const $baseButton: ThemedStyle<ViewStyle> = theme => ({
   alignItems: 'center',
   justifyContent: 'center',
   borderRadius: 12,
+  overflow: 'hidden',
+  position: 'relative',
   ...Platform.select({
     web: {
       transition: 'all 0.2s ease',
@@ -183,20 +276,32 @@ const $baseButton: ThemedStyle<ViewStyle> = theme => ({
   }),
 });
 
+const $holdProgressBar: ThemedStyle<ViewStyle> = theme => ({
+  position: 'absolute',
+  left: 0,
+  top: 0,
+  bottom: 0,
+  opacity: 0.3,
+  zIndex: 0,
+});
+
 const $baseButtonText: ThemedStyle<TextStyle> = theme => ({
   fontFamily: theme.typography.primary.semiBold,
   letterSpacing: -0.2,
+  zIndex: 1,
 });
 
 const $baseSubtitleText: ThemedStyle<TextStyle> = theme => ({
   fontFamily: theme.typography.primary.normal,
   fontSize: 12,
   opacity: 0.8,
+  zIndex: 1,
 });
 
 const $quickActionContent: ThemedStyle<ViewStyle> = theme => ({
   alignItems: 'center',
   gap: theme.spacing.xs,
+  zIndex: 1,
 });
 
 // Size styles
